@@ -8,6 +8,7 @@ WebSite for a Restaurant
 - **Wilian Bordon** (Lt)
 - **Fabricio Gonzalez Bez Fontana** (Dev)
 - **Eduardo Henrique Fritsche** (Dev)
+- **Carlos de Mello Feliponi** (Dev)
 
 ## Functional Requirements
 
