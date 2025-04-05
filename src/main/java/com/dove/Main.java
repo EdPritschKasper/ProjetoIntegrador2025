@@ -1,18 +1,25 @@
 package com.dove;
 
+import com.dove.options.PedidoOpcao;
 import jakarta.persistence.EntityManager;
+
+import java.util.List;
 import java.util.Scanner;
 import com.dove.repository.*;
 import com.dove.entities.*;
 
 import java.time.LocalTime;
+import com.dove.options.*;
 
 public class Main {
     public static void main(String[] args) {
 
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
-        int controle = 0, controlePedido = 0;
+        int controle = 0;
+
+        // Inicialização de Opções
+        PedidoOpcao pedidoOpcao = new PedidoOpcao();
 
         // Estrutura de repetição incial para opções de entidade
         do {
@@ -40,36 +47,7 @@ public class Main {
                 case 4:
                     break;
                 case 5: // Opção Pedido
-                    do {
-                        System.out.println("------------------------------");
-                        System.out.println("OPÇÕES DE CRUD DO PEDIDO");
-                        System.out.println("Digite a opção desejada:");
-                        System.out.println("1 - Cadastrar Pedido:");
-                        System.out.println("2 - Ler Pedido Por ID:");
-                        System.out.println("3 - Atualizar Pedido:");
-                        System.out.println("4 - Deletar Pedido:");
-                        System.out.println("0 - Sair das Opções de Pedido:");
-                        System.out.println("------------------------------");
-
-                        controlePedido = scanner.nextInt();
-                        scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
-
-                        switch (controlePedido) {
-                            case 1:
-                                System.out.println("case 1");
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                break;
-                            case 4:
-                                break;
-                            case 0:
-                                break;
-                            default:
-                                break;
-                        }
-                    } while(controlePedido != 0);
+                    pedidoOpcao.caseEntidade();
                     break;
                 case 0:
                     break;

@@ -1,5 +1,7 @@
 package com.dove.repository;
 
+import java.util.List;
+import java.util.ArrayList;
 import jakarta.persistence.EntityManager;
 import com.dove.entities.PedidoEntity;
 
@@ -30,5 +32,11 @@ public class PedidoRepository {
         em.getTransaction().begin();
         em.remove(pedido);
         em.getTransaction().commit();
+    }
+
+    public List<PedidoEntity> findAll() {
+        return em
+                .createQuery("SELECT e FROM PedidoEntity e", PedidoEntity.class)
+                .getResultList();
     }
 }
