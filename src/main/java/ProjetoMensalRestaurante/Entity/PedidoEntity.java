@@ -1,4 +1,4 @@
 package ProjetoMensalRestaurante.Entity;
 
-public class Funcionario {
+public class PedidoEntity {
 }
