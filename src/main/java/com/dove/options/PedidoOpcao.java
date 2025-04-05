@@ -1,6 +1,10 @@
 package com.dove.options;
 
+import com.dove.entities.PedidoEntity;
+import jakarta.persistence.EntityManager;
 import java.util.Scanner;
+import com.dove.repository.PedidoRepository;
+import com.dove.repository.CustomizerFactory;
 
 
 public class PedidoOpcao {
@@ -8,7 +12,11 @@ public class PedidoOpcao {
     // Switch Case 5 - CRUD do Pedido
     public void caseEntidade() {
         Scanner scanner = new Scanner(System.in);
+        EntityManager em = CustomizerFactory.getEntityManager();
+        PedidoRepository pedidoRepository = new PedidoRepository(em);
+        PedidoEntity pedidoEntity = new PedidoEntity();
         int controlePedido = 0;
+        Long id;
 
         do {
             System.out.println("------------------------------");
@@ -22,13 +30,20 @@ public class PedidoOpcao {
             System.out.println("------------------------------");
 
             controlePedido = scanner.nextInt();
-            scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
+//            scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
 
             switch (controlePedido) {
                 case 1:
                     System.out.println("case 1");
                     break;
                 case 2:
+                    System.out.println("------------------------------");
+                    System.out.println("Digite o ID do pedido:");
+                    System.out.println("------------------------------");
+
+                    id = scanner.nextLong();
+                    pedidoEntity = pedidoRepository.findById(id);
+                    System.out.println(pedidoEntity);
                     break;
                 case 3:
                     break;

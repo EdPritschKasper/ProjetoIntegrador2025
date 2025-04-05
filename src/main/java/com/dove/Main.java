@@ -19,9 +19,10 @@ public class Main {
         int controle = 0;
 
         // Inicialização de Opções
+        // Classes com a implementação das switch cases para não poluir a Main
         PedidoOpcao pedidoOpcao = new PedidoOpcao();
 
-        // Estrutura de repetição incial para opções de entidade
+        // Estrutura de repetição inicial para opções de entidade
         do {
             System.out.println("------------------------------");
             System.out.println("OPÇÕES DE ENTIDADES");
@@ -35,7 +36,7 @@ public class Main {
             System.out.println("------------------------------");
 
             controle = scanner.nextInt();
-            scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
+//            scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
 
             switch (controle) {
                 case 1:
