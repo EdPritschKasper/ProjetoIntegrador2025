@@ -13,4 +13,22 @@ public class PedidoRepository {
     public PedidoEntity findById(Long id) {
         return em.find(PedidoEntity.class, id);
     }
+
+    public void insert(PedidoEntity pedido) {
+        em.getTransaction().begin();
+        em.persist(pedido);
+        em.getTransaction().commit();
+    }
+
+    public void update(PedidoEntity pedido) {
+        em.getTransaction().begin();
+        em.merge(pedido);
+        em.getTransaction().commit();
+    }
+
+    public void delete(PedidoEntity pedido) {
+        em.getTransaction().begin();
+        em.remove(pedido);
+        em.getTransaction().commit();
+    }
 }

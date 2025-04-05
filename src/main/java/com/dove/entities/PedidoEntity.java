@@ -9,7 +9,7 @@ import java.time.LocalTime;
 public class PedidoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "marmita")
     private String marmita;
@@ -27,6 +27,16 @@ public class PedidoEntity {
     private Long cliente_id;
 
     public PedidoEntity() {}
+
+    public PedidoEntity(String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, Long cardapio_id, Long funcionario_id, Long cliente_id) {
+        this.marmita = marmita;
+        this.status = status;
+        this.hora_inicio = hora_inicio;
+        this.hora_fim = hora_fim;
+        this.cardapio_id = cardapio_id;
+        this.funcionario_id = funcionario_id;
+        this.cliente_id = cliente_id;
+    }
 
     public PedidoEntity(Long id, String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, Long cardapio_id, Long funcionario_id, Long cliente_id) {
         this.id = id;
