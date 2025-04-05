@@ -28,6 +28,7 @@ public class PedidoEntity {
 
     public PedidoEntity() {}
 
+    // construtor para insert
     public PedidoEntity(String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, Long cardapio_id, Long funcionario_id, Long cliente_id) {
         this.marmita = marmita;
         this.status = status;
@@ -38,6 +39,7 @@ public class PedidoEntity {
         this.cliente_id = cliente_id;
     }
 
+    // construtor para update
     public PedidoEntity(Long id, String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, Long cardapio_id, Long funcionario_id, Long cliente_id) {
         this.id = id;
         this.marmita = marmita;
