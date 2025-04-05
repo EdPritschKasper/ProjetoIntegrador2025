@@ -6,10 +6,17 @@ import jakarta.persistence.*;
 @Table(name = "tb_cliente")
 
 public class ClienteEntity {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false, unique = true)
     private String nome;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String senha;
 
     protected ClienteEntity(){
