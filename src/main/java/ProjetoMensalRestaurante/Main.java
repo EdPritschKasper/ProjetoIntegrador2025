@@ -17,10 +17,11 @@ public class Main {
             System.out.println("1 - Cadastrar cliente");
             System.out.println("2 - Alterar senha");
             System.out.println("3 - Excluir cliente");
+            System.out.println("4 - Exibir lista de Clientes");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
-            scanner.nextLine(); // limpar buffer
+            scanner.nextLine();
 
             clienteService.executarOpcao(opcao);
 
