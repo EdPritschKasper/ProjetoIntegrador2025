@@ -84,7 +84,7 @@ public class ClienteRepository {
 
     public List <ClienteEntity> exibirClientes(){
         try (Session session = sessionFactory.openSession()){
-            return session.createQuery("FROM ClientEntity", ClienteEntity.class).list();
+            return session.createQuery("FROM ClienteEntity", ClienteEntity.class).list();
         }
         catch (Exception e){
             throw new RuntimeException("Erro ao exibir Clientes: "+ e.getMessage(),e);
