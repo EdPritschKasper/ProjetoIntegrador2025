@@ -1,7 +1,7 @@
-package ProjetoMensalRestaurante.Service;
+package com.dove.options;
 
-import ProjetoMensalRestaurante.Entity.ClienteEntity;
-import ProjetoMensalRestaurante.Repository.ClienteRepository;
+import com.dove.entities.ClienteEntity;
+import com.dove.repository.ClienteRepository;
 
 import java.util.Scanner;
 
@@ -95,6 +95,7 @@ public class ClienteService {
         else {
 
             for (ClienteEntity cliente : clientes){
+                System.out.println("--------------------");
                 System.out.println("Nome: "+ cliente.getNome());
                 System.out.println("Email: " + cliente.getEmail());
             }
