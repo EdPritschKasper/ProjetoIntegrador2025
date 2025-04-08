@@ -1,9 +1,8 @@
 package com.dove.entities;
 
+import jakarta.persistence.*;
+
 public class Funcionario {
-<<<<<<< Updated upstream
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
