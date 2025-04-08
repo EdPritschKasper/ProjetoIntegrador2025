@@ -1,6 +1,6 @@
-package ProjetoMensalRestaurante.Repository;
+package com.dove.repository;
 
-import ProjetoMensalRestaurante.Entity.ClienteEntity;
+import com.dove.entities.ClienteEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
