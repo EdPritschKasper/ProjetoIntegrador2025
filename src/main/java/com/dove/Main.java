@@ -1,15 +1,9 @@
 package com.dove;
 
 import com.dove.options.PedidoOpcao;
-import jakarta.persistence.EntityManager;
 
-import java.util.List;
 import java.util.Scanner;
-import com.dove.repository.*;
-import com.dove.entities.*;
 
-import java.time.LocalTime;
-import com.dove.options.*;
 
 public class Main {
     public static void main(String[] args) {

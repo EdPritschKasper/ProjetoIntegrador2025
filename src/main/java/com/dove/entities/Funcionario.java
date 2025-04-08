@@ -1,8 +1,12 @@
 package com.dove.entities;
 
-public class Funcionario {
-<<<<<<< Updated upstream
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "tb_funcionario")
+public class Funcionario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
