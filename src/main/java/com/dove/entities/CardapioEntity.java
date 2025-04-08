@@ -1,4 +1,4 @@
 package com.dove.entities;
 
-public class Cliente {
+public class CardapioEntity {
 }

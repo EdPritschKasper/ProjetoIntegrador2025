@@ -1,4 +1,4 @@
 package com.dove.entities;
 
-public class Funcionario {
+public class ClienteEntity {
 }
