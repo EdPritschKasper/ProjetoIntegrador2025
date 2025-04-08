@@ -14,6 +14,21 @@ import com.dove.options.*;
 public class Main {
     public static void main(String[] args) {
 
+        // APENAS TESTE
+        EntityManager em = CustomizerFactory.getEntityManager();
+        ClienteRepository clir = new ClienteRepository();
+        CardapiosRepository carr = new CardapiosRepository(em);
+        FuncionarioRepository funr = new FuncionarioRepository(em);
+        PedidoRepository pedr = new PedidoRepository(em);
+        IngredienteRepository ingr = new IngredienteRepository(em);
+
+        System.out.println(clir.exibirClientes().get(0));
+        System.out.println(carr.findById(1L));
+        System.out.println(funr.buscarPorId(1L));
+        System.out.println(pedr.findById(1L));
+        System.out.println(ingr.findById(1L));
+        // FIM DO TESTE
+
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
         int controle = 0;
