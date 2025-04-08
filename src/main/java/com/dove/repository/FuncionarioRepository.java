@@ -53,13 +53,18 @@ public class FuncionarioRepository {
             Funcionario funcionario = entityManager.find(Funcionario.class, id);
             if (funcionario != null){
                 entityManager.remove(funcionario);
+                transaction.commit();
+                System.out.println("Funcionário removido com sucesso!");
+            } else {
+                transaction.rollback();
+                System.out.println("Funcionário não encontrado.");
             }
-            transaction.commit();
-        }catch (Exception e){
+        } catch (PersistenceException e){
+            if (transaction.isActive()) transaction.rollback();
+            System.out.println("Erro: Este funcionário está vinculado a um ou mais pedidos e não pode ser removido.");
+        } catch (Exception e){
             if (transaction.isActive()) transaction.rollback();
             e.printStackTrace();
-            }
+        }
     }
 }
-
-

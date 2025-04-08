@@ -72,7 +72,6 @@ public class FuncionarioOpcao {
                     scanner.nextLine();
 
                     funcionarioRepository.deletar(id);
-                    System.out.println("Funcionário removido com sucesso!");
                 }
 
                 case 0 -> System.out.println("Encerrando...");
