@@ -63,4 +63,80 @@ public class PedidoEntity {
                 ", cliente=" + cliente +
                 '}';
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getMarmita() {
+        return marmita;
+    }
+
+    public void setMarmita(String marmita) {
+        this.marmita = marmita;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalTime getHora_inicio() {
+        return hora_inicio;
+    }
+
+    public void setHora_inicio(LocalTime hora_inicio) {
+        this.hora_inicio = hora_inicio;
+    }
+
+    public LocalTime getHora_fim() {
+        return hora_fim;
+    }
+
+    public void setHora_fim(LocalTime hora_fim) {
+        this.hora_fim = hora_fim;
+    }
+
+    public CardapiosEntity getCardapio() {
+        return cardapio;
+    }
+
+    public void setCardapio(CardapiosEntity cardapio) {
+        this.cardapio = cardapio;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+
+    public ClienteEntity getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(ClienteEntity cliente) {
+        this.cliente = cliente;
+    }
+
+    public List<IngredienteEntity> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteEntity> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+
+    public void addIngrediente(IngredienteEntity ingrediente) {
+        this.ingredientes.add(ingrediente);
+    }
 }
