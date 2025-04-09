@@ -84,9 +84,7 @@ public class PedidoCadastraOpcao {
         cardapiosEntity = cardapiosRepository.findById(1L);
         pedidoEntity.setCardapio(cardapiosEntity);
 
-        // DB
+        // Insere no Banco
         pedidoRepository.insert(pedidoEntity);
-
-        System.out.println("------------------------------");
     }
 }

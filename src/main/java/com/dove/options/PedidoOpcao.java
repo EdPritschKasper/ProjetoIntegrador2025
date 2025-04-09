@@ -38,7 +38,7 @@ public class PedidoOpcao {
                     break;
                 case 2:
                     System.out.println("------------------------------");
-                    System.out.println("Digite o ID do pedido:");
+                    System.out.println("Digite o ID do pedido para PESQUISAR");
                     System.out.println("------------------------------");
 
                     id = scanner.nextLong();
@@ -48,6 +48,12 @@ public class PedidoOpcao {
                 case 3:
                     break;
                 case 4:
+                    System.out.println("------------------------------");
+                    System.out.println("Digite o ID do pedido para DELETAR:");
+                    System.out.println("------------------------------");
+                    id = scanner.nextLong();
+                    pedidoEntity = pedidoRepository.findById(id);
+                    pedidoRepository.delete(pedidoEntity);
                     break;
                 case 0:
                     break;
