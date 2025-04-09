@@ -2,6 +2,8 @@ package com.dove.options;
 
 import com.dove.entities.PedidoEntity;
 import jakarta.persistence.EntityManager;
+
+import java.time.LocalTime;
 import java.util.Scanner;
 import com.dove.repository.PedidoRepository;
 import com.dove.repository.CustomizerFactory;
@@ -24,7 +26,7 @@ public class PedidoOpcao {
             System.out.println("Digite a opção desejada:");
             System.out.println("1 - Cadastrar Pedido:");
             System.out.println("2 - Ler Pedido Por ID:");
-            System.out.println("3 - Atualizar Pedido:");
+            System.out.println("3 - Definir como PRONTO (Atualiza):");
             System.out.println("4 - Deletar Pedido:");
             System.out.println("0 - Sair das Opções de Pedido:");
             System.out.println("------------------------------");
@@ -33,10 +35,10 @@ public class PedidoOpcao {
 //            scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
 
             switch (controlePedido) {
-                case 1:
+                case 1: // Cadastra Pedido
                     PedidoCadastraOpcao.caseEntidade();
                     break;
-                case 2:
+                case 2: // Deleta Pedido
                     System.out.println("------------------------------");
                     System.out.println("Digite o ID do pedido para PESQUISAR");
                     System.out.println("------------------------------");
@@ -45,9 +47,22 @@ public class PedidoOpcao {
                     pedidoEntity = pedidoRepository.findById(id);
                     System.out.println(pedidoEntity);
                     break;
-                case 3:
+                case 3: // Atualiza Pedido
+                    System.out.println("------------------------------");
+                    System.out.println("Digite o ID do pedido para ATUALIZAR");
+                    System.out.println("------------------------------");
+
+                    id = scanner.nextLong();
+                    pedidoEntity = pedidoRepository.findById(id);
+
+                    // Define como pronto
+                    pedidoEntity.setStatus("pronto");
+                    pedidoEntity.setHora_fim(LocalTime.now());
+
+                    // Atualiza no Banco
+                    pedidoRepository.update(pedidoEntity);
                     break;
-                case 4:
+                case 4: // Deleta Pedido
                     System.out.println("------------------------------");
                     System.out.println("Digite o ID do pedido para DELETAR:");
                     System.out.println("------------------------------");
