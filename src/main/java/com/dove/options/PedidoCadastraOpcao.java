@@ -1,15 +1,10 @@
 package com.dove.options;
 
-import com.dove.entities.ClienteEntity;
-import com.dove.entities.Funcionario;
-import com.dove.entities.IngredienteEntity;
-import com.dove.entities.PedidoEntity;
-import com.dove.repository.ClienteRepository;
-import com.dove.repository.CustomizerFactory;
-import com.dove.repository.FuncionarioRepository;
-import com.dove.repository.IngredienteRepository;
+import com.dove.entities.*;
+import com.dove.repository.*;
 import jakarta.persistence.EntityManager;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,11 +16,14 @@ public class PedidoCadastraOpcao {
         IngredienteRepository ingredienteRepository = new IngredienteRepository(em);
         ClienteRepository clienteRepository = new ClienteRepository();
         FuncionarioRepository funcionarioRepository = new FuncionarioRepository(em);
+        CardapiosRepository cardapiosRepository = new CardapiosRepository(em);
+        PedidoRepository pedidoRepository = new PedidoRepository(em);
         PedidoEntity pedidoEntity = new PedidoEntity();
         ClienteEntity clienteEntity = new ClienteEntity();
         Funcionario funcionario = new Funcionario();
+        CardapiosEntity cardapiosEntity = new CardapiosEntity();
         List<IngredienteEntity> ingredientes = ingredienteRepository.findAll();
-        String[] marmita = {"Prato no Local", "Marmita Pequena", "Marmita Média", "Marmita Grande"};
+        String[] marmita = {"prato", "pequena", "média", "grande"};
         int controleEscolheIngrediente = 0, indexIngrediente, controleMarmita = 0;
 
         // Adição de ingredientes
@@ -68,19 +66,27 @@ public class PedidoCadastraOpcao {
 
         } while(controleMarmita != 0);
 
-        // adiciona cliente
+        // Adiciona Cliente
         System.out.println("------------------------------");
         System.out.println("Digite o Id do Cliente");
         clienteEntity = clienteRepository.findById(scanner.nextLong());
         pedidoEntity.setCliente(clienteEntity);
 
-        // adiciona funcionário
+        // Adiciona Funcionário
         System.out.println("------------------------------");
         System.out.println("Digite o Id do Funcionário");
         funcionario = funcionarioRepository.buscarPorId(scanner.nextLong());
         pedidoEntity.setFuncionario(funcionario);
 
+        // Adições Automáticas + cardápio
+        pedidoEntity.setHora_inicio(LocalTime.now());
+        pedidoEntity.setStatus("Iniciado");
+        cardapiosEntity = cardapiosRepository.findById(1L);
+        pedidoEntity.setCardapio(cardapiosEntity);
+
+        // DB
+        pedidoRepository.insert(pedidoEntity);
+
         System.out.println("------------------------------");
-//        System.out.println("");
     }
 }
