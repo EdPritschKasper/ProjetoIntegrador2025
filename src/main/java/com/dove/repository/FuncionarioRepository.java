@@ -1,19 +1,18 @@
 package com.dove.repository;
 
-import com.dove.entities.Funcionario;
+import com.dove.entities.FuncionarioEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 public class FuncionarioRepository {
-
     private final EntityManager entityManager;
 
     public FuncionarioRepository(EntityManager entityManager){
         this.entityManager = entityManager;
     }
 
-    public void salvar (Funcionario funcionario){
+    public void salvar(FuncionarioEntity funcionario){
         EntityTransaction transaction = entityManager.getTransaction();
         try{
             transaction.begin();
@@ -25,16 +24,17 @@ public class FuncionarioRepository {
         }
     }
 
-    public Funcionario buscarPorId(Long id){
-        return entityManager.find(Funcionario.class, id);
+    public FuncionarioEntity buscarPorId(Long id){
+        return entityManager.find(FuncionarioEntity.class, id);
     }
 
-    public List<Funcionario> buscarTodos(){
-        TypedQuery<Funcionario> query = entityManager.createQuery("SELECT f FROM Funcionario f", Funcionario.class);
-        return query.getResultList();
+    public List<FuncionarioEntity> buscarTodos() {
+        return entityManager
+                .createQuery("FROM FuncionarioEntity", FuncionarioEntity.class)
+                .getResultList();
     }
 
-    public void atualizar (Funcionario funcionario){
+    public void atualizar(FuncionarioEntity funcionario){
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
@@ -46,11 +46,11 @@ public class FuncionarioRepository {
         }
     }
 
-    public void deletar (Long id){
+    public void deletar(Long id){
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
-            Funcionario funcionario = entityManager.find(Funcionario.class, id);
+            FuncionarioEntity funcionario = entityManager.find(FuncionarioEntity.class, id);
             if (funcionario != null){
                 entityManager.remove(funcionario);
                 transaction.commit();

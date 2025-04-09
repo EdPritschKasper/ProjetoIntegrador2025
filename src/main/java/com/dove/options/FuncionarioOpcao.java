@@ -1,6 +1,6 @@
 package com.dove.options;
 
-import com.dove.entities.Funcionario;
+import com.dove.entities.FuncionarioEntity;
 import com.dove.repository.CustomizerFactory;
 import com.dove.repository.FuncionarioRepository;
 import jakarta.persistence.EntityManager;
@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class FuncionarioOpcao {
 
-    public void caseFuncionario() {
+    public void caseEntidades() {
         EntityManager em = CustomizerFactory.getEntityManager();
         FuncionarioRepository funcionarioRepository = new FuncionarioRepository(em);
         Scanner scanner = new Scanner(System.in);
@@ -38,7 +38,7 @@ public class FuncionarioOpcao {
                     System.out.print("Digite o nome do funcionário: ");
                     String nome = scanner.nextLine();
 
-                    Funcionario novoFuncionario = new Funcionario();
+                    FuncionarioEntity novoFuncionario = new FuncionarioEntity();
                     novoFuncionario.setNome(nome);
 
                     funcionarioRepository.salvar(novoFuncionario);
@@ -46,9 +46,9 @@ public class FuncionarioOpcao {
                 }
 
                 case 2 -> {
-                    List<Funcionario> funcionarios = funcionarioRepository.buscarTodos();
+                    List<FuncionarioEntity> funcionarios = funcionarioRepository.buscarTodos();
                     System.out.println("\n--- Lista de Funcionários ---");
-                    for (Funcionario f : funcionarios) {
+                    for (FuncionarioEntity f : funcionarios) {
                         System.out.println("ID: " + f.getId() + " | Nome: " + f.getNome());
                     }
                 }
@@ -58,7 +58,7 @@ public class FuncionarioOpcao {
                     Long id = scanner.nextLong();
                     scanner.nextLine();
 
-                    Funcionario funcionario = funcionarioRepository.buscarPorId(id);
+                    FuncionarioEntity funcionario = funcionarioRepository.buscarPorId(id);
                     if (funcionario != null) {
                         System.out.print("Digite o novo nome: ");
                         String novoNome = scanner.nextLine();

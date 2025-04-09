@@ -1,13 +1,10 @@
 package com.dove.entities;
 
-
 import jakarta.persistence.*;
-
 
 @Entity
 @Table(name = "tb_funcionario")
-public class Funcionario {
-
+public class FuncionarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,11 +12,11 @@ public class Funcionario {
     @Column(name = "nome")
     private String nome;
 
-    public Funcionario(){
+    public FuncionarioEntity(){
 
     }
 
-    public Funcionario(Long id, String nome){
+    public FuncionarioEntity(Long id, String nome){
         this.id = id;
     }
 

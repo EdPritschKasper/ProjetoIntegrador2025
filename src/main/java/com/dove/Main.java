@@ -1,5 +1,6 @@
 package com.dove;
 
+import com.dove.options.IngredienteOpcao;
 import com.dove.options.PedidoOpcao;
 import com.dove.options.FuncionarioOpcao;
 
@@ -18,6 +19,7 @@ public class Main {
         // Classes com a implementação das switch cases para não poluir a Main
         FuncionarioOpcao funcionarioOpcao = new FuncionarioOpcao();
         PedidoOpcao pedidoOpcao = new PedidoOpcao();
+        IngredienteOpcao ingredienteOpcao = new IngredienteOpcao();
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -37,15 +39,16 @@ public class Main {
 
             switch (controle) {
                 case 1:// Opcao Funcionario
-                    funcionarioOpcao.caseFuncionario();
+                    funcionarioOpcao.caseEntidades();
                     break;
                 case 2:
                     break;
                 case 3:
                     break;
-                case 4:
+                case 4://  Opcao Ingrediente
+                    ingredienteOpcao.caseEntidade();
                     break;
-                case 5: // Opção Pedido
+                case 5:// Opção Pedido
                     pedidoOpcao.caseEntidade();
                     break;
                 case 0:

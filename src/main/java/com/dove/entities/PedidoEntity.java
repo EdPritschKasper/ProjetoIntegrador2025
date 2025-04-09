@@ -10,7 +10,7 @@ public class PedidoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "marmita")
     private String marmita;
     @Column(name = "status")
@@ -40,7 +40,7 @@ public class PedidoEntity {
     }
 
     // construtor para update
-    public PedidoEntity(Long id, String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, Long cardapio_id, Long funcionario_id, Long cliente_id) {
+    public PedidoEntity(Integer id, String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, Long cardapio_id, Long funcionario_id, Long cliente_id) {
         this.id = id;
         this.marmita = marmita;
         this.status = status;

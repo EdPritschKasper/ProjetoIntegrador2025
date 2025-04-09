@@ -1,4 +1,4 @@
-package ProjetoMensalRestaurante.Entity;
+package com.dove.entities;
 
 import jakarta.persistence.*;
 
