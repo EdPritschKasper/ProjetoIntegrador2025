@@ -22,6 +22,12 @@ public class ClienteRepository {
         }
     }
 
+    public ClienteEntity findById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(ClienteEntity.class, id);
+        }
+    }
+
     public void salvarCliente(ClienteEntity cliente) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {

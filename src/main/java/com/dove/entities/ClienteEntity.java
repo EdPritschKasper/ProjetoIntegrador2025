@@ -25,11 +25,7 @@ public class ClienteEntity {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoEntity> pedidos = new ArrayList<>();
 
-    protected ClienteEntity(){
-        this.nome= null;
-        this.email = null;
-    }
-
+    public ClienteEntity(){}
 
     public ClienteEntity (String nome, String email, String senha){
     this.nome = nome;
