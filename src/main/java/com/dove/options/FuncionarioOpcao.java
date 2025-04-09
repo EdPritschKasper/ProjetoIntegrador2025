@@ -1,3 +1,4 @@
+package com.dove.options;
 
 import com.dove.entities.Funcionario;
 import com.dove.repository.CustomizerFactory;
@@ -9,7 +10,7 @@ import java.util.Scanner;
 
 public class FuncionarioOpcao {
 
-    public static void main(String[] args) {
+    public void caseFuncionario() {
         EntityManager em = CustomizerFactory.getEntityManager();
         FuncionarioRepository funcionarioRepository = new FuncionarioRepository(em);
         Scanner scanner = new Scanner(System.in);
@@ -27,6 +28,10 @@ public class FuncionarioOpcao {
 
             opcao = scanner.nextInt();
             scanner.nextLine(); // Limpa o buffer
+
+            if (opcao == 0) {
+                break; // Sai do loop sem cair no switch
+            }
 
             switch (opcao) {
                 case 1 -> {
@@ -74,13 +79,11 @@ public class FuncionarioOpcao {
                     funcionarioRepository.deletar(id);
                 }
 
-                case 0 -> System.out.println("Encerrando...");
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
 
         } while (opcao != 0);
 
-        scanner.close();
         em.close();
     }
 }

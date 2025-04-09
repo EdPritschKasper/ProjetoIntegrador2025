@@ -1,6 +1,8 @@
 package com.dove;
 
 import com.dove.options.PedidoOpcao;
+import com.dove.options.FuncionarioOpcao;
+
 
 import java.util.Scanner;
 
@@ -14,6 +16,7 @@ public class Main {
 
         // Inicialização de Opções
         // Classes com a implementação das switch cases para não poluir a Main
+        FuncionarioOpcao funcionarioOpcao = new FuncionarioOpcao();
         PedidoOpcao pedidoOpcao = new PedidoOpcao();
 
         // Estrutura de repetição inicial para opções de entidade
@@ -33,7 +36,8 @@ public class Main {
 //            scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
 
             switch (controle) {
-                case 1:
+                case 1:// Opcao Funcionario
+                    funcionarioOpcao.caseFuncionario();
                     break;
                 case 2:
                     break;
