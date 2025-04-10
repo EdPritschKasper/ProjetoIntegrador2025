@@ -2,6 +2,9 @@ package com.dove.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "tb_cliente")
 
@@ -19,11 +22,10 @@ public class ClienteEntity {
     @Column(nullable = false)
     private String senha;
 
-    protected ClienteEntity(){
-        this.nome= null;
-        this.email = null;
-    }
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoEntity> pedidos = new ArrayList<>();
 
+    public ClienteEntity(){}
 
     public ClienteEntity (String nome, String email, String senha){
     this.nome = nome;

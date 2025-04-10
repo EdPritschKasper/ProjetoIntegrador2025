@@ -4,9 +4,13 @@ import com.dove.options.IngredienteOpcao;
 import com.dove.options.PedidoOpcao;
 import com.dove.options.FuncionarioOpcao;
 
-
+import java.util.List;
 import java.util.Scanner;
+import com.dove.repository.*;
+import com.dove.entities.*;
 
+import java.time.LocalTime;
+import com.dove.options.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -48,7 +52,7 @@ public class Main {
                 case 4://  Opcao Ingrediente
                     ingredienteOpcao.caseEntidade();
                     break;
-                case 5:// Opção Pedido
+                case 5: // Opção Pedido
                     pedidoOpcao.caseEntidade();
                     break;
                 case 0:

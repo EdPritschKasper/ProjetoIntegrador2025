@@ -1,10 +1,12 @@
 package com.dove.entities;
 
 import jakarta.persistence.*;
+import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "tb_cardapios")
+@Table(name = "tb_cardapio")
 public class CardapiosEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,6 +14,9 @@ public class CardapiosEntity {
 
     @Column(name = "data", nullable = false)
     private LocalDate data;
+
+    @OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoEntity> pedidos = new ArrayList<>();
 
     public CardapiosEntity() {}
 
