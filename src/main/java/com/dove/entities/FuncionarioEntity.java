@@ -1,13 +1,13 @@
 package com.dove.entities;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "tb_funcionario")
-public class Funcionario {
+public class FuncionarioEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,11 +18,11 @@ public class Funcionario {
     @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoEntity> pedidos = new ArrayList<>();
 
-    public Funcionario(){
+    public FuncionarioEntity(){
 
     }
 
-    public Funcionario(Long id, String nome){
+    public FuncionarioEntity(Long id, String nome){
         this.id = id;
     }
 

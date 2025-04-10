@@ -26,7 +26,7 @@ public class PedidoEntity {
     private CardapiosEntity cardapio;
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
-    private Funcionario funcionario;
+    private FuncionarioEntity funcionario;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private ClienteEntity cliente;
@@ -37,18 +37,6 @@ public class PedidoEntity {
             inverseJoinColumns = @JoinColumn(name = "ingrediente_id")
     )
     private List<IngredienteEntity> ingredientes = new ArrayList<>();
-
-    public PedidoEntity() {}
-
-    public PedidoEntity(String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, CardapiosEntity cardapio, Funcionario funcionario, ClienteEntity cliente) {
-        this.marmita = marmita;
-        this.status = status;
-        this.hora_inicio = hora_inicio;
-        this.hora_fim = hora_fim;
-        this.cardapio = cardapio;
-        this.funcionario = funcionario;
-        this.cliente = cliente;
-    }
 
     @Override
     public String toString() {
@@ -112,11 +100,11 @@ public class PedidoEntity {
         this.cardapio = cardapio;
     }
 
-    public Funcionario getFuncionario() {
+    public FuncionarioEntity getFuncionario() {
         return funcionario;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
+    public void setFuncionario(FuncionarioEntity funcionario) {
         this.funcionario = funcionario;
     }
 

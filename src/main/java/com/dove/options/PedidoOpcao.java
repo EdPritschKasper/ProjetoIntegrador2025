@@ -12,7 +12,7 @@ import com.dove.repository.CustomizerFactory;
 public class PedidoOpcao {
 
     // Switch Case 5 - CRUD do Pedido
-    public static void  caseEntidade() {
+    public void  caseEntidade() {
         Scanner scanner = new Scanner(System.in);
         EntityManager em = CustomizerFactory.getEntityManager();
         PedidoRepository pedidoRepository = new PedidoRepository(em);

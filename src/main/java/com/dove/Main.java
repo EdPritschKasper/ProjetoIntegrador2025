@@ -1,7 +1,8 @@
 package com.dove;
 
+import com.dove.options.IngredienteOpcao;
 import com.dove.options.PedidoOpcao;
-import jakarta.persistence.EntityManager;
+import com.dove.options.FuncionarioOpcao;
 
 import java.util.List;
 import java.util.Scanner;
@@ -14,24 +15,15 @@ import com.dove.options.*;
 public class Main {
     public static void main(String[] args) {
 
-        // APENAS TESTE
-//        EntityManager em = CustomizerFactory.getEntityManager();
-//        ClienteRepository clir = new ClienteRepository();
-//        CardapiosRepository carr = new CardapiosRepository(em);
-//        FuncionarioRepository funr = new FuncionarioRepository(em);
-//        PedidoRepository pedr = new PedidoRepository(em);
-//        IngredienteRepository ingr = new IngredienteRepository(em);
-//
-//        System.out.println(clir.exibirClientes().get(0));
-//        System.out.println(carr.findById(1L));
-//        System.out.println(funr.buscarPorId(1L));
-//        System.out.println(pedr.findById(1L));
-//        System.out.println(ingr.findById(1L));
-        // FIM DO TESTE
-
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
         int controle = 0;
+
+        // Inicialização de Opções
+        // Classes com a implementação das switch cases para não poluir a Main
+        FuncionarioOpcao funcionarioOpcao = new FuncionarioOpcao();
+        PedidoOpcao pedidoOpcao = new PedidoOpcao();
+        IngredienteOpcao ingredienteOpcao = new IngredienteOpcao();
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -45,19 +37,23 @@ public class Main {
             System.out.println("5 - Pedido:");
             System.out.println("0 - Sair do programa:");
             System.out.println("------------------------------");
+
             controle = scanner.nextInt();
+//            scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
 
             switch (controle) {
-                case 1:
+                case 1:// Opcao Funcionario
+                    funcionarioOpcao.caseEntidades();
                     break;
                 case 2:
                     break;
                 case 3:
                     break;
-                case 4:
+                case 4://  Opcao Ingrediente
+                    ingredienteOpcao.caseEntidade();
                     break;
                 case 5: // Opção Pedido
-                    PedidoOpcao.caseEntidade();
+                    pedidoOpcao.caseEntidade();
                     break;
                 case 0:
                     break;
