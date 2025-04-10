@@ -25,7 +25,7 @@ public class PedidoEntity {
     @JoinColumn(name = "cardapio_id", nullable = false)
     private CardapiosEntity cardapio;
     @ManyToOne
-    @JoinColumn(name = "funcionario_id")
+    @JoinColumn(name = "funcionario_id", nullable = false)
     private FuncionarioEntity funcionario;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
