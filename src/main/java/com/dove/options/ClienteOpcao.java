@@ -5,17 +5,29 @@ import com.dove.repository.ClienteRepository;
 
 import java.util.Scanner;
 
-public class ClienteService {
+public class ClienteOpcao {
 
     private final ClienteRepository clienteRepository;
     private final Scanner scanner;
-
-    public ClienteService(Scanner scanner) {
+    int opcao;
+    public ClienteOpcao(Scanner scanner) {
         this.clienteRepository = new ClienteRepository();
         this.scanner = scanner;
     }
 
-    public void executarOpcao(int opcao) {
+
+    public void executarOpcao() {
+
+        System.out.println("---------MENU---------");
+        System.out.println("1- Cadastar Cliente");
+        System.out.println("2- Alterar Senha");
+        System.out.println("3- Excluir Conta");
+        System.out.println("4- Exibir Lista de Clietes");
+        System.out.println("0- Sair ?");
+
+        opcao = scanner.nextInt();
+        scanner.nextLine();
+
         switch (opcao) {
             case 1 -> cadastrarCliente();
             case 2 -> alterarSenha();
