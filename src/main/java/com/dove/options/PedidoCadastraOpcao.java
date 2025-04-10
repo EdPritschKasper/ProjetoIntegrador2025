@@ -20,7 +20,7 @@ public class PedidoCadastraOpcao {
         PedidoRepository pedidoRepository = new PedidoRepository(em);
         PedidoEntity pedidoEntity = new PedidoEntity();
         ClienteEntity clienteEntity = new ClienteEntity();
-        Funcionario funcionario = new Funcionario();
+        FuncionarioEntity funcionario = new FuncionarioEntity();
         CardapiosEntity cardapiosEntity = new CardapiosEntity();
         List<IngredienteEntity> ingredientes = ingredienteRepository.findAll();
         String[] marmita = {"prato", "pequena", "média", "grande"};
