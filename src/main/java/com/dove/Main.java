@@ -29,11 +29,6 @@ public class Main {
         ClienteOpcao clienteOpcao = new ClienteOpcao(scanner);
         CardapioOpcao cardapioOpcao = new CardapioOpcao();
 
-//        EntityManager emf = CustomizerFactory.getEntityManager();
-//
-//        CardapiosRepository card = new CardapiosRepository(emf);
-//        System.out.println(card.getCardapioIngredientePorId(1L));
-
         // Estrutura de repetição inicial para opções de entidade
         do {
             System.out.println("------------------------------");

@@ -56,6 +56,14 @@ public class CardapiosEntity {
         this.data = data;
     }
 
+    public List<IngredienteEntity> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteEntity> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+
     @Override
     public String toString() {
         return "CardapiosEntity{" +
