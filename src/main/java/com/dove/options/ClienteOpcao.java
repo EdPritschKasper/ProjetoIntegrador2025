@@ -24,6 +24,7 @@ public class ClienteOpcao {
         System.out.println("3- Excluir Conta");
         System.out.println("4- Exibir Lista de Clietes");
         System.out.println("5- Exibir Pedidos do Cliente");
+        System.out.println("6- Exibir Clientes que Mais Faz Pedido");
         System.out.println("0- Sair ?");
 
         opcao = scanner.nextInt();
@@ -35,6 +36,7 @@ public class ClienteOpcao {
             case 3 -> excluirCliente();
             case 4 -> exibirClientes();
             case 5 -> exibirPedidosCliente();
+            case 6 -> exibirClientesComMaisPedidos();
             case 0 -> System.out.println("Encerrando o sistema...");
             default -> System.out.println("Opção inválida.");
         }
@@ -132,6 +134,21 @@ public class ClienteOpcao {
             System.out.println("Nenhum pedido encontrado.");
         } else {
             cliente.getPedidos().forEach(pedido -> System.out.println(pedido));
+        }
+    }
+
+    private void exibirClientesComMaisPedidos(){
+        var clientes = clienteRepository.getClientesComMaisPedidos();
+        if (clientes == null || clientes.isEmpty()) {
+            System.out.println("Nenhum cliente encontrado.");
+            return;
+        }
+        System.out.println("Clientes com mais pedidos:");
+        for (ClienteEntity cliente : clientes) {
+            System.out.println("--------------------");
+            System.out.println("Nome: " + cliente.getNome());
+            System.out.println("Email: " + cliente.getEmail());
+            System.out.println("Quantidade de pedidos: " + cliente.getPedidos().size());
         }
     }
 }

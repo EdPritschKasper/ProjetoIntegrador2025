@@ -8,6 +8,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class ClienteRepository {
 
@@ -106,6 +107,30 @@ public class ClienteRepository {
             throw new RuntimeException("Erro ao exibir Clientes: "+ e.getMessage(),e);
         }
 
+    }
+
+    public List<ClienteEntity> getClientesComMaisPedidos() {
+        try (Session session = sessionFactory.openSession()){
+            Query<String> emailQuery = session.createQuery(
+                "SELECT c.email FROM ClienteEntity c LEFT JOIN c.pedidos p " +
+                "GROUP BY c.id, c.email, c.nome, c.senha " +
+                "ORDER BY COUNT(p) DESC", String.class);
+            emailQuery.setMaxResults(3);
+            List<String> topEmails = emailQuery.list();
+            
+            if (topEmails.isEmpty()) {
+                return new ArrayList<>();
+            }
+            
+            Query<ClienteEntity> fetchQuery = session.createQuery(
+                "SELECT DISTINCT c FROM ClienteEntity c LEFT JOIN FETCH c.pedidos WHERE c.email IN (:emails)", 
+                ClienteEntity.class);
+            fetchQuery.setParameter("emails", topEmails);
+            List<ClienteEntity> clientes = fetchQuery.list();
+
+            clientes.sort((c1, c2) -> Integer.compare(topEmails.indexOf(c1.getEmail()), topEmails.indexOf(c2.getEmail())));
+            return clientes;
+        }
     }
 
     public void fechar() {
