@@ -26,6 +26,7 @@ public class Main {
         PedidoOpcao pedidoOpcao = new PedidoOpcao();
         IngredienteOpcao ingredienteOpcao = new IngredienteOpcao();
         ClienteOpcao clienteOpcao = new ClienteOpcao(scanner);
+        CardapioOpcao cardapioOpcao = new CardapioOpcao();
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -48,7 +49,8 @@ public class Main {
                 case 2: // Opcao Cliente
                     clienteOpcao.executarOpcao();
                     break;
-                case 3: // Opcao Cardápio
+                case 3:
+                    cardapioOpcao.caseEntidade();
                     break;
                 case 4://  Opcao Ingrediente
                     ingredienteOpcao.caseEntidade();

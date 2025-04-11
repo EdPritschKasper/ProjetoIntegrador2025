@@ -45,6 +45,10 @@ public class ClienteEntity {
         return this.senha;
     }
 
+    public List<PedidoEntity> getPedidos() {
+        return pedidos;
+    }
+
     public void alterarSenha(String novaSenha) {
         if (novaSenha == null || novaSenha.length() < 4) {
             throw new IllegalArgumentException("Senha deve ter ao menos 4 caracteres.");

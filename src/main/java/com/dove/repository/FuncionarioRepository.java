@@ -46,25 +46,35 @@ public class FuncionarioRepository {
         }
     }
 
-    public void deletar(Long id){
+    public void deletar(Long id) {
         EntityTransaction transaction = entityManager.getTransaction();
         try {
             transaction.begin();
             FuncionarioEntity funcionario = entityManager.find(FuncionarioEntity.class, id);
-            if (funcionario != null){
-                entityManager.remove(funcionario);
-                transaction.commit();
-                System.out.println("Funcionário removido com sucesso!");
+
+            if (funcionario != null) {
+                // Verifica se há pedidos relacionados ao funcionário
+                String jpql = "SELECT COUNT(p) FROM PedidoEntity p WHERE p.funcionario.id = :id";
+                Long pedidosVinculados = entityManager.createQuery(jpql, Long.class)
+                        .setParameter("id", id)
+                        .getSingleResult();
+
+                if (pedidosVinculados > 0) {
+                    transaction.rollback();
+                    System.out.println("Erro: Este funcionário está vinculado a um ou mais pedidos e não pode ser removido.");
+                } else {
+                    entityManager.remove(funcionario);
+                    transaction.commit();
+                    System.out.println("Funcionário removido com sucesso!");
+                }
             } else {
                 transaction.rollback();
                 System.out.println("Funcionário não encontrado.");
             }
-        } catch (PersistenceException e){
-            if (transaction.isActive()) transaction.rollback();
-            System.out.println("Erro: Este funcionário está vinculado a um ou mais pedidos e não pode ser removido.");
-        } catch (Exception e){
+        } catch (Exception e) {
             if (transaction.isActive()) transaction.rollback();
             e.printStackTrace();
         }
     }
+
 }
