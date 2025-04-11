@@ -3,6 +3,7 @@ package com.dove.repository;
 import com.dove.entities.CardapiosEntity;
 import jakarta.persistence.EntityManager;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class CardapiosRepository {
@@ -38,5 +39,14 @@ public class CardapiosRepository {
         return em
                 .createQuery("SELECT i FROM CardapiosEntity i", CardapiosEntity.class)
                 .getResultList();
+    }
+
+    public CardapiosEntity getCardapioHoje() {
+        return em
+                .createQuery("SELECT c " +
+                        "FROM CardapiosEntity c " +
+                        "WHERE c.data = :hoje", CardapiosEntity.class)
+                .setParameter("hoje", LocalDate.now())
+                .getSingleResult();
     }
 }

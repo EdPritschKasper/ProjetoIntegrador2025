@@ -12,6 +12,7 @@ import com.dove.entities.*;
 
 import java.time.LocalTime;
 import com.dove.options.*;
+import jakarta.persistence.EntityManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -46,7 +47,7 @@ public class Main {
                 case 1:// Opcao Funcionario
                     funcionarioOpcao.caseEntidades();
                     break;
-                case 2:
+                case 2: // Opcao Cliente
                     clienteOpcao.executarOpcao();
                     break;
                 case 3:

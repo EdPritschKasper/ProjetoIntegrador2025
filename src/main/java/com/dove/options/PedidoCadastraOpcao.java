@@ -22,9 +22,19 @@ public class PedidoCadastraOpcao {
         ClienteEntity clienteEntity = new ClienteEntity();
         FuncionarioEntity funcionario = new FuncionarioEntity();
         CardapiosEntity cardapiosEntity = new CardapiosEntity();
-        List<IngredienteEntity> ingredientes = ingredienteRepository.findAll();
         String[] marmita = {"prato", "pequena", "média", "grande"};
         int controleEscolheIngrediente = 0, indexIngrediente, controleMarmita = 0;
+
+
+        // Seta hora_inicio do pedido para HOJE
+        pedidoEntity.setHora_inicio(LocalTime.now());
+        // Seta o status do pedido como "Iniciado"
+        pedidoEntity.setStatus("Iniciado");
+        // Seta o Cardápio do pedido para o cardápio de HOJE
+        cardapiosEntity = cardapiosRepository.getCardapioHoje();
+        pedidoEntity.setCardapio(cardapiosEntity);
+        List<IngredienteEntity> ingredientes = cardapiosEntity.getIngredientes();
+
 
         // Adição de ingredientes
         do {
@@ -57,8 +67,8 @@ public class PedidoCadastraOpcao {
             System.out.println("------------------------------");
             controleMarmita = scanner.nextInt();
 
-            if (controleMarmita > 0 && controleMarmita < marmita.length) {
-                pedidoEntity.setMarmita(marmita[controleMarmita]);
+            if (controleMarmita > 0 && controleMarmita <= marmita.length) {
+                pedidoEntity.setMarmita(marmita[--controleMarmita]);
                 controleMarmita = 0;
             } else {
                 System.out.println("Opção Inválida");
@@ -77,12 +87,6 @@ public class PedidoCadastraOpcao {
         System.out.println("Digite o Id do Funcionário");
         funcionario = funcionarioRepository.buscarPorId(scanner.nextLong());
         pedidoEntity.setFuncionario(funcionario);
-
-        // Adições Automáticas + cardápio
-        pedidoEntity.setHora_inicio(LocalTime.now());
-        pedidoEntity.setStatus("Iniciado");
-        cardapiosEntity = cardapiosRepository.findById(1L);
-        pedidoEntity.setCardapio(cardapiosEntity);
 
         // Insere no Banco
         pedidoRepository.insert(pedidoEntity);
