@@ -12,6 +12,7 @@ import com.dove.entities.*;
 
 import java.time.LocalTime;
 import com.dove.options.*;
+import jakarta.persistence.EntityManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -27,6 +28,11 @@ public class Main {
         IngredienteOpcao ingredienteOpcao = new IngredienteOpcao();
         ClienteOpcao clienteOpcao = new ClienteOpcao(scanner);
         CardapioOpcao cardapioOpcao = new CardapioOpcao();
+
+//        EntityManager emf = CustomizerFactory.getEntityManager();
+//
+//        CardapiosRepository card = new CardapiosRepository(emf);
+//        System.out.println(card.getCardapioIngredientePorId(1L));
 
         // Estrutura de repetição inicial para opções de entidade
         do {

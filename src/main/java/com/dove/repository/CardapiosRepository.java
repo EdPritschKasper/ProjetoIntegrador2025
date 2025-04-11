@@ -39,4 +39,13 @@ public class CardapiosRepository {
                 .createQuery("SELECT i FROM CardapiosEntity i", CardapiosEntity.class)
                 .getResultList();
     }
+
+//    public List<CardapiosEntity> getCardapioIngredientePorId(Long id) {
+//        return em.createQuery(
+//                        "SELECT c FROM CardapiosEntity c " +
+//                                "INNER JOIN ingredientes i " +
+//                                "WHERE i.id = :id", CardapiosEntity.class)
+//                .setParameter("id", id)
+//                .getResultList();
+//    }
 }
