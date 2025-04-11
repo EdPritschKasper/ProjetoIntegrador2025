@@ -28,6 +28,7 @@ public class PedidoOpcao {
             System.out.println("2 - Ler Pedido Por ID:");
             System.out.println("3 - Definir como PRONTO (Atualiza):");
             System.out.println("4 - Deletar Pedido:");
+            System.out.println("5 - Exibir Histórico de Pedidos");
             System.out.println("0 - Sair das Opções de Pedido:");
             System.out.println("------------------------------");
 
@@ -42,7 +43,6 @@ public class PedidoOpcao {
                     System.out.println("------------------------------");
                     System.out.println("Digite o ID do pedido para PESQUISAR");
                     System.out.println("------------------------------");
-
                     id = scanner.nextLong();
                     pedidoEntity = pedidoRepository.findById(id);
                     System.out.println(pedidoEntity);
@@ -51,14 +51,11 @@ public class PedidoOpcao {
                     System.out.println("------------------------------");
                     System.out.println("Digite o ID do pedido para ATUALIZAR");
                     System.out.println("------------------------------");
-
                     id = scanner.nextLong();
                     pedidoEntity = pedidoRepository.findById(id);
-
                     // Define como pronto
                     pedidoEntity.setStatus("pronto");
                     pedidoEntity.setHora_fim(LocalTime.now());
-
                     // Atualiza no Banco
                     pedidoRepository.update(pedidoEntity);
                     break;
@@ -69,6 +66,31 @@ public class PedidoOpcao {
                     id = scanner.nextLong();
                     pedidoEntity = pedidoRepository.findById(id);
                     pedidoRepository.delete(pedidoEntity);
+                    break;
+                case 5:
+                    System.out.println("------------------------------");
+                    System.out.println("Histórico de Pedidos, seus Status e Tempo:");
+                    var pedidos = pedidoRepository.findAll();
+                    if (pedidos.isEmpty()) {
+                        System.out.println("Nenhum pedido realizado.");
+                    } else {
+                        pedidos.sort(java.util.Comparator.comparing(PedidoEntity::getHora_fim, 
+                                    java.util.Comparator.nullsLast(java.util.Comparator.naturalOrder())).reversed());
+                        for (PedidoEntity pedido : pedidos) {
+                            String tempo;
+                            if (pedido.getHora_fim() != null) {
+                                java.time.Duration duracao = java.time.Duration.between(pedido.getHora_inicio(), pedido.getHora_fim());
+                                long minutos = duracao.toMinutes();
+                                long segundos = duracao.minusMinutes(minutos).getSeconds();
+                                tempo = minutos + " minutos " + segundos + " segundos";
+                            } else {
+                                tempo = "Em andamento";
+                            }
+                            System.out.println("Pedido ID: " + pedido.getId() +
+                                               " | Status: " + pedido.getStatus() +
+                                               " | Tempo: " + tempo);
+                        }
+                    }
                     break;
                 case 0:
                     break;
