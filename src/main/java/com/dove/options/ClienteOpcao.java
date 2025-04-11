@@ -23,6 +23,7 @@ public class ClienteOpcao {
         System.out.println("2- Alterar Senha");
         System.out.println("3- Excluir Conta");
         System.out.println("4- Exibir Lista de Clietes");
+        System.out.println("5- Exibir Pedidos do Cliente");
         System.out.println("0- Sair ?");
 
         opcao = scanner.nextInt();
@@ -33,6 +34,7 @@ public class ClienteOpcao {
             case 2 -> alterarSenha();
             case 3 -> excluirCliente();
             case 4 -> exibirClientes();
+            case 5 -> exibirPedidosCliente();
             case 0 -> System.out.println("Encerrando o sistema...");
             default -> System.out.println("Opção inválida.");
         }
@@ -111,6 +113,25 @@ public class ClienteOpcao {
                 System.out.println("Nome: "+ cliente.getNome());
                 System.out.println("Email: " + cliente.getEmail());
             }
+        }
+    }
+
+    private void exibirPedidosCliente() {
+        System.out.print("Digite seu email: ");
+        String email = scanner.nextLine();
+
+        ClienteEntity cliente = clienteRepository.findByEmail(email);
+
+        if (cliente == null) {
+            System.out.println("Cliente não encontrado.");
+            return;
+        }
+
+        System.out.println("Pedidos do Cliente " + cliente.getEmail() + ":");
+        if (cliente.getPedidos() == null || cliente.getPedidos().isEmpty()){
+            System.out.println("Nenhum pedido encontrado.");
+        } else {
+            cliente.getPedidos().forEach(pedido -> System.out.println(pedido));
         }
     }
 }

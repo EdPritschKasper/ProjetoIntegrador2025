@@ -28,6 +28,16 @@ public class ClienteRepository {
         }
     }
 
+    public ClienteEntity findByEmail(String email) {
+        try (Session session = sessionFactory.openSession()){
+            Query<ClienteEntity> query = session.createQuery(
+                "SELECT c FROM ClienteEntity c LEFT JOIN FETCH c.pedidos WHERE c.email = :email", 
+                ClienteEntity.class);
+            query.setParameter("email", email);
+            return query.uniqueResult();
+        }
+    }
+
     public void salvarCliente(ClienteEntity cliente) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
