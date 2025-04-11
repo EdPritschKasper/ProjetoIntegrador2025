@@ -1,6 +1,7 @@
 package com.dove.repository;
 
 import com.dove.entities.FuncionarioEntity;
+import com.dove.entities.PedidoEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -75,6 +76,13 @@ public class FuncionarioRepository {
             if (transaction.isActive()) transaction.rollback();
             e.printStackTrace();
         }
+    }
+
+    public List<PedidoEntity> buscarPedidosPorFuncionario(Long funcionarioId) {
+        return entityManager.createQuery(
+                        "SELECT p FROM PedidoEntity p WHERE p.funcionario.id = :funcionarioId", PedidoEntity.class)
+                .setParameter("funcionarioId", funcionarioId)
+                .getResultList();
     }
 
 }

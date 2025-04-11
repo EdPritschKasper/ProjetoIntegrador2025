@@ -1,6 +1,7 @@
 package com.dove.options;
 
 import com.dove.entities.FuncionarioEntity;
+import com.dove.entities.PedidoEntity;
 import com.dove.repository.CustomizerFactory;
 import com.dove.repository.FuncionarioRepository;
 import jakarta.persistence.EntityManager;
@@ -23,6 +24,7 @@ public class FuncionarioOpcao {
             System.out.println("2 - Listar funcionários");
             System.out.println("3 - Atualizar funcionário");
             System.out.println("4 - Remover funcionário");
+            System.out.println("5 - Relatório de pedidos realizados");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -79,6 +81,31 @@ public class FuncionarioOpcao {
                     funcionarioRepository.deletar(id);
                 }
 
+                case 5 -> {
+                    System.out.print("Digite o ID do funcionário para gerar o relatório: ");
+                    Long id = scanner.nextLong();
+                    scanner.nextLine();
+
+                    FuncionarioEntity funcionario = funcionarioRepository.buscarPorId(id);
+                    if (funcionario != null) {
+                        List<PedidoEntity> pedidos = funcionario.getPedidos();
+
+                        System.out.println("\n--- Relatório de Pedidos ---");
+                        System.out.println("Funcionário: " + funcionario.getNome());
+                        System.out.println("Total de pedidos: " + pedidos.size());
+
+                        for (PedidoEntity pedido : pedidos) {
+                            System.out.println("Pedido ID: " + pedido.getId());
+                            System.out.println("Status: " + pedido.getStatus());
+                            System.out.println("Hora de início: " + pedido.getHora_inicio());
+                            System.out.println("Hora de fim: " + pedido.getHora_fim());
+                            System.out.println("-----------------------------");
+                        }
+
+                    } else {
+                        System.out.println("Funcionário não encontrado.");
+                    }
+                }
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
 
