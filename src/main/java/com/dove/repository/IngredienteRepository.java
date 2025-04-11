@@ -39,4 +39,11 @@ public class IngredienteRepository {
                 .createQuery("SELECT i FROM IngredienteEntity i", IngredienteEntity.class)
                 .getResultList();
     }
+
+    public IngredienteEntity getMostSelectedIngrediente() {
+        String jpql = "SELECT i FROM IngredienteEntity i LEFT JOIN i.pedidos p GROUP BY i ORDER BY COUNT(p) DESC";
+        return em.createQuery(jpql, IngredienteEntity.class)
+                 .setMaxResults(1)
+                 .getSingleResult();
+    }
 }
