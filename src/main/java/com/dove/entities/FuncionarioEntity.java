@@ -15,6 +15,10 @@ public class FuncionarioEntity {
     @Column(name = "nome")
     private String nome;
 
+    public List<PedidoEntity> getPedidos() {
+        return pedidos;
+    }
+
     @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoEntity> pedidos = new ArrayList<>();
 
@@ -42,6 +46,11 @@ public class FuncionarioEntity {
     public void setNome(String nome){
         this.nome = nome;
     }
+
+    public void setPedidos(List<PedidoEntity> pedidos) {
+        this.pedidos = pedidos;
+    }
+
 
 
     @Override
