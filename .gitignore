@@ -41,4 +41,3 @@ build/
 hibernate.cfg.xml
 
 /src/main/java/com/dove/Exemplo.java
-/src/main/resources/META-INF/

@@ -2,9 +2,6 @@ package com.dove.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "tb_ingrediente")
 public class IngredienteEntity {
@@ -14,8 +11,6 @@ public class IngredienteEntity {
     private Long id;
     @Column(name = "descricao", nullable = false)
     private String descricao;
-    @ManyToMany(mappedBy = "ingredientes")
-    private List<PedidoEntity> pedidos = new ArrayList<>();
 
     public IngredienteEntity() {}
 
