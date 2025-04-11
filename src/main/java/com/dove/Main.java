@@ -1,7 +1,9 @@
 package com.dove;
 
+import com.dove.options.IngredienteOpcao;
 import com.dove.options.PedidoOpcao;
-import jakarta.persistence.EntityManager;
+import com.dove.options.FuncionarioOpcao;
+import com.dove.options.ClienteOpcao;
 
 import java.util.List;
 import java.util.Scanner;
@@ -20,7 +22,10 @@ public class Main {
 
         // Inicialização de Opções
         // Classes com a implementação das switch cases para não poluir a Main
+        FuncionarioOpcao funcionarioOpcao = new FuncionarioOpcao();
         PedidoOpcao pedidoOpcao = new PedidoOpcao();
+        IngredienteOpcao ingredienteOpcao = new IngredienteOpcao();
+        ClienteOpcao clienteOpcao = new ClienteOpcao(scanner);
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -36,16 +41,17 @@ public class Main {
             System.out.println("------------------------------");
 
             controle = scanner.nextInt();
-//            scanner.nextLine(); // limpa o buffer do scanner para nao pular linha
-
             switch (controle) {
-                case 1:
+                case 1:// Opcao Funcionario
+                    funcionarioOpcao.caseEntidades();
                     break;
                 case 2:
+                    clienteOpcao.executarOpcao();
                     break;
                 case 3:
                     break;
-                case 4:
+                case 4://  Opcao Ingrediente
+                    ingredienteOpcao.caseEntidade();
                     break;
                 case 5: // Opção Pedido
                     pedidoOpcao.caseEntidade();
