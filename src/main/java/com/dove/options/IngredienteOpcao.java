@@ -24,6 +24,7 @@ public class IngredienteOpcao {
             System.out.println("3 - Atualizar Ingrediente:");
             System.out.println("4 - Deletar Ingrediente:");
             System.out.println("5 - Listar Todos Ingredientes");
+            System.out.println("6 - Ingrediente Mais Selecionado");
             System.out.println("0 - Sair:");
             System.out.println("------------------------------");
 
@@ -36,6 +37,7 @@ public class IngredienteOpcao {
                 case 3 -> atualizarIngrediente(scanner);
                 case 4 -> deletarIngrediente(scanner);
                 case 5 -> listarTodosIngredientes();
+                case 6 -> pegarIngredienteMaisSelecionado();
                 case 0 -> System.out.println("Saindo do CRUD de Ingrediente.");
                 default -> System.out.println("Opção inválida.");
             }
@@ -129,5 +131,22 @@ public class IngredienteOpcao {
         }
 
         em.close();
+    }
+
+    private static void pegarIngredienteMaisSelecionado() {
+        EntityManager em = emf.createEntityManager();
+        IngredienteRepository repo = new IngredienteRepository(em);
+        try {
+            IngredienteEntity ingrediente = repo.getMostSelectedIngrediente();
+            if (ingrediente != null) {
+                System.out.println("Ingrediente mais selecionado: " + ingrediente);
+            } else {
+                System.out.println("Nenhum ingrediente encontrado.");
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao recuperar ingrediente: " + e.getMessage());
+        } finally {
+            em.close();
+        }
     }
 }
