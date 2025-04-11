@@ -45,10 +45,10 @@ public class Main {
                 case 1:// Opcao Funcionario
                     funcionarioOpcao.caseEntidades();
                     break;
-                case 2:
+                case 2: // Opcao Cliente
                     clienteOpcao.executarOpcao();
                     break;
-                case 3:
+                case 3: // Opcao Cardápio
                     break;
                 case 4://  Opcao Ingrediente
                     ingredienteOpcao.caseEntidade();

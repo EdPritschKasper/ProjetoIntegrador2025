@@ -57,8 +57,8 @@ public class PedidoCadastraOpcao {
             System.out.println("------------------------------");
             controleMarmita = scanner.nextInt();
 
-            if (controleMarmita > 0 && controleMarmita < marmita.length) {
-                pedidoEntity.setMarmita(marmita[controleMarmita]);
+            if (controleMarmita > 0 && controleMarmita <= marmita.length) {
+                pedidoEntity.setMarmita(marmita[--controleMarmita]);
                 controleMarmita = 0;
             } else {
                 System.out.println("Opção Inválida");
