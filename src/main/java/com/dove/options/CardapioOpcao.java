@@ -4,6 +4,7 @@ import com.dove.entities.CardapiosEntity;
 import com.dove.repository.CardapiosRepository;
 import jakarta.persistence.EntityManager;
 import com.dove.repository.CustomizerFactory;
+import com.dove.repository.IngredienteRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -57,6 +58,37 @@ public class CardapioOpcao {
         try {
             LocalDate data = LocalDate.parse(dataStr);
             CardapiosEntity cardapio = new CardapiosEntity(data);
+            
+            System.out.println("Deseja adicionar ingredientes ao cardápio? (s/n): ");
+            String resposta = scanner.nextLine();
+            if (resposta.equalsIgnoreCase("s")) {
+                IngredienteRepository ingredienteRepository = new IngredienteRepository(em);
+                var ingredientesDisponiveis = ingredienteRepository.findAll();
+                
+                if (ingredientesDisponiveis.isEmpty()) {
+                    System.out.println("Nenhum ingrediente cadastrado disponível.");
+                } else {
+                    System.out.println("Lista de Ingredientes:");
+                    for (int i = 0; i < ingredientesDisponiveis.size(); i++) {
+                        System.out.println(i + " - " + ingredientesDisponiveis.get(i).getDescricao());
+                    }
+                    System.out.println("Digite os índices dos ingredientes para adicionar (digite -1 para finalizar): ");
+                    while (true) {
+                        int indice = scanner.nextInt();
+                        scanner.nextLine();
+                        if (indice == -1) {
+                            break;
+                        }
+                        if (indice >= 0 && indice < ingredientesDisponiveis.size()) {
+                            cardapio.getIngredientes().add(ingredientesDisponiveis.get(indice));
+                            System.out.println("Ingrediente adicionado: " + ingredientesDisponiveis.get(indice).getDescricao());
+                        } else {
+                            System.out.println("Opção inválida. Tente novamente.");
+                        }
+                    }
+                }
+            }
+            
             cardapiosRepository.insert(cardapio);
             System.out.println("Cardápio cadastrado com sucesso!");
         } catch (Exception e) {
