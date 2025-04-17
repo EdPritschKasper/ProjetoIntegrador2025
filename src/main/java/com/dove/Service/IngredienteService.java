@@ -1,4 +1,4 @@
-package com.dove.options;
+package com.dove.Service;
 
 import com.dove.entities.IngredienteEntity;
 import com.dove.repository.IngredienteRepository;
@@ -8,7 +8,7 @@ import jakarta.persistence.Persistence;
 
 import java.util.Scanner;
 
-public class IngredienteOpcao {
+public class IngredienteService {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
 

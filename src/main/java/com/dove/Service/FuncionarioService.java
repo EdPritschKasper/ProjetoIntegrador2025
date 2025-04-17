@@ -1,4 +1,4 @@
-package com.dove.options;
+package com.dove.Service;
 
 import com.dove.entities.FuncionarioEntity;
 import com.dove.repository.CustomizerFactory;
@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Scanner;
 
-public class FuncionarioOpcao {
+public class FuncionarioService {
 
     public void caseEntidades() {
         EntityManager em = CustomizerFactory.getEntityManager();

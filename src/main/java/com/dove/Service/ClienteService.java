@@ -1,16 +1,16 @@
-package com.dove.options;
+package com.dove.Service;
 
 import com.dove.entities.ClienteEntity;
 import com.dove.repository.ClienteRepository;
 
 import java.util.Scanner;
 
-public class ClienteOpcao {
+public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final Scanner scanner;
     int opcao;
-    public ClienteOpcao(Scanner scanner) {
+    public ClienteService(Scanner scanner) {
         this.clienteRepository = new ClienteRepository();
         this.scanner = scanner;
     }

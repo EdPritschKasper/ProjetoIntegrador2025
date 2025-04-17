@@ -1,17 +1,11 @@
 package com.dove;
 
-import com.dove.options.IngredienteOpcao;
-import com.dove.options.PedidoOpcao;
-import com.dove.options.FuncionarioOpcao;
-import com.dove.options.ClienteOpcao;
+import com.dove.Service.IngredienteService;
+import com.dove.Service.PedidoService;
+import com.dove.Service.FuncionarioService;
+import com.dove.Service.ClienteService;
 
-import java.util.List;
 import java.util.Scanner;
-import com.dove.repository.*;
-import com.dove.entities.*;
-
-import java.time.LocalTime;
-import com.dove.options.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,10 +16,10 @@ public class Main {
 
         // Inicialização de Opções
         // Classes com a implementação das switch cases para não poluir a Main
-        FuncionarioOpcao funcionarioOpcao = new FuncionarioOpcao();
-        PedidoOpcao pedidoOpcao = new PedidoOpcao();
-        IngredienteOpcao ingredienteOpcao = new IngredienteOpcao();
-        ClienteOpcao clienteOpcao = new ClienteOpcao(scanner);
+        FuncionarioService funcionarioService = new FuncionarioService();
+        PedidoService pedidoService = new PedidoService();
+        IngredienteService ingredienteService = new IngredienteService();
+        ClienteService clienteService = new ClienteService(scanner);
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -43,18 +37,18 @@ public class Main {
             controle = scanner.nextInt();
             switch (controle) {
                 case 1:// Opcao Funcionario
-                    funcionarioOpcao.caseEntidades();
+                    funcionarioService.caseEntidades();
                     break;
                 case 2:
-                    clienteOpcao.executarOpcao();
+                    clienteService.executarOpcao();
                     break;
                 case 3:
                     break;
                 case 4://  Opcao Ingrediente
-                    ingredienteOpcao.caseEntidade();
+                    ingredienteService.caseEntidade();
                     break;
                 case 5: // Opção Pedido
-                    pedidoOpcao.caseEntidade();
+                    pedidoService.caseEntidade();
                     break;
                 case 0:
                     break;
