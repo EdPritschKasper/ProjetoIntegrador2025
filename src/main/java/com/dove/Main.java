@@ -24,7 +24,7 @@ public class Main {
         // Inicialização de Opções
         // Classes com a implementação das switch cases para não poluir a Main
         FuncionarioOpcao funcionarioOpcao = new FuncionarioOpcao();
-        PedidoOpcao pedidoOpcao = new PedidoOpcao();
+        PedidoOpcao pedidoOpcao = new PedidoOpcao(scanner);
         IngredienteOpcao ingredienteOpcao = new IngredienteOpcao();
         ClienteOpcao clienteOpcao = new ClienteOpcao(scanner);
         CardapioOpcao cardapioOpcao = new CardapioOpcao();
@@ -44,26 +44,13 @@ public class Main {
 
             controle = scanner.nextInt();
             switch (controle) {
-                case 1:// Opcao Funcionario
-                    funcionarioOpcao.caseEntidades();
-                    break;
-                case 2: // Opcao Cliente
-                    clienteOpcao.executarOpcao();
-                    break;
-                case 3:
-                    cardapioOpcao.caseEntidade();
-                    break;
-                case 4://  Opcao Ingrediente
-                    ingredienteOpcao.caseEntidade();
-                    break;
-                case 5: // Opção Pedido
-                    pedidoOpcao.caseEntidade();
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Opção inválida");
-                    break;
+                case 1 -> funcionarioOpcao.caseEntidades();
+                case 2 -> clienteOpcao.executarOpcao();
+                case 3 -> cardapioOpcao.caseEntidade();
+                case 4 -> ingredienteOpcao.caseEntidade();
+                case 5 -> pedidoOpcao.caseEntidade();
+                case 0 -> System.out.println("Saindo de Pedidos...");
+                default -> System.out.println("Opção Inválida");
             }
 
         } while(controle != 0);
