@@ -15,17 +15,14 @@ public class PedidoOpcao {
     private final ClienteRepository clienteRepository;
     private final FuncionarioRepository funcionarioRepository;
     private final CardapiosRepository cardapiosRepository;
-    private final IngredienteRepository ingredienteRepository;
     private final PedidoRepository pedidoRepository;
     private final String[] marmita = {"prato", "pequena", "média", "grande"};
-    private int controleEscolheIngrediente, indexIngrediente, controleMarmita;
     private Long id;
 
 
     public PedidoOpcao(Scanner scanner) {
         this.scanner = scanner;
         this.em = CustomizerFactory.getEntityManager();
-        this.ingredienteRepository = new IngredienteRepository(em);
         this.clienteRepository = new ClienteRepository();
         this.funcionarioRepository = new FuncionarioRepository(em);
         this.cardapiosRepository = new CardapiosRepository(em);
@@ -82,6 +79,8 @@ public class PedidoOpcao {
 
     // cria pedido no dia
     private void adicionaPedido() {
+
+        int controleIngrediente = 0, controleMarmita = 0;
         // verifica se tem apenas um cardápio do dia
         CardapiosEntity cardapiosEntity = cardapiosRepository.getCardapioHoje();
         if(cardapiosEntity == null) return;
@@ -98,21 +97,21 @@ public class PedidoOpcao {
         do {
             System.out.println("------------------------------");
             System.out.println("Digite um por vez os números dos ingredientes");
-            for(indexIngrediente = 0; indexIngrediente < ingredientes.size(); indexIngrediente++){
-                System.out.println(indexIngrediente + " - " + ingredientes.get(indexIngrediente).getDescricao());
+            for(int i = 1; i <= ingredientes.size(); i++){
+                System.out.println(i + " - " + ingredientes.get(i-1).getDescricao());
             }
-            System.out.println("(-1) - Sair das Opções de Pedido:");
+            System.out.println("0 - Sair das Opções de Pedido:");
             System.out.println("------------------------------");
-            controleEscolheIngrediente = scanner.nextInt();
+            controleIngrediente = scanner.nextInt();
 
             // Verifica se usuário informou um número dentro da lista de ingredientes
-            if (controleEscolheIngrediente > -1 && controleEscolheIngrediente < ingredientes.size()) {
-                pedidoEntity.addIngrediente(ingredientes.get(controleEscolheIngrediente));
+            if (controleIngrediente > 0 && controleIngrediente <= ingredientes.size()) {
+                pedidoEntity.addIngrediente(ingredientes.get(controleIngrediente-1));
             }
-            else if (controleEscolheIngrediente == -1) System.out.println("Ingredientes confirmados");
+            else if (controleIngrediente == 0) System.out.println("Ingredientes confirmados");
             else System.out.println("Opção Inválida");
 
-        } while(controleEscolheIngrediente != -1);
+        } while(controleIngrediente != 0);
 
         // seleção do tamanho da marmita ou apenas prato
         do {
@@ -136,16 +135,25 @@ public class PedidoOpcao {
         System.out.println("------------------------------");
         System.out.println("Digite o Id do Cliente");
         ClienteEntity clienteEntity = clienteRepository.findById(scanner.nextLong());
+        if(clienteEntity == null) {
+            System.out.println("Cliente não encontrado");
+            return;
+        }
         pedidoEntity.setCliente(clienteEntity);
 
         // Adiciona Funcionário
         System.out.println("------------------------------");
         System.out.println("Digite o Id do Funcionário");
         FuncionarioEntity funcionario = funcionarioRepository.buscarPorId(scanner.nextLong());
+        if(funcionario == null) {
+            System.out.println("Funcionario não encontrado");
+            return;
+        }
         pedidoEntity.setFuncionario(funcionario);
 
         // Insere no Banco
         pedidoRepository.insert(pedidoEntity);
+        System.out.println("Pedido criado com sucesso");
     }
 
     // pesquisa um pedido por ID
@@ -174,6 +182,7 @@ public class PedidoOpcao {
         pedidoEntity.setHora_fim(LocalTime.now());
         // Atualiza no Banco
         pedidoRepository.update(pedidoEntity);
+        System.out.println("Pedido atualizado com sucesso");
     }
 
     // deleta pedido por id
@@ -184,6 +193,7 @@ public class PedidoOpcao {
         PedidoEntity pedidoEntity = pesquisaPedidoId();
 
         if(pedidoEntity != null) pedidoRepository.delete(pedidoEntity);
+        System.out.println("Pedido deletado com sucesso");
     }
 
     // histórico de todos os pedidos
