@@ -15,7 +15,7 @@ public class Main {
         // Classes com a implementação das switch cases para não poluir a Main
         CardapioService cardapioService = new CardapioService();
         FuncionarioService funcionarioService = new FuncionarioService();
-        PedidoService pedidoService = new PedidoService();
+        PedidoService pedidoService = new PedidoService(scanner);
         IngredienteService ingredienteService = new IngredienteService();
         ClienteService clienteService = new ClienteService(scanner);
 
@@ -34,26 +34,13 @@ public class Main {
 
             controle = scanner.nextInt();
             switch (controle) {
-                case 1:// Opcao Funcionario
-                    funcionarioService.caseEntidades();
-                    break;
-                case 2:
-                    clienteService.executarOpcao();
-                    break;
-                case 3:
-                    cardapioService.caseEntidade();
-                    break;
-                case 4://  Opcao Ingrediente
-                    ingredienteService.caseEntidade();
-                    break;
-                case 5: // Opção Pedido
-                    pedidoService.caseEntidade();
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Opção inválida");
-                    break;
+                case 1 -> funcionarioService.caseEntidades();
+                case 2 -> clienteService.executarOpcao();
+                case 3 -> cardapioService.caseEntidade();
+                case 4 -> ingredienteService.caseEntidade();
+                case 5 -> pedidoService.caseEntidade();
+                case 0 -> System.out.println("Encerrando Sistema...");
+                default -> System.out.println("Opção Inválida");
             }
 
         } while(controle != 0);
