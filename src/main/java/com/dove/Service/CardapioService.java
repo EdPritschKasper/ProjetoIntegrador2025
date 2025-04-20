@@ -1,4 +1,4 @@
-package com.dove.options;
+package com.dove.Service;
 
 import com.dove.entities.CardapiosEntity;
 import com.dove.repository.CardapiosRepository;
@@ -10,12 +10,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
-public class CardapioOpcao {
+public class CardapioService {
     private EntityManager em;
     private CardapiosRepository cardapiosRepository;
     private Scanner scanner;
 
-    public CardapioOpcao() {
+    public CardapioService() {
         this.em = CustomizerFactory.getEntityManager();
         this.cardapiosRepository = new CardapiosRepository(em);
         this.scanner = new Scanner(System.in);

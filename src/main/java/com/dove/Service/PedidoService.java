@@ -1,4 +1,4 @@
-package com.dove.options;
+package com.dove.Service;
 
 import com.dove.entities.PedidoEntity;
 import jakarta.persistence.EntityManager;
@@ -9,7 +9,7 @@ import com.dove.repository.PedidoRepository;
 import com.dove.repository.CustomizerFactory;
 
 
-public class PedidoOpcao {
+public class PedidoService {
 
     // Switch Case 5 - CRUD do Pedido
     public void  caseEntidade() {
@@ -37,7 +37,7 @@ public class PedidoOpcao {
 
             switch (controlePedido) {
                 case 1: // Cadastra Pedido
-                    PedidoCadastraOpcao.caseEntidade();
+                    PedidoCadastraService.caseEntidade();
                     break;
                 case 2: // Deleta Pedido
                     System.out.println("------------------------------");

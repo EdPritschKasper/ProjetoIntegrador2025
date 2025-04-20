@@ -1,15 +1,14 @@
-package com.dove.options;
+package com.dove.Service;
 
 import com.dove.entities.*;
 import com.dove.repository.*;
 import jakarta.persistence.EntityManager;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class PedidoCadastraOpcao {
+public class PedidoCadastraService {
     public static void caseEntidade() {
         Scanner scanner = new Scanner(System.in);
         EntityManager em = CustomizerFactory.getEntityManager();
