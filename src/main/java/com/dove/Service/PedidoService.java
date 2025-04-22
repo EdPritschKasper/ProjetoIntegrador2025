@@ -4,6 +4,7 @@ import com.dove.entities.*;
 import com.dove.repository.*;
 import jakarta.persistence.EntityManager;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
@@ -42,6 +43,7 @@ public class PedidoService {
             System.out.println("3 - Definir como PRONTO (Atualiza):");
             System.out.println("4 - Deletar Pedido:");
             System.out.println("5 - Exibir Histórico de Pedidos");
+            System.out.println("6 - Tempo Médio dos Pedidos");
             System.out.println("0 - Sair das Opções de Pedido:");
             System.out.println("------------------------------");
 
@@ -53,6 +55,7 @@ public class PedidoService {
                 case 3 -> atualizaPedido();
                 case 4 -> deletaPedido();
                 case 5 -> historicoPedido();
+                case 6 -> tempoMedioPedidos();
                 case 0 -> System.out.println("Saindo de Pedidos...");
                 default -> System.out.println("Opção inválida.");
             }
@@ -221,5 +224,17 @@ public class PedidoService {
                         " | Tempo: " + tempo);
             }
         }
+    }
+
+    public void tempoMedioPedidos() {
+        Duration duracao = pedidoRepository.buscaTempoMedio();
+        long segundosTotais = duracao.getSeconds();
+
+        long horas = segundosTotais / 3600;
+        long minutos = (segundosTotais % 3600) / 60;
+        long segundos = segundosTotais % 60;
+
+        String tempoFormatado = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+        System.out.println("Tempo médio: " + tempoFormatado);
     }
 }
