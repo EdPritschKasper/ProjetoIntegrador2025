@@ -15,6 +15,9 @@ public class FuncionarioEntity {
     @Column(name = "nome")
     private String nome;
 
+    @Column(name = "cpf")
+    private String cpf;
+
     public List<PedidoEntity> getPedidos() {
         return pedidos;
     }
@@ -39,6 +42,10 @@ public class FuncionarioEntity {
         return nome;
     }
 
+    public String getCpf(){
+        return cpf;
+    }
+
     public void setId(Long id){
         this.id = id;
     }
@@ -46,6 +53,8 @@ public class FuncionarioEntity {
     public void setNome(String nome){
         this.nome = nome;
     }
+
+    public void setCpf(String cpf) {this.cpf = cpf;}
 
     public void setPedidos(List<PedidoEntity> pedidos) {
         this.pedidos = pedidos;
