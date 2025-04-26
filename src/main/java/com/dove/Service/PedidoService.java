@@ -31,36 +31,7 @@ public class PedidoService {
     }
 
     // Switch Case 5 - CRUD do Pedido
-    public void  caseEntidade() {
-        int controle = 0;
 
-        do {
-            System.out.println("------------------------------");
-            System.out.println("OPÇÕES DE CRUD DO PEDIDO");
-            System.out.println("Digite a opção desejada:");
-            System.out.println("1 - Cadastrar Pedido:");
-            System.out.println("2 - Ler Pedido Por ID:");
-            System.out.println("3 - Definir como PRONTO (Atualiza):");
-            System.out.println("4 - Deletar Pedido:");
-            System.out.println("5 - Exibir Histórico de Pedidos");
-            System.out.println("6 - Tempo Médio dos Pedidos");
-            System.out.println("0 - Sair das Opções de Pedido:");
-            System.out.println("------------------------------");
-
-            controle = scanner.nextInt();
-
-            switch (controle) {
-                case 1 -> adicionaPedido();
-                case 2 -> pesquisaPedido();
-                case 3 -> atualizaPedido();
-                case 4 -> deletaPedido();
-                case 5 -> historicoPedido();
-                case 6 -> tempoMedioPedidos();
-                case 0 -> System.out.println("Saindo de Pedidos...");
-                default -> System.out.println("Opção inválida.");
-            }
-        } while(controle != 0);
-    }
 
     // função auxiliar para validar e pesquisar o ID
     public PedidoEntity pesquisaPedidoId(){
@@ -81,7 +52,7 @@ public class PedidoService {
     }
 
     // cria pedido no dia
-    private void adicionaPedido() {
+    public void adicionaPedido() {
 
         int controleIngrediente = 0, controleMarmita = 0;
         // verifica se tem apenas um cardápio do dia
@@ -160,7 +131,7 @@ public class PedidoService {
     }
 
     // pesquisa um pedido por ID
-    private void pesquisaPedido() {
+    public void pesquisaPedido() {
         System.out.println("------------------------------");
         System.out.println("Digite o ID do pedido para PESQUISAR");
         System.out.println("------------------------------");
@@ -171,7 +142,7 @@ public class PedidoService {
     }
 
     // atualiza pedido, definindo como pronto e a hora final
-    private void atualizaPedido(){
+    public void atualizaPedido(){
         System.out.println("------------------------------");
         System.out.println("Digite o ID do pedido para ATUALIZAR");
         System.out.println("------------------------------");
@@ -189,7 +160,7 @@ public class PedidoService {
     }
 
     // deleta pedido por id
-    private void deletaPedido(){
+    public void deletaPedido(){
         System.out.println("------------------------------");
         System.out.println("Digite o ID do pedido para DELETAR:");
         System.out.println("------------------------------");
@@ -200,7 +171,7 @@ public class PedidoService {
     }
 
     // histórico de todos os pedidos
-    private void historicoPedido(){
+    public void historicoPedido(){
         System.out.println("------------------------------");
         System.out.println("Histórico de Pedidos, seus Status e Tempo:");
         var pedidos = pedidoRepository.findAll();

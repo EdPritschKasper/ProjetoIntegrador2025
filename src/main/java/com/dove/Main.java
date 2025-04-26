@@ -1,6 +1,7 @@
 package com.dove;
 
 import com.dove.Service.*;
+import com.dove.Options.*;
 
 import java.util.Scanner;
 
@@ -12,10 +13,9 @@ public class Main {
         int controle = 0;
 
         // Inicialização de Opções
-        // Classes com a implementação das switch cases para não poluir a Main
         CardapioService cardapioService = new CardapioService();
         FuncionarioService funcionarioService = new FuncionarioService();
-        PedidoService pedidoService = new PedidoService(scanner);
+        PedidoOptions pedidoOptions = new PedidoOptions(scanner);
         IngredienteService ingredienteService = new IngredienteService();
         ClienteService clienteService = new ClienteService(scanner);
 
@@ -38,7 +38,7 @@ public class Main {
                 case 2 -> clienteService.executarOpcao();
                 case 3 -> cardapioService.caseEntidade();
                 case 4 -> ingredienteService.caseEntidade();
-                case 5 -> pedidoService.caseEntidade();
+                case 5 -> pedidoOptions.caseEntidade();
                 case 0 -> System.out.println("Encerrando Sistema...");
                 default -> System.out.println("Opção Inválida");
             }
