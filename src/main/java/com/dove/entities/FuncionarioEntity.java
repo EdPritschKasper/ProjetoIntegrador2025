@@ -15,50 +15,59 @@ public class FuncionarioEntity {
     @Column(name = "nome")
     private String nome;
 
-    public List<PedidoEntity> getPedidos() {
-        return pedidos;
-    }
+    @Column(name = "cpf", nullable = false, unique = true)
+    private String cpf;
 
-    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "funcionario",orphanRemoval = true)
     private List<PedidoEntity> pedidos = new ArrayList<>();
 
-    public FuncionarioEntity(){
-
+    public FuncionarioEntity() {
     }
 
-    public FuncionarioEntity(Long id, String nome){
+    public FuncionarioEntity(Long id, String nome, String cpf) {
         this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
     }
 
-    //Metodo Getters e Setters
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
-    public String getNome(){
+    public String getNome() {
         return nome;
     }
 
-    public void setId(Long id){
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setNome(String nome){
+    public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public List<PedidoEntity> getPedidos() {
+        return pedidos;
     }
 
     public void setPedidos(List<PedidoEntity> pedidos) {
         this.pedidos = pedidos;
     }
 
-
-
     @Override
     public String toString() {
         return "Funcionario{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
                 '}';
     }
-
 }

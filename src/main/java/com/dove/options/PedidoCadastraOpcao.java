@@ -77,6 +77,7 @@ public class PedidoCadastraOpcao {
         System.out.println("Digite o Id do Funcionário");
         funcionario = funcionarioRepository.buscarPorId(scanner.nextLong());
         pedidoEntity.setFuncionario(funcionario);
+        funcionario.getPedidos().add(pedidoEntity); //linha nova para puxar os pedidos no relatorio do Funcionario
 
         // Adições Automáticas + cardápio
         pedidoEntity.setHora_inicio(LocalTime.now());
