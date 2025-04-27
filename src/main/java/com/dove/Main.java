@@ -1,18 +1,9 @@
 package com.dove;
 
-import com.dove.options.IngredienteOpcao;
-import com.dove.options.PedidoOpcao;
-import com.dove.options.FuncionarioOpcao;
-import com.dove.options.ClienteOpcao;
+import com.dove.Service.*;
+import com.dove.Options.*;
 
-import java.util.List;
 import java.util.Scanner;
-import com.dove.repository.*;
-import com.dove.entities.*;
-
-import java.time.LocalTime;
-import com.dove.options.*;
-import jakarta.persistence.EntityManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,12 +13,11 @@ public class Main {
         int controle = 0;
 
         // Inicialização de Opções
-        // Classes com a implementação das switch cases para não poluir a Main
-        FuncionarioOpcao funcionarioOpcao = new FuncionarioOpcao();
-        PedidoOpcao pedidoOpcao = new PedidoOpcao();
-        IngredienteOpcao ingredienteOpcao = new IngredienteOpcao();
-        ClienteOpcao clienteOpcao = new ClienteOpcao(scanner);
-        CardapioOpcao cardapioOpcao = new CardapioOpcao();
+        CardapioService cardapioService = new CardapioService();
+        FuncionarioService funcionarioService = new FuncionarioService();
+        PedidoOptions pedidoOptions = new PedidoOptions(scanner);
+        IngredienteService ingredienteService = new IngredienteService();
+        ClienteService clienteService = new ClienteService(scanner);
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -44,26 +34,13 @@ public class Main {
 
             controle = scanner.nextInt();
             switch (controle) {
-                case 1:// Opcao Funcionario
-                    funcionarioOpcao.caseEntidades();
-                    break;
-                case 2: // Opcao Cliente
-                    clienteOpcao.executarOpcao();
-                    break;
-                case 3:
-                    cardapioOpcao.caseEntidade();
-                    break;
-                case 4://  Opcao Ingrediente
-                    ingredienteOpcao.caseEntidade();
-                    break;
-                case 5: // Opção Pedido
-                    pedidoOpcao.caseEntidade();
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("Opção inválida");
-                    break;
+                case 1 -> funcionarioService.caseEntidades();
+                case 2 -> clienteService.executarOpcao();
+                case 3 -> cardapioService.caseEntidade();
+                case 4 -> ingredienteService.caseEntidade();
+                case 5 -> pedidoOptions.caseEntidade();
+                case 0 -> System.out.println("Encerrando Sistema...");
+                default -> System.out.println("Opção Inválida");
             }
 
         } while(controle != 0);

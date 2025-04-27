@@ -40,16 +40,14 @@ public class PedidoEntity {
 
     @Override
     public String toString() {
-        return "PedidoEntity{" +
-                "id=" + id +
-                ", marmita='" + marmita + '\'' +
-                ", status='" + status + '\'' +
-                ", hora_inicio=" + hora_inicio +
-                ", hora_fim=" + hora_fim +
-                ", cardapio=" + cardapio +
-                ", funcionario=" + funcionario +
-                ", cliente=" + cliente +
-                '}';
+        return "id = " + id + "\n" +
+                "marmita = " + marmita + "\n" +
+                "status = " + status + "\n" +
+                "hora_inicio = " + hora_inicio + "\n" +
+                "hora_fim = " + hora_fim + "\n" +
+                "cardapio = " + cardapio + "\n" +
+                "funcionario = " + funcionario + "\n" +
+                "cliente = " + cliente + "\n";
     }
 
     public Long getId() {

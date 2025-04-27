@@ -1,4 +1,4 @@
-package com.dove.options;
+package com.dove.Service;
 
 import com.dove.entities.FuncionarioEntity;
 import com.dove.entities.PedidoEntity;
@@ -9,7 +9,7 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Scanner;
 
-public class FuncionarioOpcao {
+public class FuncionarioService {
 
     public void caseEntidades() {
         EntityManager em = CustomizerFactory.getEntityManager();
@@ -40,8 +40,12 @@ public class FuncionarioOpcao {
                     System.out.print("Digite o nome do funcionário: ");
                     String nome = scanner.nextLine();
 
+                    System.out.print("Digite o cpf do funcionário: ");
+                    String cpf = scanner.nextLine();
+
                     FuncionarioEntity novoFuncionario = new FuncionarioEntity();
                     novoFuncionario.setNome(nome);
+                    novoFuncionario.setCpf(cpf);
 
                     funcionarioRepository.salvar(novoFuncionario);
                     System.out.println("Funcionário cadastrado com sucesso!");
@@ -51,7 +55,7 @@ public class FuncionarioOpcao {
                     List<FuncionarioEntity> funcionarios = funcionarioRepository.buscarTodos();
                     System.out.println("\n--- Lista de Funcionários ---");
                     for (FuncionarioEntity f : funcionarios) {
-                        System.out.println("ID: " + f.getId() + " | Nome: " + f.getNome());
+                        System.out.println("ID: " + f.getId() + " | Nome: " + f.getNome() + " | Cpf: " + f.getCpf());
                     }
                 }
 
@@ -65,6 +69,10 @@ public class FuncionarioOpcao {
                         System.out.print("Digite o novo nome: ");
                         String novoNome = scanner.nextLine();
                         funcionario.setNome(novoNome);
+
+                        System.out.print("Digite o novo cpf: ");
+                        String novoCpf = scanner.nextLine();
+                        funcionario.setCpf(novoCpf);
 
                         funcionarioRepository.atualizar(funcionario);
                         System.out.println("Funcionário atualizado com sucesso!");

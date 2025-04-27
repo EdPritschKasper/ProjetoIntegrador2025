@@ -1,6 +1,16 @@
+-- DROP TABLES - para resetar o banco
+drop table tb_pedido_ingrediente;
+drop table tb_cardapio_ingrediente;
+drop table tb_pedido;
+drop table tb_cardapio;
+drop table tb_funcionario;
+drop table tb_ingrediente;
+drop table tb_cliente;
+
 create table tb_funcionario (
 	id serial primary key,
-	nome varchar(50) not null
+	nome varchar(50) not null,
+	cpf varchar(50) not null unique
 )
 
 create table tb_cliente (
@@ -49,9 +59,9 @@ create table tb_pedido_ingrediente (
 )
 
 -- INSERT INTO
-insert into tb_funcionario (nome) values
-('Didi Mocó'),
-('Zacarias');
+insert into tb_funcionario (nome, cpf) values
+('Didi Mocó', '111.111.111-11'),
+('Zacarias', '222.222.222-22');
 
 insert into tb_cliente (nome, email, senha) values
 ('Dado Dolabela', 'dado@gmail.com', 'iloveyou'),
@@ -86,4 +96,11 @@ insert into tb_pedido_ingrediente (pedido_id, ingrediente_id) values
 (2, 4), (2, 5), (2, 6), (2, 7),
 (3, 1), (3, 2), (3, 5), (3, 7);
 
-
+-- SELECTS
+select * from tb_cardapio;
+select * from tb_pedido;
+select * from tb_cardapio_ingrediente;
+select * from tb_pedido_ingrediente;
+select * from tb_funcionario;
+select * from tb_cliente;
+select * from tb_ingrediente;
