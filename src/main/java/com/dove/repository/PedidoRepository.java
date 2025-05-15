@@ -1,7 +1,9 @@
 package com.dove.repository;
 
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
-import java.util.ArrayList;
+import java.time.LocalTime;
 import jakarta.persistence.EntityManager;
 import com.dove.entities.PedidoEntity;
 
@@ -38,5 +40,13 @@ public class PedidoRepository {
         return em
                 .createQuery("SELECT e FROM PedidoEntity e", PedidoEntity.class)
                 .getResultList();
+    }
+
+    public Duration buscaTempoMedio() {
+        BigDecimal segundos = (BigDecimal) em.createNativeQuery(
+                "SELECT AVG(EXTRACT(EPOCH FROM hora_fim - hora_inicio)) FROM tb_pedido where hora_fim is not null and hora_inicio is not null"
+        ).getSingleResult();
+
+        return Duration.ofSeconds(segundos.longValue());
     }
 }

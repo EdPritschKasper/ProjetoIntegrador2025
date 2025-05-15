@@ -18,6 +18,14 @@ public class CardapiosEntity {
     @OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoEntity> pedidos = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "tb_cardapio_ingrediente",
+            joinColumns = @JoinColumn(name = "cardapio_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingrediente_id")
+    )
+    private List<IngredienteEntity> ingredientes = new ArrayList<>();
+
     public CardapiosEntity() {}
 
     // Construtor para INSERT
@@ -46,6 +54,14 @@ public class CardapiosEntity {
 
     public void setData(LocalDate data) {
         this.data = data;
+    }
+
+    public List<IngredienteEntity> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteEntity> ingredientes) {
+        this.ingredientes = ingredientes;
     }
 
     @Override

@@ -1,21 +1,21 @@
 package com.dove.options;
 
-import com.dove.services.FuncionarioService;
 import com.dove.repository.CustomizerFactory;
 import jakarta.persistence.EntityManager;
+import com.dove.Service.FuncionarioService;
 
 import java.util.Scanner;
 
-public class FuncionarioOpcao {
-
+public class FuncionarioOptions {
     private final FuncionarioService funcionarioService;
     private final Scanner scanner;
 
-    public FuncionarioOpcao() {
+    public FuncionarioOptions() {
         EntityManager em = CustomizerFactory.getEntityManager();
         this.funcionarioService = new FuncionarioService(em);
         this.scanner = new Scanner(System.in);
     }
+
 
     public void caseEntidades() {
         int opcao;
@@ -42,6 +42,7 @@ public class FuncionarioOpcao {
                 case 5 -> relatorioPedidos();
                 case 0 -> System.out.println("Saindo do CRUD de Funcionários.");
                 default -> System.out.println("Opção inválida.");
+
             }
 
         } while (opcao != 0);
@@ -81,3 +82,4 @@ public class FuncionarioOpcao {
         funcionarioService.relatorioPedidos(id);
     }
 }
+

@@ -1,4 +1,4 @@
-package com.dove.services;
+package com.dove.Service;
 
 import com.dove.entities.FuncionarioEntity;
 import com.dove.entities.PedidoEntity;
