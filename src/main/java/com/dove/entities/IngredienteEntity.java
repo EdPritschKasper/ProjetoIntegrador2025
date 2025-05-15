@@ -41,10 +41,6 @@ public class IngredienteEntity {
         return descricao;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }

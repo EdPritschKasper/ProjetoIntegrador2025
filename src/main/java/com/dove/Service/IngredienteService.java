@@ -6,46 +6,16 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-import java.util.Scanner;
-
 public class IngredienteService {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+    private final java.util.Scanner scanner;
 
-    public void caseEntidade() {
-        Scanner scanner = new Scanner(System.in);
-        int opcao;
-
-        do {
-            System.out.println("------------------------------");
-            System.out.println("OPÇÕES DE CRUD DO INGREDIENTE");
-            System.out.println("1 - Cadastrar Ingrediente:");
-            System.out.println("2 - Ler Ingrediente por ID:");
-            System.out.println("3 - Atualizar Ingrediente:");
-            System.out.println("4 - Deletar Ingrediente:");
-            System.out.println("5 - Listar Todos Ingredientes");
-            System.out.println("6 - Ingrediente Mais Selecionado");
-            System.out.println("0 - Sair:");
-            System.out.println("------------------------------");
-
-            opcao = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (opcao) {
-                case 1 -> cadastrarIngrediente(scanner);
-                case 2 -> lerIngrediente(scanner);
-                case 3 -> atualizarIngrediente(scanner);
-                case 4 -> deletarIngrediente(scanner);
-                case 5 -> listarTodosIngredientes();
-                case 6 -> pegarIngredienteMaisSelecionado();
-                case 0 -> System.out.println("Saindo do CRUD de Ingrediente.");
-                default -> System.out.println("Opção inválida.");
-            }
-
-        } while (opcao != 0);
+    public IngredienteService(java.util.Scanner scanner) {
+        this.scanner = scanner;
     }
 
-    private static void cadastrarIngrediente(Scanner scanner) {
+    public void cadastrarIngrediente() {
         EntityManager em = emf.createEntityManager();
         IngredienteRepository repo = new IngredienteRepository(em);
 
@@ -53,19 +23,19 @@ public class IngredienteService {
         String descricao = scanner.nextLine();
 
         IngredienteEntity ingrediente = new IngredienteEntity(descricao);
-
         repo.insert(ingrediente);
         em.close();
 
         System.out.println("Ingrediente cadastrado com sucesso!");
     }
 
-    private static void lerIngrediente(Scanner scanner) {
+    public void lerIngrediente() {
         EntityManager em = emf.createEntityManager();
         IngredienteRepository repo = new IngredienteRepository(em);
 
         System.out.println("Digite o ID do ingrediente:");
         Long id = scanner.nextLong();
+        scanner.nextLine();
 
         IngredienteEntity ingrediente = repo.findById(id);
         em.close();
@@ -77,7 +47,7 @@ public class IngredienteService {
         }
     }
 
-    private static void atualizarIngrediente(Scanner scanner) {
+    public void atualizarIngrediente() {
         EntityManager em = emf.createEntityManager();
         IngredienteRepository repo = new IngredienteRepository(em);
 
@@ -102,26 +72,54 @@ public class IngredienteService {
         em.close();
     }
 
-    private static void deletarIngrediente(Scanner scanner) {
+    public void deletarIngrediente() {
         EntityManager em = emf.createEntityManager();
-        IngredienteRepository repo = new IngredienteRepository(em);
 
-        System.out.println("Digite o ID do ingrediente a deletar:");
-        Long id = scanner.nextLong();
+        try {
+            System.out.println("Digite o ID do ingrediente a deletar:");
+            Long id = scanner.nextLong();
+            scanner.nextLine();
 
-        IngredienteEntity ingrediente = repo.findById(id);
+            em.getTransaction().begin();
 
-        if (ingrediente != null) {
-            repo.delete(ingrediente);
-            System.out.println("Ingrediente deletado com sucesso!");
-        } else {
-            System.out.println("Ingrediente não encontrado.");
+            IngredienteEntity ingrediente = em.find(IngredienteEntity.class, id);
+            if (ingrediente == null) {
+                System.out.println("Ingrediente não encontrado.");
+                em.getTransaction().rollback();
+                return;
+            }
+
+            // Verifica se está no cardápio
+            Long countCardapio = em.createQuery(
+                            "select count(c) from CardapiosEntity c join c.ingredientes i where i.id = :id", Long.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+
+            // Verifica se está em algum pedido
+            Long countPedido = em.createQuery(
+                            "select count(p) from PedidoEntity p join p.ingredientes i where i.id = :id", Long.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+
+            if (countCardapio > 0 || countPedido > 0) {
+                System.out.println("Ingrediente está cadastrado em cardápio ou pedido. Não pode ser excluído.");
+                em.getTransaction().rollback();
+                return;
+            }
+
+            em.remove(ingrediente);
+            em.getTransaction().commit();
+            System.out.println("Ingrediente excluído com sucesso.");
+
+        } catch (Exception e) {
+            System.out.println("Erro ao tentar excluir ingrediente: " + e.getMessage());
+            em.getTransaction().rollback();
+        } finally {
+            em.close();
         }
-
-        em.close();
     }
 
-    private static void listarTodosIngredientes() {
+    public void listarTodosIngredientes() {
         EntityManager em = emf.createEntityManager();
         IngredienteRepository repo = new IngredienteRepository(em);
 
@@ -133,7 +131,7 @@ public class IngredienteService {
         em.close();
     }
 
-    private static void pegarIngredienteMaisSelecionado() {
+    public void pegarIngredienteMaisSelecionado() {
         EntityManager em = emf.createEntityManager();
         IngredienteRepository repo = new IngredienteRepository(em);
         try {

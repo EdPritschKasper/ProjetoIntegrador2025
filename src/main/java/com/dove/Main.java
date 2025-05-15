@@ -16,7 +16,7 @@ public class Main {
         CardapioService cardapioService = new CardapioService();
         FuncionarioService funcionarioService = new FuncionarioService();
         PedidoOptions pedidoOptions = new PedidoOptions(scanner);
-        IngredienteService ingredienteService = new IngredienteService();
+        IngredienteOptions ingredienteOptions = new IngredienteOptions(scanner);
         ClienteService clienteService = new ClienteService(scanner);
 
         // Estrutura de repetição inicial para opções de entidade
@@ -37,7 +37,7 @@ public class Main {
                 case 1 -> funcionarioService.caseEntidades();
                 case 2 -> clienteService.executarOpcao();
                 case 3 -> cardapioService.caseEntidade();
-                case 4 -> ingredienteService.caseEntidade();
+                case 4 -> ingredienteOptions.caseEntidade();
                 case 5 -> pedidoOptions.caseEntidade();
                 case 0 -> System.out.println("Encerrando Sistema...");
                 default -> System.out.println("Opção Inválida");
