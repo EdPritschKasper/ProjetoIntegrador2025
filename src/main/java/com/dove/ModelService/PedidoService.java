@@ -1,12 +1,12 @@
-package com.dove.Service;
+package com.dove.ModelService;
 
-import com.dove.entities.PedidoEntity;
+import com.dove.ModelEntities.PedidoEntity;
 import jakarta.persistence.EntityManager;
 
 import java.time.LocalTime;
 import java.util.Scanner;
-import com.dove.repository.PedidoRepository;
-import com.dove.repository.CustomizerFactory;
+import com.dove.ModelRepository.PedidoRepository;
+import com.dove.ModelRepository.CustomizerFactory;
 
 
 public class PedidoService {

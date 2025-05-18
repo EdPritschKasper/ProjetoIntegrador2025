@@ -1,8 +1,8 @@
-package com.dove.Service;
+package com.dove.ModelService;
 
-import com.dove.entities.FuncionarioEntity;
-import com.dove.repository.CustomizerFactory;
-import com.dove.repository.FuncionarioRepository;
+import com.dove.ModelEntities.FuncionarioEntity;
+import com.dove.ModelRepository.CustomizerFactory;
+import com.dove.ModelRepository.FuncionarioRepository;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;

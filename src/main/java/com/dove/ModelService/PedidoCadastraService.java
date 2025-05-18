@@ -1,4 +1,4 @@
-package com.dove.Service;
+package com.dove.ModelService;
 
 import com.dove.entities.*;
 import com.dove.repository.*;

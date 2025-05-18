@@ -1,9 +1,9 @@
-package com.dove.repository;
+package com.dove.ModelRepository;
 
 import java.util.List;
-import java.util.ArrayList;
+
 import jakarta.persistence.EntityManager;
-import com.dove.entities.PedidoEntity;
+import com.dove.ModelEntities.PedidoEntity;
 
 public class PedidoRepository {
     private EntityManager em;

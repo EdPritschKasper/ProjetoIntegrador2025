@@ -1,9 +1,9 @@
 package com.dove;
 
-import com.dove.Service.IngredienteService;
-import com.dove.Service.PedidoService;
-import com.dove.Service.FuncionarioService;
-import com.dove.Service.ClienteService;
+import com.dove.ModelService.IngredienteService;
+import com.dove.ModelService.PedidoService;
+import com.dove.ModelService.FuncionarioService;
+import com.dove.ModelService.ClienteService;
 
 import java.util.Scanner;
 

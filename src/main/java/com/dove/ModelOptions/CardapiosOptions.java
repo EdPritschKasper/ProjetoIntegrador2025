@@ -1,4 +1,4 @@
-package com.dove.Options;
+package com.dove.ModelOptions;
 
 public class CardapiosOptions {
 }

@@ -1,6 +1,6 @@
-package com.dove.repository;
+package com.dove.ModelRepository;
 
-import com.dove.entities.IngredienteEntity;
+import com.dove.ModelEntities.IngredienteEntity;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
