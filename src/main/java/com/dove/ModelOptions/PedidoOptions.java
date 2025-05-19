@@ -1,6 +1,6 @@
-package com.dove.Options;
+package com.dove.ModelOptions;
 
-import com.dove.Service.PedidoService;
+import com.dove.ModelService.PedidoService;
 
 import java.util.Scanner;
 

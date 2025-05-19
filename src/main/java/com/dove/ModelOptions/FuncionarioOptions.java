@@ -1,8 +1,8 @@
-package com.dove.Options;
+package com.dove.ModelOptions;
 
-import com.dove.repository.CustomizerFactory;
+import com.dove.ModelRepository.CustomizerFactory;
 import jakarta.persistence.EntityManager;
-import com.dove.Service.FuncionarioService;
+import com.dove.ModelService.FuncionarioService;
 
 import java.util.Scanner;
 

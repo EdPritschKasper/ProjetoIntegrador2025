@@ -1,7 +1,8 @@
 package com.dove;
 
-import com.dove.Service.*;
-import com.dove.Options.*;
+import com.dove.ModelService.*;
+import com.dove.ModelOptions.*;
+import com.dove.ModelService.*;
 
 import java.util.Scanner;
 

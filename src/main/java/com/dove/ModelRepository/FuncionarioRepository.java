@@ -1,7 +1,7 @@
-package com.dove.repository;
+package com.dove.ModelRepository;
 
-import com.dove.entities.FuncionarioEntity;
-import com.dove.entities.PedidoEntity;
+import com.dove.ModelEntities.FuncionarioEntity;
+import com.dove.ModelEntities.PedidoEntity;
 import jakarta.persistence.*;
 
 import java.util.List;

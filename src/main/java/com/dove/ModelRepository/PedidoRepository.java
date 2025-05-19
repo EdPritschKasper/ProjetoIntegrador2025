@@ -1,11 +1,11 @@
-package com.dove.repository;
+package com.dove.ModelRepository;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 import java.time.LocalTime;
 import jakarta.persistence.EntityManager;
-import com.dove.entities.PedidoEntity;
+import com.dove.ModelEntities.PedidoEntity;
 
 public class PedidoRepository {
     private EntityManager em;

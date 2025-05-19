@@ -1,10 +1,8 @@
-package com.dove.Service;
+package com.dove.ModelService;
 
-import com.dove.entities.CardapiosEntity;
-import com.dove.repository.CardapiosRepository;
+import com.dove.ModelEntities.*;
+import com.dove.ModelRepository.*;
 import jakarta.persistence.EntityManager;
-import com.dove.repository.CustomizerFactory;
-import com.dove.repository.IngredienteRepository;
 
 import java.time.LocalDate;
 import java.util.List;
