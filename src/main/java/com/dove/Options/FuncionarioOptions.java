@@ -1,4 +1,4 @@
-package com.dove.options;
+package com.dove.Options;
 
 import com.dove.repository.CustomizerFactory;
 import jakarta.persistence.EntityManager;

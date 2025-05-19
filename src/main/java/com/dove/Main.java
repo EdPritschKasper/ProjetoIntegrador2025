@@ -1,7 +1,7 @@
 package com.dove;
 
 import com.dove.Service.*;
-import com.dove.options.*;
+import com.dove.Options.*;
 
 import java.util.Scanner;
 
