@@ -1,7 +1,8 @@
 package com.dove;
 
-import com.dove.Service.*;
-import com.dove.Options.*;
+import com.dove.ModelService.*;
+import com.dove.ModelOptions.*;
+import com.dove.ModelService.*;
 
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class Main {
 
         // Inicialização de Opções
         CardapioService cardapioService = new CardapioService();
-        FuncionarioService funcionarioService = new FuncionarioService();
+        FuncionarioOptions funcionarioOptions = new FuncionarioOptions();
         PedidoOptions pedidoOptions = new PedidoOptions(scanner);
         IngredienteOptions ingredienteOptions = new IngredienteOptions(scanner);
         ClienteService clienteService = new ClienteService(scanner);
@@ -34,7 +35,7 @@ public class Main {
 
             controle = scanner.nextInt();
             switch (controle) {
-                case 1 -> funcionarioService.caseEntidades();
+                case 1 -> funcionarioOptions.caseEntidades();
                 case 2 -> clienteService.executarOpcao();
                 case 3 -> cardapioService.caseEntidade();
                 case 4 -> ingredienteOptions.caseEntidade();

@@ -1,7 +1,7 @@
-package com.dove.Service;
+package com.dove.ModelService;
 
-import com.dove.entities.ClienteEntity;
-import com.dove.repository.ClienteRepository;
+import com.dove.ModelEntities.ClienteEntity;
+import com.dove.ModelRepository.ClienteRepository;
 
 import java.util.Scanner;
 

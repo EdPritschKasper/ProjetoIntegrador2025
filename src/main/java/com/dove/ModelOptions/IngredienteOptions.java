@@ -1,4 +1,4 @@
-package com.dove.Options;
+package com.dove.ModelOptions;
 
 import com.dove.Service.IngredienteService;
 

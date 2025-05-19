@@ -1,6 +1,6 @@
-package com.dove.repository;
+package com.dove.ModelRepository;
 
-import com.dove.entities.CardapiosEntity;
+import com.dove.ModelEntities.CardapiosEntity;
 import jakarta.persistence.EntityManager;
 
 import java.time.LocalDate;
