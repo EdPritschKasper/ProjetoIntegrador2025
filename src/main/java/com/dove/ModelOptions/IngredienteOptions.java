@@ -1,6 +1,6 @@
 package com.dove.ModelOptions;
 
-import com.dove.Service.IngredienteService;
+import com.dove.ModelService.IngredienteService;
 
 import java.util.Scanner;
 
