@@ -38,8 +38,7 @@ build/
 .DS_Store
 /.idea/vcs.xml
 
-hibernate.cfg.xml
 
-/src/main/java/com/dove/Exemplo.java
+
 /src/main/resources/META-INF/persistence.xml
-/src/main/resources/
+/src/main/resources/hibernate.cfg.xml
