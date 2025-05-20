@@ -1,6 +1,6 @@
-package com.dove.ModelRepository;
+package com.dove.repository;
 
-import com.dove.ModelEntities.ClienteEntity;
+import com.dove.model.ClienteEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;

@@ -9,10 +9,10 @@
         <property name="hibernate.hbm2ddl.auto">none</property>
 
         <!-- Adicione suas entidades aqui -->
-        <mapping class="com.dove.ModelEntities.PedidoEntity"/>
-        <mapping class="com.dove.ModelEntities.CardapiosEntity"/>
-        <mapping class="com.dove.ModelEntities.FuncionarioEntity"/>
-        <mapping class="com.dove.ModelEntities.IngredienteEntity"/>
-        <mapping class="com.dove.ModelEntities.ClienteEntity"/>
+        <mapping class="com.dove.model.PedidoEntity"/>
+        <mapping class="com.dove.model.CardapiosEntity"/>
+        <mapping class="com.dove.model.FuncionarioEntity"/>
+        <mapping class="com.dove.model.IngredienteEntity"/>
+        <mapping class="com.dove.model.ClienteEntity"/>
     </session-factory>
 </hibernate-configuration>

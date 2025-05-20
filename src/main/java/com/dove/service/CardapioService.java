@@ -1,7 +1,7 @@
-package com.dove.ModelService;
+package com.dove.service;
 
-import com.dove.ModelEntities.*;
-import com.dove.ModelRepository.*;
+import com.dove.model.*;
+import com.dove.repository.*;
 import jakarta.persistence.EntityManager;
 
 import java.time.LocalDate;
@@ -48,7 +48,7 @@ public class CardapioService {
         } while (opcao != 0);
     }
 
-    private void cadastrarCardapio() {
+    public void cadastrarCardapio() {
         System.out.println("\n=== CADASTRAR CARDÁPIO ===");
         System.out.println("Digite a data (YYYY-MM-DD): ");
         String dataStr = scanner.nextLine();
@@ -94,7 +94,7 @@ public class CardapioService {
         }
     }
 
-    private void buscarCardapio() {
+    public void buscarCardapio() {
         System.out.println("\n=== BUSCAR CARDÁPIO ===");
         System.out.println("Digite o ID do cardápio: ");
         Long id = scanner.nextLong();
@@ -111,7 +111,7 @@ public class CardapioService {
         }
     }
 
-    private void atualizarCardapio() {
+    public void atualizarCardapio() {
         System.out.println("\n=== ATUALIZAR CARDÁPIO ===");
         System.out.println("Digite o ID do cardápio: ");
         Long id = scanner.nextLong();
@@ -135,7 +135,7 @@ public class CardapioService {
         }
     }
 
-    private void deletarCardapio() {
+    public void deletarCardapio() {
         System.out.println("\n=== DELETAR CARDÁPIO ===");
         System.out.println("Digite o ID do cardápio: ");
         Long id = scanner.nextLong();
@@ -153,7 +153,7 @@ public class CardapioService {
         }
     }
 
-    private void listarCardapios() {
+    public void listarCardapios() {
         System.out.println("\n=== LISTA DE CARDÁPIOS ===");
         try {
             List<CardapiosEntity> cardapios = cardapiosRepository.findAll();

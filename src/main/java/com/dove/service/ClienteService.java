@@ -1,48 +1,21 @@
-package com.dove.ModelService;
+package com.dove.service;
 
-import com.dove.ModelEntities.ClienteEntity;
-import com.dove.ModelRepository.ClienteRepository;
+import com.dove.model.ClienteEntity;
+import com.dove.repository.ClienteRepository;
 
 import java.util.Scanner;
 
-public class ClienteService {
 
+public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final Scanner scanner;
-    int opcao;
+
     public ClienteService(Scanner scanner) {
         this.clienteRepository = new ClienteRepository();
         this.scanner = scanner;
     }
 
-
-    public void executarOpcao() {
-
-        System.out.println("---------MENU---------");
-        System.out.println("1- Cadastar Cliente");
-        System.out.println("2- Alterar Senha");
-        System.out.println("3- Excluir Conta");
-        System.out.println("4- Exibir Lista de Clietes");
-        System.out.println("5- Exibir Pedidos do Cliente");
-        System.out.println("6- Exibir Clientes que Mais Faz Pedido");
-        System.out.println("0- Sair ?");
-
-        opcao = scanner.nextInt();
-        scanner.nextLine();
-
-        switch (opcao) {
-            case 1 -> cadastrarCliente();
-            case 2 -> alterarSenha();
-            case 3 -> excluirCliente();
-            case 4 -> exibirClientes();
-            case 5 -> exibirPedidosCliente();
-            case 6 -> exibirClientesComMaisPedidos();
-            case 0 -> System.out.println("Encerrando o sistema...");
-            default -> System.out.println("Opção inválida.");
-        }
-    }
-
-    private void cadastrarCliente() {
+    public void cadastrarCliente() {
         try {
             System.out.print("Nome: ");
             String nome = scanner.nextLine();
@@ -63,7 +36,7 @@ public class ClienteService {
         }
     }
 
-    private void alterarSenha() {
+    public void alterarSenha() {
         try {
             System.out.print("Email: ");
             String email = scanner.nextLine();
@@ -83,7 +56,7 @@ public class ClienteService {
         }
     }
 
-    private void excluirCliente() {
+    public void excluirCliente() {
         try {
             System.out.print("Email do cliente a excluir: ");
             String email = scanner.nextLine();
@@ -100,7 +73,7 @@ public class ClienteService {
         }
     }
 
-    private void exibirClientes() {
+    public void exibirClientes() {
         System.out.println("-----Lista de Clientes-----");
 
         var clientes = clienteRepository.exibirClientes();
@@ -118,7 +91,7 @@ public class ClienteService {
         }
     }
 
-    private void exibirPedidosCliente() {
+    public void exibirPedidosCliente() {
         System.out.print("Digite seu email: ");
         String email = scanner.nextLine();
 
@@ -137,7 +110,7 @@ public class ClienteService {
         }
     }
 
-    private void exibirClientesComMaisPedidos(){
+    public void exibirClientesComMaisPedidos(){
         var clientes = clienteRepository.getClientesComMaisPedidos();
         if (clientes == null || clientes.isEmpty()) {
             System.out.println("Nenhum cliente encontrado.");

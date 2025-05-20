@@ -1,76 +1,52 @@
-package com.dove.ModelOptions;
+package com.dove.controller;
 
-import com.dove.ModelRepository.CustomizerFactory;
+import com.dove.repository.CustomizerFactory;
+import com.dove.service.FuncionarioService;
+import com.dove.view.FuncionarioView;
 import jakarta.persistence.EntityManager;
-import com.dove.ModelService.FuncionarioService;
-
 import java.util.Scanner;
 
-public class FuncionarioOptions {
+public class FuncionarioController {
     private final FuncionarioService funcionarioService;
+    private final FuncionarioView funcionarioView;
     private final Scanner scanner;
 
-    public FuncionarioOptions() {
+    public FuncionarioController(Scanner scanner) {
         EntityManager em = CustomizerFactory.getEntityManager();
         this.funcionarioService = new FuncionarioService(em);
-        this.scanner = new Scanner(System.in);
+        this.funcionarioView = new FuncionarioView(scanner);
+        this.scanner = scanner;
     }
 
-
-    public void caseEntidades() {
+    public void executar() {
         int opcao;
-
         do {
-            System.out.println("------------------------------");
-            System.out.println("OPÇÕES DE CRUD DO FUNCIONÁRIO");
-            System.out.println("1 - Cadastrar Funcionário");
-            System.out.println("2 - Listar Funcionários");
-            System.out.println("3 - Atualizar Funcionário");
-            System.out.println("4 - Remover Funcionário");
-            System.out.println("5 - Relatório de Pedidos");
-            System.out.println("0 - Sair");
-            System.out.println("------------------------------");
-
-            opcao = scanner.nextInt();
-            scanner.nextLine();
-
+            opcao = funcionarioView.exibirMenu();
+            scanner.nextLine(); // Limpa buffer
             switch (opcao) {
                 case 1 -> cadastrarFuncionario();
-                case 2 -> listarFuncionarios();
-                case 3 -> atualizarFuncionarios(scanner);
+                case 2 -> funcionarioService.listarFuncionarios();
+                case 3 -> funcionarioService.atualizarFuncionarioeCpf(scanner);
                 case 4 -> removerFuncionario();
                 case 5 -> relatorioPedidos();
                 case 0 -> System.out.println("Saindo do CRUD de Funcionários.");
                 default -> System.out.println("Opção inválida.");
-
             }
-
         } while (opcao != 0);
     }
 
     private void cadastrarFuncionario() {
         System.out.print("Digite o nome do funcionário: ");
         String nome = scanner.nextLine();
-
         System.out.print("Digite o CPF do funcionário: ");
         String cpf = scanner.nextLine();
-
         funcionarioService.cadastrarFuncionario(nome, cpf);
-    }
-
-    private void listarFuncionarios() {
-        funcionarioService.listarFuncionarios();
-    }
-
-    private void atualizarFuncionarios(Scanner scanner) {
-        funcionarioService.atualizarFuncionarioeCpf(this.scanner);
     }
 
     private void removerFuncionario() {
         System.out.print("Digite o ID do funcionário a ser removido: ");
         Long id = scanner.nextLong();
         scanner.nextLine();
-
         funcionarioService.removerFuncionario(id);
     }
 
@@ -78,8 +54,6 @@ public class FuncionarioOptions {
         System.out.print("Digite o ID do funcionário para gerar o relatório: ");
         Long id = scanner.nextLong();
         scanner.nextLine();
-
         funcionarioService.relatorioPedidos(id);
     }
 }
-

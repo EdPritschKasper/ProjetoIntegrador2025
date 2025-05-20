@@ -1,7 +1,7 @@
-package com.dove.ModelService;
+package com.dove.service;
 
-import com.dove.ModelRepository.*;
-import com.dove.ModelEntities.*;
+import com.dove.repository.*;
+import com.dove.model.*;
 import jakarta.persistence.EntityManager;
 
 import java.time.Duration;

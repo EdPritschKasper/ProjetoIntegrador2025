@@ -1,4 +1,4 @@
-package com.dove.ModelRepository;
+package com.dove.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

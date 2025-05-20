@@ -1,8 +1,7 @@
 package com.dove;
 
-import com.dove.ModelService.*;
-import com.dove.ModelOptions.*;
-import com.dove.ModelService.*;
+
+
 
 import java.util.Scanner;
 
@@ -14,11 +13,11 @@ public class Main {
         int controle = 0;
 
         // Inicialização de Opções
-        CardapioService cardapioService = new CardapioService();
-        FuncionarioOptions funcionarioOptions = new FuncionarioOptions();
-        PedidoOptions pedidoOptions = new PedidoOptions(scanner);
-        IngredienteOptions ingredienteOptions = new IngredienteOptions(scanner);
-        ClienteService clienteService = new ClienteService(scanner);
+        com.dove.controller.CardapiosController cardapiosController = new com.dove.controller.CardapiosController(scanner);
+        com.dove.controller.FuncionarioController funcionarioController = new com.dove.controller.FuncionarioController(scanner);
+        com.dove.controller.PedidoController pedidoController = new com.dove.controller.PedidoController(scanner);
+        com.dove.controller.IngredienteController ingredienteController = new com.dove.controller.IngredienteController(scanner);
+        com.dove.controller.ClienteController clienteController = new com.dove.controller.ClienteController(scanner);
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -35,11 +34,11 @@ public class Main {
 
             controle = scanner.nextInt();
             switch (controle) {
-                case 1 -> funcionarioOptions.caseEntidades();
-                case 2 -> clienteService.executarOpcao();
-                case 3 -> cardapioService.caseEntidade();
-                case 4 -> ingredienteOptions.caseEntidade();
-                case 5 -> pedidoOptions.caseEntidade();
+                case 1 -> funcionarioController.executar();
+                case 2 -> clienteController.executar();
+                case 3 -> cardapiosController.executar();
+                case 4 -> ingredienteController.executar();
+                case 5 -> pedidoController.executar();
                 case 0 -> System.out.println("Encerrando Sistema...");
                 default -> System.out.println("Opção Inválida");
             }
