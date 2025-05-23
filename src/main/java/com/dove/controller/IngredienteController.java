@@ -1,6 +1,6 @@
 package com.dove.controller;
 
-import com.dove.service.IngredienteService;
+import com.dove.model.service.IngredienteService;
 import com.dove.view.IngredienteView;
 import java.util.Scanner;
 

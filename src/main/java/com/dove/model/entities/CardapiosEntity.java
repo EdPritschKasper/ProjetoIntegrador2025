@@ -1,4 +1,4 @@
-package com.dove.model;
+package com.dove.model.entities;
 
 import jakarta.persistence.*;
 import java.util.List;

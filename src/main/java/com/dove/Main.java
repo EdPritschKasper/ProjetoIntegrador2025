@@ -1,9 +1,7 @@
 package com.dove;
 
-
-
-
 import java.util.Scanner;
+import com.dove.view.options.PedidoOptions;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,9 +13,9 @@ public class Main {
         // Inicialização de Opções
         com.dove.controller.CardapiosController cardapiosController = new com.dove.controller.CardapiosController(scanner);
         com.dove.controller.FuncionarioController funcionarioController = new com.dove.controller.FuncionarioController(scanner);
-        com.dove.controller.PedidoController pedidoController = new com.dove.controller.PedidoController(scanner);
         com.dove.controller.IngredienteController ingredienteController = new com.dove.controller.IngredienteController(scanner);
         com.dove.controller.ClienteController clienteController = new com.dove.controller.ClienteController(scanner);
+        PedidoOptions pedidoOptions = new PedidoOptions(scanner);
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -38,7 +36,7 @@ public class Main {
                 case 2 -> clienteController.executar();
                 case 3 -> cardapiosController.executar();
                 case 4 -> ingredienteController.executar();
-                case 5 -> pedidoController.executar();
+                case 5 -> pedidoOptions.caseEntidade();
                 case 0 -> System.out.println("Encerrando Sistema...");
                 default -> System.out.println("Opção Inválida");
             }

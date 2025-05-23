@@ -1,6 +1,6 @@
 package com.dove.controller;
 
-import com.dove.service.ClienteService;
+import com.dove.model.service.ClienteService;
 import com.dove.view.ClienteView;
 import java.util.Scanner;
 

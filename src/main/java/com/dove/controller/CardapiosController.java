@@ -1,6 +1,6 @@
 package com.dove.controller;
 
-import com.dove.service.CardapioService;
+import com.dove.model.service.CardapioService;
 import com.dove.view.CardapiosView;
 import java.util.Scanner;
 

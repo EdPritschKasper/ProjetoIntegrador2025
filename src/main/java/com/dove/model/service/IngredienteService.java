@@ -1,7 +1,7 @@
-package com.dove.service;
+package com.dove.model.service;
 
-import com.dove.model.IngredienteEntity;
-import com.dove.repository.IngredienteRepository;
+import com.dove.model.entities.IngredienteEntity;
+import com.dove.model.repository.IngredienteRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;

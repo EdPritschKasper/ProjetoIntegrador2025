@@ -1,7 +1,7 @@
 package com.dove.controller;
 
-import com.dove.repository.CustomizerFactory;
-import com.dove.service.FuncionarioService;
+import com.dove.model.repository.CustomizerFactory;
+import com.dove.model.service.FuncionarioService;
 import com.dove.view.FuncionarioView;
 import jakarta.persistence.EntityManager;
 import java.util.Scanner;
