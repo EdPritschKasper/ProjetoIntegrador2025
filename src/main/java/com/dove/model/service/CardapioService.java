@@ -1,171 +1,51 @@
 package com.dove.model.service;
 
 import com.dove.model.entities.CardapiosEntity;
+import com.dove.model.entities.IngredienteEntity;
 import com.dove.model.repository.CardapiosRepository;
 import com.dove.model.repository.CustomizerFactory;
 import com.dove.model.repository.IngredienteRepository;
 import jakarta.persistence.EntityManager;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Scanner;
 
 public class CardapioService {
-    private EntityManager em;
-    private CardapiosRepository cardapiosRepository;
-    private Scanner scanner;
+    private final EntityManager em;
+    private final CardapiosRepository cardapioRepository;
+    private final IngredienteRepository ingredienteRepository;
 
     public CardapioService() {
         this.em = CustomizerFactory.getEntityManager();
-        this.cardapiosRepository = new CardapiosRepository(em);
-        this.scanner = new Scanner(System.in);
+        this.cardapioRepository = new CardapiosRepository(em);
+        this.ingredienteRepository = new IngredienteRepository(em);
+    }
+    
+    // CRUD operations without direct user interaction
+    public boolean insertCardapio(CardapiosEntity cardapio) {
+        cardapioRepository.insert(cardapio);
+        return true;
     }
 
-    public void caseEntidade() {
-        int opcao;
-
-        do {
-            System.out.println("\n=== MENU CARDÁPIO ===");
-            System.out.println("1 - Cadastrar novo cardápio");
-            System.out.println("2 - Buscar cardápio por ID");
-            System.out.println("3 - Atualizar cardápio");
-            System.out.println("4 - Deletar cardápio");
-            System.out.println("5 - Listar todos os cardápios");
-            System.out.println("0 - Voltar ao menu principal");
-            System.out.print("Escolha uma opção: ");
-
-            opcao = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (opcao) {
-                case 1 -> cadastrarCardapio();
-                case 2 -> buscarCardapio();
-                case 3 -> atualizarCardapio();
-                case 4 -> deletarCardapio();
-                case 5 -> listarCardapios();
-                case 0 -> System.out.println("Voltando ao menu principal...");
-                default -> System.out.println("Opção inválida!");
-            }
-
-        } while (opcao != 0);
+    public CardapiosEntity findCardapioById(Long id) {
+        return cardapioRepository.findById(id);
     }
 
-    public void cadastrarCardapio() {
-        System.out.println("\n=== CADASTRAR CARDÁPIO ===");
-        System.out.println("Digite a data (YYYY-MM-DD): ");
-        String dataStr = scanner.nextLine();
-        
-        try {
-            LocalDate data = LocalDate.parse(dataStr);
-            CardapiosEntity cardapio = new CardapiosEntity(data);
-            
-            System.out.println("Deseja adicionar ingredientes ao cardápio? (s/n): ");
-            String resposta = scanner.nextLine();
-            if (resposta.equalsIgnoreCase("s")) {
-                IngredienteRepository ingredienteRepository = new IngredienteRepository(em);
-                var ingredientesDisponiveis = ingredienteRepository.findAll();
-                
-                if (ingredientesDisponiveis.isEmpty()) {
-                    System.out.println("Nenhum ingrediente cadastrado disponível.");
-                } else {
-                    System.out.println("Lista de Ingredientes:");
-                    for (int i = 0; i < ingredientesDisponiveis.size(); i++) {
-                        System.out.println(i + " - " + ingredientesDisponiveis.get(i).getDescricao());
-                    }
-                    System.out.println("Digite os índices dos ingredientes para adicionar (digite -1 para finalizar): ");
-                    while (true) {
-                        int indice = scanner.nextInt();
-                        scanner.nextLine();
-                        if (indice == -1) {
-                            break;
-                        }
-                        if (indice >= 0 && indice < ingredientesDisponiveis.size()) {
-                            cardapio.getIngredientes().add(ingredientesDisponiveis.get(indice));
-                            System.out.println("Ingrediente adicionado: " + ingredientesDisponiveis.get(indice).getDescricao());
-                        } else {
-                            System.out.println("Opção inválida. Tente novamente.");
-                        }
-                    }
-                }
-            }
-            
-            cardapiosRepository.insert(cardapio);
-            System.out.println("Cardápio cadastrado com sucesso!");
-        } catch (Exception e) {
-            System.out.println("Erro ao cadastrar cardápio: " + e.getMessage());
-        }
+    public boolean updateCardapio(CardapiosEntity cardapio) {
+        cardapioRepository.update(cardapio);
+        return true;
     }
 
-    public void buscarCardapio() {
-        System.out.println("\n=== BUSCAR CARDÁPIO ===");
-        System.out.println("Digite o ID do cardápio: ");
-        Long id = scanner.nextLong();
-
-        try {
-            CardapiosEntity cardapio = cardapiosRepository.findById(id);
-            if (cardapio != null) {
-                System.out.println(cardapio);
-            } else {
-                System.out.println("Cardápio não encontrado!");
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao buscar cardápio: " + e.getMessage());
-        }
+    public boolean deleteCardapio(CardapiosEntity cardapio) {
+        cardapioRepository.delete(cardapio);
+        return true;
     }
 
-    public void atualizarCardapio() {
-        System.out.println("\n=== ATUALIZAR CARDÁPIO ===");
-        System.out.println("Digite o ID do cardápio: ");
-        Long id = scanner.nextLong();
-        scanner.nextLine();
-
-        try {
-            CardapiosEntity cardapio = cardapiosRepository.findById(id);
-            if (cardapio != null) {
-                System.out.println("Digite a nova data (YYYY-MM-DD): ");
-                String dataStr = scanner.nextLine();
-                LocalDate novaData = LocalDate.parse(dataStr);
-                
-                cardapio.setData(novaData);
-                cardapiosRepository.update(cardapio);
-                System.out.println("Cardápio atualizado com sucesso!");
-            } else {
-                System.out.println("Cardápio não encontrado!");
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao atualizar cardápio: " + e.getMessage());
-        }
+    public List<CardapiosEntity> findAllCardapios() {
+        return cardapioRepository.findAll();
     }
 
-    public void deletarCardapio() {
-        System.out.println("\n=== DELETAR CARDÁPIO ===");
-        System.out.println("Digite o ID do cardápio: ");
-        Long id = scanner.nextLong();
-
-        try {
-            CardapiosEntity cardapio = cardapiosRepository.findById(id);
-            if (cardapio != null) {
-                cardapiosRepository.delete(cardapio);
-                System.out.println("Cardápio deletado com sucesso!");
-            } else {
-                System.out.println("Cardápio não encontrado!");
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao deletar cardápio: " + e.getMessage());
-        }
-    }
-
-    public void listarCardapios() {
-        System.out.println("\n=== LISTA DE CARDÁPIOS ===");
-        try {
-            List<CardapiosEntity> cardapios = cardapiosRepository.findAll();
-            if (cardapios.isEmpty()) {
-                System.out.println("Nenhum cardápio cadastrado!");
-            } else {
-                cardapios.forEach(System.out::println);
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao listar cardápios: " + e.getMessage());
-        }
+    public List<IngredienteEntity> findAllIngredientes() {
+        return ingredienteRepository.findAll();
     }
 }
+
