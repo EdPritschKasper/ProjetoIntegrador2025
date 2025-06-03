@@ -1,59 +1,41 @@
 package com.dove.controller;
 
+import com.dove.model.entities.ClienteEntity;
 import com.dove.model.service.ClienteService;
-import com.dove.view.ClienteView;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class ClienteController {
     private final ClienteService clienteService;
-    private final ClienteView clienteView;
     private final Scanner scanner;
 
     public ClienteController(Scanner scanner) {
-        this.clienteService = new ClienteService(scanner);
-        this.clienteView = new ClienteView(scanner);
+        this.clienteService = new ClienteService();
         this.scanner = scanner;
     }
 
-    public void executar() {
-        int opcao;
-        do {
-            opcao = clienteView.exibirMenu();
-            scanner.nextLine(); // Limpa buffer
-            switch (opcao) {
-                case 1 -> cadastrarCliente();
-                case 2 -> alterarSenha();
-                case 3 -> excluirCliente();
-                case 4 -> exibirClientes();
-                case 5 -> exibirPedidosCliente();
-                case 6 -> exibirClientesComMaisPedidos();
-                case 0 -> System.out.println("Encerrando o sistema...");
-                default -> System.out.println("Opção inválida.");
-            }
-        } while (opcao != 0);
+    public ClienteEntity findByEmail(String email) {
+        return clienteService.buscarClientePorEmail(email);
     }
 
-    private void cadastrarCliente() {
-        clienteService.cadastrarCliente();
+    public void salvarCliente(ClienteEntity cliente) {
+        clienteService.cadastrarCliente(cliente);
     }
 
-    private void alterarSenha() {
-        clienteService.alterarSenha();
+    public boolean alterarSenha(String email, String senha) {
+        return clienteService.alterarSenha(email, senha);
     }
 
-    private void excluirCliente() {
-        clienteService.excluirCliente();
+    public boolean excluirCliente(String email) {
+        return clienteService.excluirCliente(email);
     }
 
-    private void exibirClientes() {
-        clienteService.exibirClientes();
+    public List<ClienteEntity> exibirClientes() {
+        return clienteService.exibirClientes();
     }
 
-    private void exibirPedidosCliente() {
-        clienteService.exibirPedidosCliente();
-    }
-
-    private void exibirClientesComMaisPedidos() {
-        clienteService.exibirClientesComMaisPedidos();
+    public List<ClienteEntity> getClientesComMaisPedidos() {
+        return clienteService.exibirClientesComMaisPedidos();
     }
 }

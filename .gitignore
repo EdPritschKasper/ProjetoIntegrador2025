@@ -1,3 +1,14 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
 # Arquivos de compilação do Maven
 /target/
 
@@ -10,15 +21,44 @@ yarn-error.log*
 # Arquivos de configuração específicos do editor IntelliJ IDEA
 .idea/
 *.iml
+*.ipr
 
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 # Arquivos de dependências e de ambiente
 /node_modules/
 .pnp
 .pnp.js
 
+### VS Code ###
+.vscode/
+
+### Mac OS ###
 # Arquivos temporários e de sistema operacional
 *.tmp
 *.bak
 *.swp
 *~
 .DS_Store
+/.idea/vcs.xml
+
+
+
+/src/main/resources/META-INF/persistence.xml
+/src/main/resources/hibernate.cfg.xml

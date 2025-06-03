@@ -1,35 +1,39 @@
 package com.dove.controller;
 
+import com.dove.model.entities.IngredienteEntity;
 import com.dove.model.service.IngredienteService;
-import com.dove.view.IngredienteView;
-import java.util.Scanner;
+
+import java.util.List;
 
 public class IngredienteController {
-    private final IngredienteService ingredienteService;
-    private final IngredienteView ingredienteView;
-    private final Scanner scanner;
 
-    public IngredienteController(Scanner scanner) {
-        this.scanner = scanner;
-        this.ingredienteService = new IngredienteService(scanner);
-        this.ingredienteView = new IngredienteView(scanner);
+    private IngredienteService service;
+
+    public IngredienteController() {
+        this.service = new IngredienteService();
     }
 
-    public void executar() {
-        int controle;
-        do {
-            controle = ingredienteView.exibirMenu();
-            scanner.nextLine(); // Limpa buffer
-            switch (controle) {
-                case 1 -> ingredienteService.cadastrarIngrediente();
-                case 2 -> ingredienteService.lerIngrediente();
-                case 3 -> ingredienteService.atualizarIngrediente();
-                case 4 -> ingredienteService.deletarIngrediente();
-                case 5 -> ingredienteService.listarTodosIngredientes();
-                case 6 -> ingredienteService.pegarIngredienteMaisSelecionado();
-                case 0 -> System.out.println("Saindo de Ingredientes...");
-                default -> System.out.println("Opção inválida.");
-            }
-        } while (controle != 0);
+    public IngredienteEntity findById(Long id) {
+        return service.findById(id);
+    }
+
+    public boolean insert(IngredienteEntity ingrediente) {
+        return service.insert(ingrediente);
+    }
+
+    public boolean update(IngredienteEntity ingrediente) {
+        return service.update(ingrediente);
+    }
+
+    public boolean delete(IngredienteEntity ingrediente) {
+        return service.delete(ingrediente);
+    }
+
+    public List<IngredienteEntity> findAll() {
+        return service.findAll();
+    }
+
+    public IngredienteEntity getMostSelectedIngrediente() {
+        return service.getMostSelectedIngrediente();
     }
 }

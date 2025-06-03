@@ -2,11 +2,7 @@ package com.dove.model.repository;
 
 import com.dove.model.entities.FuncionarioEntity;
 import com.dove.model.entities.PedidoEntity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.TypedQuery;
 
-import java.util.Collections;
 import java.util.List;
 
 public class FuncionarioRepository {
