@@ -5,9 +5,11 @@ import com.dove.view.options.PedidoOptions;
 import com.dove.view.options.CardapioOptions;
 import com.dove.view.IngredienteView;
 import com.dove.view.options.ClienteOptions;
+import com.dove.view.LoginView;
 
 public class Main {
     public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(LoginView::new);
 
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
@@ -36,7 +38,7 @@ public class Main {
             controle = scanner.nextInt();
             switch (controle) {
                 case 1 -> funcionarioController.executar();
-                case 2 -> cardapioOptions.caseEntidade();
+                case 2 -> clienteOptions.caseEntidades();
                 case 3 -> cardapioOptions.caseEntidade();
                 case 4 -> ingredienteView.executar();
                 case 5 -> pedidoOptions.caseEntidade();
