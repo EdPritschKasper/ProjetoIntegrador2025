@@ -37,7 +37,7 @@ public class Main {
             controle = scanner.nextInt();
             switch (controle) {
                 case 1 -> funcionarioController.executar();
-                case 2 -> cardapioOptions.caseEntidade();
+                case 2 -> clienteOptions.caseEntidades();
                 case 3 -> cardapioOptions.caseEntidade();
                 case 4 -> ingredienteController.executar();
                 case 5 -> pedidoOptions.caseEntidade();
