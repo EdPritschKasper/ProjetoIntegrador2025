@@ -4,9 +4,11 @@ import java.util.Scanner;
 import com.dove.view.options.PedidoOptions;
 import com.dove.view.options.CardapioOptions;
 import com.dove.view.options.ClienteOptions;
+import com.dove.view.LoginView;
 
 public class Main {
     public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(LoginView::new);
 
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
