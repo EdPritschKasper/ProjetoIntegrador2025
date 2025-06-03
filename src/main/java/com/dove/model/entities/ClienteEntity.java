@@ -1,19 +1,17 @@
 package com.dove.model.entities;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "tb_cliente")
-
 public class ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nome;
 
     @Column(nullable = false, unique = true)
@@ -25,12 +23,12 @@ public class ClienteEntity {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoEntity> pedidos = new ArrayList<>();
 
-    public ClienteEntity(){}
+    public ClienteEntity() {}
 
-    public ClienteEntity (String nome, String email, String senha){
-    this.nome = nome;
-    this.email = email;
-    this.senha = senha;
+    public ClienteEntity(String nome, String email, String senha) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
     }
 
     public String getNome() {
@@ -55,5 +53,4 @@ public class ClienteEntity {
         }
         this.senha = novaSenha;
     }
-
 }
