@@ -3,13 +3,13 @@ package com.dove;
 import java.util.Scanner;
 import com.dove.view.options.PedidoOptions;
 import com.dove.view.options.CardapioOptions;
-import com.dove.view.IngredienteView;
+import com.dove.view.options.IngredienteOptions;
 import com.dove.view.options.ClienteOptions;
 import com.dove.view.LoginView;
 
 public class Main {
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(LoginView::new);
+       // javax.swing.SwingUtilities.invokeLater(LoginView::new);
 
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
@@ -18,7 +18,7 @@ public class Main {
         // Inicialização de Opções
         CardapioOptions cardapioOptions = new CardapioOptions(scanner);
         com.dove.controller.FuncionarioController funcionarioController = new com.dove.controller.FuncionarioController(scanner);
-        IngredienteView ingredienteView = new IngredienteView(scanner);
+        IngredienteOptions ingredienteOptions = new IngredienteOptions(scanner);
         PedidoOptions pedidoOptions = new PedidoOptions(scanner);
         ClienteOptions clienteOptions = new ClienteOptions(scanner);
 
@@ -40,7 +40,7 @@ public class Main {
                 case 1 -> funcionarioController.executar();
                 case 2 -> clienteOptions.caseEntidades();
                 case 3 -> cardapioOptions.caseEntidade();
-                case 4 -> ingredienteView.executar();
+                case 4 -> ingredienteOptions.casaEntidade();
                 case 5 -> pedidoOptions.caseEntidade();
                 case 0 -> System.out.println("Encerrando Sistema...");
                 default -> System.out.println("Opção Inválida");
