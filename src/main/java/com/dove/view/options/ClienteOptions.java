@@ -1,6 +1,5 @@
 package com.dove.view.options;
 
-import com.dove.view.ClienteView;
 import java.util.Scanner;
 
 public class ClienteOptions {

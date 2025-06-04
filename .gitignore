@@ -9,6 +9,17 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 *.iws
+# Arquivos de compilação do Maven
+/target/
+
+# Arquivos de Log
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de configuração específicos do editor IntelliJ IDEA
+.idea/
 *.iml
 *.ipr
 
@@ -30,11 +41,20 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+# Arquivos de dependências e de ambiente
+/node_modules/
+.pnp
+.pnp.js
 
 ### VS Code ###
 .vscode/
 
 ### Mac OS ###
+# Arquivos temporários e de sistema operacional
+*.tmp
+*.bak
+*.swp
+*~
 .DS_Store
 /.idea/vcs.xml
 

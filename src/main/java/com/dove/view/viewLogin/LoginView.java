@@ -1,4 +1,7 @@
-package com.dove.view;
+package com.dove.view.viewLogin;
+
+import com.dove.view.viewCliente.ClienteView;
+import com.dove.view.viewFuncionario.TelaPrincipalFuncionarioView;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -107,6 +110,19 @@ public class LoginView extends JFrame {
         JButton btnLogin = new JButton("Entrar");
         estilizarBotaoPrimario(btnLogin);
 
+        // --- ADICIONANDO A AÇÃO AO BOTÃO DE LOGIN ---
+        btnLogin.addActionListener(e -> {
+            // Validação simples (pode ser melhorada com a lógica do seu controller)
+            if (!txtCPF.getText().isBlank()) {
+                // Cria a nova tela de dashboard
+                new TelaPrincipalFuncionarioView();
+                // Fecha a tela de login
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, insira o CPF.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
         adicionarCamposCard(card, new JLabel[]{lblCPF}, new JComponent[]{txtCPF, btnLogin});
 
         return card;
@@ -197,5 +213,6 @@ public class LoginView extends JFrame {
         });
         timer.start();
     }
+
 
 }
