@@ -1,6 +1,6 @@
 package com.dove.view.options;
 
-import com.dove.view.ClienteView;
+import com.dove.view.viewCliente.ClienteView;
 import java.util.Scanner;
 
 public class ClienteOptions {
@@ -10,7 +10,7 @@ public class ClienteOptions {
 
     public ClienteOptions(Scanner scanner) {
         this.scanner = scanner;
-        this.view = new ClienteView(scanner);
+        this.view = new ClienteView();
     }
 
     public void caseEntidades() {
@@ -29,12 +29,6 @@ public class ClienteOptions {
             scanner.nextLine();
 
             switch (opcao) {
-                case 1 -> view.cadastrarCliente();
-                case 2 -> view.alterarSenha();
-                case 3 -> view.excluirCliente();
-                case 4 -> view.exibirClientes();
-                case 5 -> view.exibirPedidosCliente();
-                case 6 -> view.exibirClientesComMaisPedidos();
                 case 0 -> System.out.println("Encerrando o sistema...");
                 default -> System.out.println("Opção inválida.");
             }
