@@ -2,6 +2,7 @@ package com.dove.view;
 
 import com.dove.controller.IngredienteController;
 import com.dove.model.entities.IngredienteEntity;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,31 +16,7 @@ public class IngredienteView {
         this.controller = new IngredienteController();
     }
 
-    public void executar() {
-        int opcao = -1;
-        do {
-            System.out.println("---- Menu Ingrediente ----");
-            System.out.println("1 - Listar ingredientes");
-            System.out.println("2 - Inserir ingrediente");
-            System.out.println("3 - Atualizar ingrediente");
-            System.out.println("4 - Deletar ingrediente");
-            System.out.println("0 - Voltar");
-            System.out.print("Escolha uma opção: ");
-            opcao = scanner.nextInt();
-            scanner.nextLine(); // para consumir o \n
-
-            switch (opcao) {
-                case 1 -> listarIngredientes();
-                case 2 -> inserirIngrediente();
-                case 3 -> atualizarIngrediente();
-                case 4 -> deletarIngrediente();
-                case 0 -> System.out.println("Voltando...");
-                default -> System.out.println("Opção inválida");
-            }
-        } while (opcao != 0);
-    }
-
-    private void listarIngredientes() {
+    public void listarIngredientes() {
         List<IngredienteEntity> lista = controller.findAll();
         if (lista.isEmpty()) {
             System.out.println("Nenhum ingrediente cadastrado.");
@@ -48,7 +25,7 @@ public class IngredienteView {
         }
     }
 
-    private void inserirIngrediente() {
+    public void inserirIngrediente() {
         System.out.print("Descrição do ingrediente: ");
         String descricao = scanner.nextLine();
         IngredienteEntity ingrediente = new IngredienteEntity();
@@ -57,10 +34,10 @@ public class IngredienteView {
         System.out.println(sucesso ? "Ingrediente inserido com sucesso." : "Erro ao inserir ingrediente.");
     }
 
-    private void atualizarIngrediente() {
+    public void atualizarIngrediente() {
         System.out.print("ID do ingrediente para atualizar: ");
         Long id = scanner.nextLong();
-        scanner.nextLine();
+        scanner.nextLine(); // Consome o \n
 
         IngredienteEntity ingrediente = controller.findById(id);
         if (ingrediente == null) {
@@ -76,10 +53,10 @@ public class IngredienteView {
         System.out.println(sucesso ? "Ingrediente atualizado." : "Erro ao atualizar ingrediente.");
     }
 
-    private void deletarIngrediente() {
+    public void deletarIngrediente() {
         System.out.print("ID do ingrediente para deletar: ");
         Long id = scanner.nextLong();
-        scanner.nextLine();
+        scanner.nextLine(); // Consome o \n
 
         IngredienteEntity ingrediente = controller.findById(id);
         if (ingrediente == null) {
