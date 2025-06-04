@@ -9,7 +9,7 @@ import com.dove.view.LoginView;
 
 public class Main {
     public static void main(String[] args) {
-       // javax.swing.SwingUtilities.invokeLater(LoginView::new);
+        javax.swing.SwingUtilities.invokeLater(LoginView::new);
 
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
