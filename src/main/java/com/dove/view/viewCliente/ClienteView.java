@@ -1,9 +1,9 @@
-package com.dove.view;
+package com.dove.view.viewCliente;
 
 import javax.swing.*;
 import java.awt.*;
-import com.dove.controller.ClienteController;
-import com.dove.view.LoginView;
+
+import com.dove.view.viewLogin.LoginView;
 
 public class ClienteView extends JFrame {
 

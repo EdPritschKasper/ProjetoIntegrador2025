@@ -1,30 +1,36 @@
 package com.dove;
 
 import java.util.Scanner;
+
+import com.dove.view.IngredienteView;
 import com.dove.view.options.PedidoOptions;
 import com.dove.view.options.CardapioOptions;
 import com.dove.view.options.IngredienteOptions;
+import com.dove.view.options.FuncionarioOptions;
 import com.dove.view.options.ClienteOptions;
-import com.dove.view.LoginView;
+import com.dove.view.viewLogin.LoginView;
+import com.dove.view.viewFuncionario.*;
+import com.dove.model.service.*;
+import jakarta.persistence.EntityManager;
+
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-
-
-       /*
-
-       javax.swing.SwingUtilities.invokeLater(LoginView::new);
+        javax.swing.SwingUtilities.invokeLater(LoginView::new);
 
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
         int controle = 0;
 
+
+
         // Inicialização de Opções
         CardapioOptions cardapioOptions = new CardapioOptions(scanner);
-        com.dove.controller.FuncionarioController funcionarioController = new com.dove.controller.FuncionarioController(scanner);
-        IngredienteOptions ingredienteOptions = new IngredienteOptions(scanner);
+        FuncionarioOptions funcionarioOptions = new FuncionarioOptions(scanner);
         PedidoOptions pedidoOptions = new PedidoOptions(scanner);
         ClienteOptions clienteOptions = new ClienteOptions(scanner);
+        IngredienteView ingredienteView = new IngredienteView(scanner);
 
         // Estrutura de repetição inicial para opções de entidade
         do {
@@ -41,17 +47,13 @@ public class Main {
 
             controle = scanner.nextInt();
             switch (controle) {
-                case 1 -> funcionarioController.executar();
+                case 1 -> funcionarioOptions.caseEntidade();
                 case 2 -> clienteOptions.caseEntidades();
                 case 3 -> cardapioOptions.caseEntidade();
-                case 4 -> ingredienteOptions.casaEntidade();
+//                case 4 -> ingredienteOptions.casaEntidade();
                 case 5 -> pedidoOptions.caseEntidade();
                 case 0 -> System.out.println("Encerrando Sistema...");
                 default -> System.out.println("Opção Inválida");
-
-                */
-
-
             }
 
         } while(controle != 0);
