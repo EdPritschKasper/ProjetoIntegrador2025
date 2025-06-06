@@ -8,14 +8,15 @@ import com.dove.model.entities.PedidoEntity;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PedidoFillerData {
     private List<PedidoEntity> pedidos;
     public PedidoFillerData(){
          this.pedidos = new ArrayList<PedidoEntity>();
-        pedidos.add(new PedidoEntity(1L, "pequena", "pronto", LocalTime.now(), LocalTime.now(), new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
-        pedidos.add(new PedidoEntity(1L, "pequena", "pronto", LocalTime.now(), LocalTime.now(), new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
-        pedidos.add(new PedidoEntity(1L, "pequena", "pronto", LocalTime.now(), LocalTime.now(), new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
+        pedidos.add(new PedidoEntity(Math.abs(new Random().nextLong()), "Pequena", "Pronto", LocalTime.parse("11:30"), LocalTime.parse("15:30"), new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
+        pedidos.add(new PedidoEntity(Math.abs(new Random().nextLong()), "Média", "Pronto", LocalTime.parse("12:00"), LocalTime.now(), new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
+        pedidos.add(new PedidoEntity(Math.abs(new Random().nextLong()), "Grande", "Iniciado", LocalTime.parse("12:30"), null, new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
     }
 
     public List<PedidoEntity> getPedidos() {

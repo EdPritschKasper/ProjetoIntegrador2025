@@ -81,10 +81,13 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         btnPedido.addActionListener(e -> cardLayout.show(painelCentral, "pedido"));
 
         // adicoes painel menu
+        painelMenu.add(Box.createVerticalStrut(10));
         painelMenu.add(btnGerenciamento);
+        painelMenu.add(Box.createVerticalStrut(20));
         painelMenu.add(btnPedido);
         painelMenu.add(Box.createVerticalGlue());
         painelFundo.add(painelMenu, BorderLayout.WEST);
+
 
         // adicoes painel principal
 //        painelCentral.add(new JLabel("funcionario"), "funcionario");
