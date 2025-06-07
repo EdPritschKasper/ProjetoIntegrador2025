@@ -4,6 +4,7 @@ import com.dove.model.entities.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -57,7 +58,7 @@ public class PedidoView {
         return panelGeral;
     }
 
-    public JPanel listar(){
+    public JPanel listar() {
         JPanel panel = new JPanel(new BorderLayout());
 
         // --- Tabela ---
@@ -68,6 +69,7 @@ public class PedidoView {
                 return false;
             }
         };
+
         JTable tabela = new JTable(modeloTabela);
         tabela.setFont(new Font("SansSerif", Font.PLAIN, 14));
         tabela.setForeground(COR_TEXTO);
@@ -83,12 +85,109 @@ public class PedidoView {
 
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
+
         panel.add(scrollPane, BorderLayout.CENTER);
+
+        // --- Painel de Botões ---
+        JPanel botoesPanel = new JPanel();
+        botoesPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        botoesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0)); // espaço entre botões
+
+        JButton btnAtualizar = new JButton("ATUALIZAR");
+        JButton btnDeletar = new JButton("DELETAR");
+        btnAtualizar.setBackground(COR_TEXTO);
+        btnAtualizar.setForeground(Color.WHITE);
+        btnDeletar.setBackground(COR_TEXTO);
+        btnDeletar.setForeground(Color.WHITE);
+
+        // Forçar mesma largura (maior entre os dois botões)
+        Dimension tamanhoAtualizar = btnAtualizar.getPreferredSize();
+        Dimension tamanhoDeletar = btnDeletar.getPreferredSize();
+
+        int larguraMax = Math.max(tamanhoAtualizar.width, tamanhoDeletar.width) + 20; // um pouco de folga
+        int alturaMax = Math.max(tamanhoAtualizar.height, tamanhoDeletar.height);
+
+        Dimension tamanhoPadrao = new Dimension(larguraMax, alturaMax);
+        btnAtualizar.setPreferredSize(tamanhoPadrao);
+        btnDeletar.setPreferredSize(tamanhoPadrao);
+
+        // ActionListeners com verificação de seleção única
+        btnAtualizar.addActionListener(e -> {
+            int linhaVisual = tabela.getSelectedRow();
+            if (linhaVisual != -1 && tabela.getSelectedRowCount() == 1) {
+                int linhaModelo = tabela.convertRowIndexToModel(linhaVisual);
+                Object idObj = modeloTabela.getValueAt(linhaModelo, 0);
+                long id = Long.parseLong(idObj.toString());
+
+                // Procura o pedido correspondente
+                for (PedidoEntity pedido : pedidos.getPedidos()) {
+                    if (pedido.getId() == id) {
+                        // Verifica se o status já está "Pronto"
+                        if ("Pronto".equalsIgnoreCase(pedido.getStatus().trim())) {
+                            JOptionPane.showMessageDialog(panel, "O pedido já está pronto.");
+                        } else {
+                            // Atualiza o status e a hora fim
+                            pedido.setStatus("Pronto");
+                            LocalTime horaFim = LocalTime.now();
+                            pedido.setHora_fim(horaFim);
+
+                            // Atualiza a tabela visualmente
+                            modeloTabela.setValueAt("Pronto", linhaModelo, 2); // coluna "Status"
+                            modeloTabela.setValueAt(horaFim, linhaModelo, 4);  // coluna "Hora Fim"
+
+                            JOptionPane.showMessageDialog(panel, "Pedido atualizado para pronto.");
+                        }
+                        return;
+                    }
+                }
+
+                JOptionPane.showMessageDialog(panel, "Pedido não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(panel, "Selecione exatamente uma linha para atualizar.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+
+        btnDeletar.addActionListener(e -> {
+            int linhaVisual = tabela.getSelectedRow();
+            if (linhaVisual != -1 && tabela.getSelectedRowCount() == 1) {
+                int linhaModelo = tabela.convertRowIndexToModel(linhaVisual);
+                Object idObj = modeloTabela.getValueAt(linhaModelo, 0);
+                long id = Long.parseLong(idObj.toString());
+
+                // Remove da lista de pedidos (entidade)
+                boolean removido = pedidos.getPedidos().removeIf(pedido -> pedido.getId() == id);
+
+                if (removido) {
+                    // Remove da tabela visual
+                    modeloTabela.removeRow(linhaModelo);
+                    JOptionPane.showMessageDialog(panel, "Pedido deletado com sucesso.");
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Pedido não encontrado na entidade.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(panel, "Selecione exatamente uma linha para deletar.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+
+        // ao clicar no scrollpane ele tira a selecao da linha
+        scrollPane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Deseleciona todas as linhas da tabela
+                tabela.clearSelection();
+            }
+        });
+
+        botoesPanel.add(btnAtualizar);
+        botoesPanel.add(btnDeletar);
+
+        panel.add(botoesPanel, BorderLayout.SOUTH);
 
         atualizarTabela();
 
-        scrollPane.setBackground(Color.red);
-        scrollPane.setSize(1000, 1000);
         return panel;
     }
 
@@ -209,7 +308,7 @@ public class PedidoView {
                         .findFirst()
                         .orElse(null);
 
-                pedidos.addPedido(new PedidoEntity(Math.abs(new Random().nextLong()), marmitaSelecionada, "iniciado", LocalTime.now(), null, new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
+                pedidos.addPedido(new PedidoEntity(Math.abs(new Random().nextLong()), marmitaSelecionada, "Iniciado", LocalTime.now(), null, new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
 
                 atualizarTabela();
 
@@ -313,3 +412,5 @@ public class PedidoView {
         return btn;
     }
 }
+
+
