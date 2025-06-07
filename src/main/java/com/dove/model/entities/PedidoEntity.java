@@ -38,6 +38,19 @@ public class PedidoEntity {
     )
     private List<IngredienteEntity> ingredientes = new ArrayList<>();
 
+    public PedidoEntity(Long id, String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, CardapiosEntity cardapio, FuncionarioEntity funcionario, ClienteEntity cliente) {
+        this.id = id;
+        this.marmita = marmita;
+        this.status = status;
+        this.hora_inicio = hora_inicio;
+        this.hora_fim = hora_fim;
+        this.cardapio = cardapio;
+        this.funcionario = funcionario;
+        this.cliente = cliente;
+    }
+
+    public PedidoEntity(){}
+
     @Override
     public String toString() {
         return "id = " + id + "\n" +
