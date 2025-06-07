@@ -10,14 +10,18 @@ import com.dove.view.options.FuncionarioOptions;
 import com.dove.view.options.ClienteOptions;
 import com.dove.view.viewLogin.LoginView;
 import com.dove.view.viewFuncionario.*;
+import com.dove.view.viewPedido.*;
 import com.dove.model.service.*;
 import jakarta.persistence.EntityManager;
+import com.dove.view.viewCliente.ClienteView;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(LoginView::new);
+//        javax.swing.SwingUtilities.invokeLater(TelaPrincipalFuncionarioView::new);
+//        javax.swing.SwingUtilities.invokeLater(ClienteView::new);
 
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
