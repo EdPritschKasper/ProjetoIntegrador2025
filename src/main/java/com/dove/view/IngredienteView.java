@@ -12,7 +12,7 @@ public class IngredienteView extends JFrame {
     JFrame janela = new JFrame();
 
 
-    /*
+
     private final IngredienteController controller;
     private final Scanner scanner;
 
@@ -73,5 +73,5 @@ public class IngredienteView extends JFrame {
         System.out.println(sucesso ? "Ingrediente deletado." : "Erro ao deletar ingrediente.");
     }
 
-    */
+
 }

@@ -17,6 +17,8 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+
+
         javax.swing.SwingUtilities.invokeLater(LoginView::new);
 
         // Declaração de variáveis
@@ -59,5 +61,7 @@ public class Main {
         } while(controle != 0);
 
         scanner.close();
+
+
     }
 }
