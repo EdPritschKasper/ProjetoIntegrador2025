@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import com.dove.view.viewLogin.LoginView;
+import com.dove.view.viewPedido.PedidoView;
 
 public class ClienteView extends JFrame {
 
@@ -11,6 +12,7 @@ public class ClienteView extends JFrame {
     private final JButton btnExibirPedidos;
     private final JButton btnExcluirConta;
     private final JButton btnPedido;
+    private final JButton btnPedidoCliente;
     private final JPanel panelPrincipal;
     private final CardLayout cardLayout;
     private final Color laranja = Color.decode("#FFA500");
@@ -21,7 +23,9 @@ public class ClienteView extends JFrame {
     public ClienteView() {
         setTitle("Área do Cliente - Restaurante Dove");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(900, 600);
+        setSize(1024, 768);
+        setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(800, 600));
         setLocationRelativeTo(null);
         setResizable(false);
         setLayout(new BorderLayout());
@@ -58,14 +62,16 @@ public class ClienteView extends JFrame {
         btnAlterarSenha = criarBotao("Alterar Senha", laranja, Color.WHITE);
         btnExcluirConta = criarBotao("Excluir Conta", laranja, Color.WHITE);
         btnExibirPedidos = criarBotao("Exibir Pedidos", laranja, Color.WHITE);
+        btnPedidoCliente = criarBotao("Pedido", laranja, Color.WHITE);
 
-        botoesPanel.add(btnPedido);
-        botoesPanel.add(Box.createVerticalStrut(20));
+//        botoesPanel.add(btnPedido);
+//        botoesPanel.add(Box.createVerticalStrut(20));
         botoesPanel.add(btnAlterarSenha);
         botoesPanel.add(Box.createVerticalStrut(20));
         botoesPanel.add(btnExcluirConta);
         botoesPanel.add(Box.createVerticalStrut(20));
-        botoesPanel.add(btnExibirPedidos);
+//        botoesPanel.add(btnExibirPedidos);
+        botoesPanel.add(btnPedidoCliente);
 
         add(botoesPanel, BorderLayout.WEST);
 
@@ -78,6 +84,7 @@ public class ClienteView extends JFrame {
         panelPrincipal.add(criarPainelExcluirConta(), "excluirConta");
         panelPrincipal.add(criarPainelPedido(), "fazerPedido");
         panelPrincipal.add(criarPainelExibirPedido(), "exibirPedidos");
+        panelPrincipal.add(new PedidoView().view(), "pedidoCliente");
 
         add(panelPrincipal, BorderLayout.CENTER);
 
@@ -95,6 +102,7 @@ public class ClienteView extends JFrame {
         btnExcluirConta.addActionListener(e -> cardLayout.show(panelPrincipal, "excluirConta"));
         btnPedido.addActionListener(e -> cardLayout.show(panelPrincipal, "fazerPedido"));
         btnExibirPedidos.addActionListener(e -> cardLayout.show(panelPrincipal, "exibirPedidos"));
+        btnPedidoCliente.addActionListener(e -> cardLayout.show(panelPrincipal, "pedidoCliente"));
 
         setVisible(true);
     }
