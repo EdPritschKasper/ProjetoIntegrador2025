@@ -83,6 +83,14 @@ public class TelaPrincipalFuncionarioView extends JFrame {
             cardLayout.show(painelCentral, "ingredientes");
         });
 
+        // botão Cardápio
+        JButton btnCardapio = criarBotaoMenu("Cardápio");
+        btnCardapio.addActionListener(e -> {
+            com.dove.view.viewCardapio.CardapioFrame frameCardapio = new com.dove.view.viewCardapio.CardapioFrame();
+            frameCardapio.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frameCardapio.setVisible(true);
+        });
+
         // botão Pedido
         JButton btnPedido = criarBotaoMenu("Pedido");
         btnPedido.addActionListener(e -> cardLayout.show(painelCentral, "pedido"));
@@ -91,7 +99,9 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelMenu.add(Box.createVerticalStrut(10));
         painelMenu.add(btnGerenciamento);
         painelMenu.add(Box.createVerticalStrut(20));
-        painelMenu.add(btnIngredientes); // <--- Ingredientes vem ANTES do pedido
+        painelMenu.add(btnIngredientes);
+        painelMenu.add(Box.createVerticalStrut(20));
+        painelMenu.add(btnCardapio);
         painelMenu.add(Box.createVerticalStrut(20));
         painelMenu.add(btnPedido);
         painelMenu.add(Box.createVerticalGlue());
