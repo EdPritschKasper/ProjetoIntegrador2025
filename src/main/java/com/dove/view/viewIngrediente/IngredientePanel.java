@@ -20,6 +20,7 @@ public class IngredientePanel extends JPanel {
     private JTable tabela;
     private DefaultTableModel modeloTabela;
 
+    // Simulando dados locais (sem banco)
     private final List<Ingrediente> ingredientes = new ArrayList<>();
 
     public IngredientePanel() {
@@ -33,7 +34,6 @@ public class IngredientePanel extends JPanel {
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         add(lblTitulo, BorderLayout.NORTH);
 
-        // Colunas: ID e Nome (descritivo)
         String[] colunas = {"ID", "Nome"};
         modeloTabela = new DefaultTableModel(colunas, 0) {
             @Override
@@ -63,10 +63,12 @@ public class IngredientePanel extends JPanel {
         JButton btnAdicionar = createStyledButton("Adicionar");
         JButton btnAtualizar = createStyledButton("Atualizar");
         JButton btnRemover = createStyledButton("Remover");
+        JButton btnMaisSelecionado = createStyledButton("Ingrediente Mais Selecionado");
 
         painelBotoes.add(btnAdicionar);
         painelBotoes.add(btnAtualizar);
         painelBotoes.add(btnRemover);
+        painelBotoes.add(btnMaisSelecionado);
 
         add(painelBotoes, BorderLayout.SOUTH);
 
@@ -108,6 +110,11 @@ public class IngredientePanel extends JPanel {
                 ingredientes.remove(indiceReal);
                 atualizarTabela();
             }
+        });
+
+        btnMaisSelecionado.addActionListener(e -> {
+            // Botão por enquanto só mostra uma mensagem.
+            JOptionPane.showMessageDialog(this, "Funcionalidade ainda não implementada.", "Ingrediente Mais Selecionado", JOptionPane.INFORMATION_MESSAGE);
         });
 
         atualizarTabela();
@@ -167,7 +174,7 @@ public class IngredientePanel extends JPanel {
             String nome = campoNome.getText().trim();
 
             if (nome.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Preencha o campo Nome!", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Preencha o campo nome!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
 
@@ -183,7 +190,7 @@ public class IngredientePanel extends JPanel {
 
     private long gerarNovoId() {
         return ingredientes.stream()
-                .mapToLong(Ingrediente::getId)
+                .mapToLong(i -> i.getId() == null ? 0 : i.getId())
                 .max()
                 .orElse(0) + 1;
     }
