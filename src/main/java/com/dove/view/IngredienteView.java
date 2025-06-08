@@ -3,10 +3,15 @@ package com.dove.view;
 import com.dove.controller.IngredienteController;
 import com.dove.model.entities.IngredienteEntity;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Scanner;
 
-public class IngredienteView {
+public class IngredienteView extends JFrame {
+
+    JFrame janela = new JFrame();
+
+
 
     private final IngredienteController controller;
     private final Scanner scanner;
@@ -67,4 +72,6 @@ public class IngredienteView {
         boolean sucesso = controller.delete(ingrediente);
         System.out.println(sucesso ? "Ingrediente deletado." : "Erro ao deletar ingrediente.");
     }
+
+
 }

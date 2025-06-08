@@ -1,11 +1,13 @@
+// imports
 package com.dove.view.viewFuncionario;
 
-import com.dove.view.viewFuncionario.GerenciamentoFuncionario.*;
+import com.dove.view.viewFuncionario.GerenciamentoFuncionario.FuncionarioFrame;
+import com.dove.view.viewIngrediente.IngredienteFrame;
 import com.dove.view.viewLogin.LoginView;
 import com.dove.view.viewPedido.PedidoView;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder; // Import para EmptyBorder
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,14 +31,13 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelFundo.setBackground(corFundoPrincipal);
         add(painelFundo);
 
-        // Cabecalho
+        // cabeçalho
         JPanel painelCabecalho = new JPanel(new BorderLayout(10, 10));
         painelCabecalho.setBackground(corLaranja);
         painelCabecalho.setBorder(new EmptyBorder(10, 20, 10, 20));
 
         JLabel lblBemVindo = new JLabel("Restaurante Dove - Bem-vindo, Funcionário!");
         lblBemVindo.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        lblBemVindo.setForeground(corTextoCabecalho);
         lblBemVindo.setForeground(corFundoPrincipal);
 
         JButton btnLogout = new JButton("Logout");
@@ -44,7 +45,6 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         btnLogout.setForeground(corLaranja);
         btnLogout.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnLogout.setFocusPainted(false);
-
         btnLogout.addActionListener(e -> {
             dispose();
             new LoginView();
@@ -54,21 +54,19 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelCabecalho.add(btnLogout, BorderLayout.EAST);
         painelFundo.add(painelCabecalho, BorderLayout.NORTH);
 
-        // menu
+        // menu lateral
         JPanel painelMenu = new JPanel();
         painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
         painelMenu.setBackground(Color.WHITE);
         painelMenu.setBorder(new EmptyBorder(20, 10, 20, 10));
-
         painelMenu.setPreferredSize(new Dimension(280, 0));
 
-        // painel principal
+        // painel central
         CardLayout cardLayout = new CardLayout();
         JPanel painelCentral = new JPanel(cardLayout);
 
-        // Funcionário btn
+        // botão Gerenciamento de Funcionário
         JButton btnGerenciamento = criarBotaoMenu("Gerenciamento de Funcionário");
-
         btnGerenciamento.addActionListener(e -> {
             FuncionarioFrame frameGerenciamento = new FuncionarioFrame();
             frameGerenciamento.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -76,30 +74,37 @@ public class TelaPrincipalFuncionarioView extends JFrame {
             cardLayout.show(painelCentral, "funcionario");
         });
 
-        // Pedido btn
+        // botão Gerenciar Ingredientes
+        JButton btnIngredientes = criarBotaoMenu("Gerenciar Ingredientes");
+        btnIngredientes.addActionListener(e -> {
+            IngredienteFrame frameIngredientes = new IngredienteFrame();
+            frameIngredientes.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frameIngredientes.setVisible(true);
+            cardLayout.show(painelCentral, "ingredientes");
+        });
+
+        // botão Pedido
         JButton btnPedido = criarBotaoMenu("Pedido");
         btnPedido.addActionListener(e -> cardLayout.show(painelCentral, "pedido"));
 
-        // adicoes painel menu
+        // adicionar botões ao menu
         painelMenu.add(Box.createVerticalStrut(10));
         painelMenu.add(btnGerenciamento);
         painelMenu.add(Box.createVerticalStrut(20));
+        painelMenu.add(btnIngredientes); // <--- Ingredientes vem ANTES do pedido
+        painelMenu.add(Box.createVerticalStrut(20));
         painelMenu.add(btnPedido);
         painelMenu.add(Box.createVerticalGlue());
+
         painelFundo.add(painelMenu, BorderLayout.WEST);
 
-
-        // adicoes painel principal
-//        painelCentral.add(new JLabel("funcionario"), "funcionario");
+        // painel central
         painelCentral.add(new JLabel(), "funcionario");
         painelCentral.add(new PedidoView().view(), "pedido");
         painelCentral.setBackground(corFundoPrincipal);
         painelFundo.add(painelCentral, BorderLayout.CENTER);
 
-        //
-        //
-
-        // rodape
+        // rodapé
         JPanel painelRodape = new JPanel(new FlowLayout(FlowLayout.CENTER));
         painelRodape.setBackground(new Color(51, 51, 51));
         JLabel lblRodape = new JLabel("© 2025 Restaurante Dove. Todos os direitos reservados.");
@@ -124,7 +129,6 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         btn.setOpaque(true);
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
-
         btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         btn.setAlignmentX(Component.LEFT_ALIGNMENT);

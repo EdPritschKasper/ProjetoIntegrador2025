@@ -19,6 +19,8 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+
+
         javax.swing.SwingUtilities.invokeLater(LoginView::new);
 //        javax.swing.SwingUtilities.invokeLater(TelaPrincipalFuncionarioView::new);
 //        javax.swing.SwingUtilities.invokeLater(ClienteView::new);
@@ -63,5 +65,7 @@ public class Main {
         } while(controle != 0);
 
         scanner.close();
+
+
     }
 }
