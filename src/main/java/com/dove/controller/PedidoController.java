@@ -27,11 +27,11 @@ public class PedidoController {
         return pedidoService.getFuncionarioById(id);
     }
 
+    // outras funcoes
     public boolean insertPedido(PedidoEntity pedido){
         return pedidoService.insertPedido(pedido);
     }
 
-    // outras funcoes
     public PedidoEntity pesquisaPedido(Long id) {
         return pedidoService.pesquisaPedidoId(id);
     }

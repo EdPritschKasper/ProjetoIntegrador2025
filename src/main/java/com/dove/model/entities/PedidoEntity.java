@@ -57,10 +57,10 @@ public class PedidoEntity {
                 "marmita = " + marmita + "\n" +
                 "status = " + status + "\n" +
                 "hora_inicio = " + hora_inicio + "\n" +
-                "hora_fim = " + hora_fim + "\n" +
-                "cardapio = " + cardapio + "\n" +
-                "funcionario = " + funcionario + "\n" +
-                "cliente = " + cliente + "\n";
+                "hora_fim = " + hora_fim + "\n";
+//                + "cardapio = " + cardapio + "\n" +
+//                "funcionario = " + funcionario + "\n" +
+//                "cliente = " + cliente + "\n";
     }
 
     public Long getId() {

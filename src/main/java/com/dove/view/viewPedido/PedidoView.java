@@ -1,5 +1,6 @@
 package com.dove.view.viewPedido;
 
+import com.dove.controller.PedidoController;
 import com.dove.model.entities.*;
 
 import javax.swing.*;
@@ -29,7 +30,7 @@ public class PedidoView {
     private PedidoFillerData pedidos;
     private DefaultTableModel modeloTabela;
 
-    public JPanel view(){
+    public JPanel view(PedidoController pedidoController){
         JPanel panelGeral = new JPanel(new BorderLayout());
         JPanel panelBotoes = new JPanel();
         CardLayout cardLayout = new CardLayout();
@@ -43,8 +44,8 @@ public class PedidoView {
 
         // Add panelConteudo
         this.pedidos = new PedidoFillerData();
-        panelConteudo.add(listar(), "lista");
-        panelConteudo.add(cadastrar(), "cadastro");
+        panelConteudo.add(listar(pedidoController), "lista");
+        panelConteudo.add(cadastrar(pedidoController), "cadastro");
 
         // Add panelBotoes
         panelBotoes.add(btnLista);
@@ -58,7 +59,7 @@ public class PedidoView {
         return panelGeral;
     }
 
-    public JPanel listar() {
+    public JPanel listar(PedidoController pedidoController) {
         JPanel panel = new JPanel(new BorderLayout());
 
         // --- Tabela ---
@@ -120,7 +121,7 @@ public class PedidoView {
                 long id = Long.parseLong(idObj.toString());
 
                 // Procura o pedido correspondente
-                for (PedidoEntity pedido : pedidos.getPedidos()) {
+                for (PedidoEntity pedido : pedidoController.findAll()) {
                     if (pedido.getId() == id) {
                         // Verifica se o status já está "Pronto"
                         if ("Pronto".equalsIgnoreCase(pedido.getStatus().trim())) {
@@ -130,17 +131,21 @@ public class PedidoView {
                             pedido.setStatus("Pronto");
                             LocalTime horaFim = LocalTime.now();
                             pedido.setHora_fim(horaFim);
+                            boolean atualizado = pedidoController.updatePedido(pedido);
 
-                            // Atualiza a tabela visualmente
-                            modeloTabela.setValueAt("Pronto", linhaModelo, 2); // coluna "Status"
-                            modeloTabela.setValueAt(horaFim, linhaModelo, 4);  // coluna "Hora Fim"
+                            if(atualizado){
+                                // Atualiza a tabela visualmente
+                                modeloTabela.setValueAt("Pronto", linhaModelo, 2); // coluna "Status"
+                                modeloTabela.setValueAt(horaFim, linhaModelo, 4);  // coluna "Hora Fim"
 
-                            JOptionPane.showMessageDialog(panel, "Pedido atualizado para pronto.");
+                                JOptionPane.showMessageDialog(panel, "Pedido atualizado para pronto.");
+                            } else {
+                                JOptionPane.showMessageDialog(panel, "Pedido não atualizado");
+                            }
                         }
                         return;
                     }
                 }
-
                 JOptionPane.showMessageDialog(panel, "Pedido não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(panel, "Selecione exatamente uma linha para atualizar.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -155,8 +160,8 @@ public class PedidoView {
                 Object idObj = modeloTabela.getValueAt(linhaModelo, 0);
                 long id = Long.parseLong(idObj.toString());
 
-                // Remove da lista de pedidos (entidade)
-                boolean removido = pedidos.getPedidos().removeIf(pedido -> pedido.getId() == id);
+                // Remove da lista de pedidos
+                boolean removido = pedidoController.deletePedido(pedidoController.pesquisaPedido(id));
 
                 if (removido) {
                     // Remove da tabela visual
@@ -186,12 +191,12 @@ public class PedidoView {
 
         panel.add(botoesPanel, BorderLayout.SOUTH);
 
-        atualizarTabela();
+        atualizarTabela(pedidoController);
 
         return panel;
     }
 
-    public JPanel cadastrar() {
+    public JPanel cadastrar(PedidoController pedidoController) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
@@ -310,7 +315,7 @@ public class PedidoView {
 
                 pedidos.addPedido(new PedidoEntity(Math.abs(new Random().nextLong()), marmitaSelecionada, "Iniciado", LocalTime.now(), null, new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
 
-                atualizarTabela();
+                atualizarTabela(pedidoController);
 
                 JOptionPane.showMessageDialog(panel, "Pedido concluído!");
 
@@ -362,18 +367,18 @@ public class PedidoView {
     }
 
 
-    public void atualizarTabela() {
+    public void atualizarTabela(PedidoController pedidoController) {
         modeloTabela.setRowCount(0);
 
-        for (PedidoEntity pedido : pedidos.getPedidos()) {
+        for (PedidoEntity pedido : pedidoController.findAll()) {
             modeloTabela.addRow(new Object[]{
                     pedido.getId(),
                     pedido.getMarmita(),
                     pedido.getStatus(),
                     pedido.getHora_inicio(),
                     pedido.getHora_fim(),
-                    pedido.getFuncionario(),
-                    pedido.getCliente(),
+                    pedido.getFuncionario().getId(),
+                    pedido.getCliente().getEmail(),
             });
         }
     }

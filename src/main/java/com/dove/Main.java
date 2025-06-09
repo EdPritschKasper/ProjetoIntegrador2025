@@ -1,7 +1,10 @@
 package com.dove;
 
+import java.util.List;
 import java.util.Scanner;
 
+import com.dove.controller.PedidoController;
+import com.dove.model.entities.PedidoEntity;
 import com.dove.view.IngredienteView;
 import com.dove.view.options.PedidoOptions;
 import com.dove.view.options.CardapioOptions;
@@ -21,9 +24,13 @@ public class Main {
     public static void main(String[] args) {
 
 
-        javax.swing.SwingUtilities.invokeLater(LoginView::new);
-//        javax.swing.SwingUtilities.invokeLater(TelaPrincipalFuncionarioView::new);
+//        javax.swing.SwingUtilities.invokeLater(LoginView::new);
+        javax.swing.SwingUtilities.invokeLater(TelaPrincipalFuncionarioView::new);
 //        javax.swing.SwingUtilities.invokeLater(ClienteView::new);
+
+//        PedidoController controller = new PedidoController();
+//        List<PedidoEntity> pedidos = controller.findAll();
+//        System.out.println(pedidos);
 
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
@@ -65,7 +72,5 @@ public class Main {
         } while(controle != 0);
 
         scanner.close();
-
-
     }
 }
