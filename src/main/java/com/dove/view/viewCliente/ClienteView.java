@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import com.dove.controller.PedidoController;
+import com.dove.model.entities.ClienteEntity;
 import com.dove.view.viewLogin.LoginView;
 import com.dove.view.viewPedido.PedidoView;
 
@@ -21,7 +22,7 @@ public class ClienteView extends JFrame {
     private final Color texto = Color.decode("#333333");
     private final Color rodape = Color.decode("#EEEEEE");
 
-    public ClienteView() {
+    public ClienteView(ClienteEntity cliente) {
         setTitle("Área do Cliente - Restaurante Dove");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1024, 768);
