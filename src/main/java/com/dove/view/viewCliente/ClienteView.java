@@ -3,6 +3,7 @@ package com.dove.view.viewCliente;
 import javax.swing.*;
 import java.awt.*;
 
+import com.dove.controller.PedidoController;
 import com.dove.view.viewLogin.LoginView;
 import com.dove.view.viewPedido.PedidoView;
 
@@ -84,7 +85,7 @@ public class ClienteView extends JFrame {
         panelPrincipal.add(criarPainelExcluirConta(), "excluirConta");
         panelPrincipal.add(criarPainelPedido(), "fazerPedido");
         panelPrincipal.add(criarPainelExibirPedido(), "exibirPedidos");
-        panelPrincipal.add(new PedidoView().view(), "pedidoCliente");
+        panelPrincipal.add(new PedidoView().view(new PedidoController()), "pedidoCliente");
 
         add(panelPrincipal, BorderLayout.CENTER);
 
