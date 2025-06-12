@@ -2,6 +2,7 @@
 package com.dove.view.viewFuncionario;
 
 import com.dove.controller.PedidoController;
+import com.dove.model.entities.FuncionarioEntity;
 import com.dove.view.viewFuncionario.GerenciamentoFuncionario.FuncionarioFrame;
 import com.dove.view.viewIngrediente.IngredienteFrame;
 import com.dove.view.viewLogin.LoginView;
@@ -19,7 +20,7 @@ public class TelaPrincipalFuncionarioView extends JFrame {
     private final Color corLaranja = new Color(0xFFA500);
     private final Color corTextoCabecalho = new Color(0x333333);
 
-    public TelaPrincipalFuncionarioView() {
+    public TelaPrincipalFuncionarioView(FuncionarioEntity funcionario) {
         // setup inicial
         setTitle("Área do Funcionário - Restaurante Dove");
         setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -1,8 +1,16 @@
 package com.dove.view.viewLogin;
 
+import com.dove.controller.ClienteController;
+import com.dove.controller.FuncionarioController;
+import com.dove.model.entities.ClienteEntity;
+import com.dove.model.entities.FuncionarioEntity;
+import com.dove.model.repository.CustomizerFactory;
+import com.dove.model.service.FuncionarioService;
 import com.dove.view.viewCliente.ClienteView;
 import com.dove.view.viewFuncionario.TelaPrincipalFuncionarioView;
+import jakarta.persistence.EntityManager;
 
+import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -92,8 +100,23 @@ public class LoginView extends JFrame {
         JButton btnLogin = new JButton("Entrar");
         estilizarBotaoPrimario(btnLogin);
         btnLogin.addActionListener(e -> {
-            new ClienteView();
-            dispose();
+
+            ClienteController clienteController = new ClienteController();
+            List<ClienteEntity> clientes = clienteController.exibirClientes();
+
+            boolean encontrado = false;
+            for(ClienteEntity cliente: clientes){
+                if(cliente.getEmail().equals(txtEmail.getText()) && cliente.getSenha().equals(new String(txtSenha.getPassword()))){
+                    new ClienteView(cliente);
+                    dispose();
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if(!encontrado){
+                JOptionPane.showMessageDialog(null, "Cliente não encontrado");
+            }
         });
 
         adicionarCamposCard(card, new JLabel[]{lblEmail, lblSenha}, new JComponent[]{txtEmail, txtSenha, btnLogin});
@@ -114,10 +137,27 @@ public class LoginView extends JFrame {
         btnLogin.addActionListener(e -> {
             // Validação simples (pode ser melhorada com a lógica do seu controller)
             if (!txtCPF.getText().isBlank()) {
-                // Cria a nova tela de dashboard
-                new TelaPrincipalFuncionarioView();
-                // Fecha a tela de login
-                dispose();
+
+                EntityManager em = CustomizerFactory.getEntityManager();
+                FuncionarioService funcionarioService = new FuncionarioService(em);
+                FuncionarioController funcionarioController = new FuncionarioController(funcionarioService);
+                List<FuncionarioEntity> funcionarios = funcionarioController.listarFuncionarios();
+                boolean encontrado = false;
+                for(FuncionarioEntity funcionario: funcionarios){
+                    if(funcionario.getCpf().equals(txtCPF.getText())){
+                        encontrado = true;
+                        // Cria a nova tela de dashboard
+                        new TelaPrincipalFuncionarioView(funcionario);
+                        // Fecha a tela de login
+                        dispose();
+                        break;
+                    }
+                }
+
+                if(!encontrado) {
+                    JOptionPane.showMessageDialog(null, "CPF não encontrado");
+                }
+
             } else {
                 JOptionPane.showMessageDialog(this, "Por favor, insira o CPF.", "Aviso", JOptionPane.WARNING_MESSAGE);
             }

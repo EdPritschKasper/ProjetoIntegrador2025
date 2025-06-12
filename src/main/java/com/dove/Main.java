@@ -3,6 +3,7 @@ package com.dove;
 import java.util.List;
 import java.util.Scanner;
 
+import com.dove.controller.ClienteController;
 import com.dove.controller.PedidoController;
 import com.dove.model.entities.PedidoEntity;
 import com.dove.view.IngredienteView;
@@ -24,8 +25,8 @@ public class Main {
     public static void main(String[] args) {
 
 
-//        javax.swing.SwingUtilities.invokeLater(LoginView::new);
-        javax.swing.SwingUtilities.invokeLater(TelaPrincipalFuncionarioView::new);
+        javax.swing.SwingUtilities.invokeLater(LoginView::new);
+//        javax.swing.SwingUtilities.invokeLater(TelaPrincipalFuncionarioView::new);
 //        javax.swing.SwingUtilities.invokeLater(ClienteView::new);
 
 //        PedidoController controller = new PedidoController();
@@ -35,8 +36,6 @@ public class Main {
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
         int controle = 0;
-
-
 
         // Inicialização de Opções
         CardapioOptions cardapioOptions = new CardapioOptions(scanner);
