@@ -38,15 +38,16 @@ public class PedidoEntity {
     )
     private List<IngredienteEntity> ingredientes = new ArrayList<>();
 
-    public PedidoEntity(Long id, String marmita, String status, LocalTime hora_inicio, LocalTime hora_fim, CardapiosEntity cardapio, FuncionarioEntity funcionario, ClienteEntity cliente) {
-        this.id = id;
+    // Construtor para insert pedido
+    public PedidoEntity(String marmita, CardapiosEntity cardapio, FuncionarioEntity funcionario, ClienteEntity cliente, List<IngredienteEntity> ingredientes) {
         this.marmita = marmita;
-        this.status = status;
-        this.hora_inicio = hora_inicio;
-        this.hora_fim = hora_fim;
+        this.status = "Iniciado";
+        this.hora_inicio =  LocalTime.now();
+        this.hora_fim = null;
         this.cardapio = cardapio;
         this.funcionario = funcionario;
         this.cliente = cliente;
+        this.ingredientes = ingredientes;
     }
 
     public PedidoEntity(){}

@@ -1,6 +1,6 @@
 package com.dove.view.viewPedido;
 
-import com.dove.controller.PedidoController;
+import com.dove.controller.*;
 import com.dove.model.entities.*;
 
 import javax.swing.*;
@@ -17,7 +17,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.dove.model.repository.CustomizerFactory;
+import com.dove.model.service.FuncionarioService;
 import com.dove.view.viewPedido.PedidoFillerData;
+import jakarta.persistence.EntityManager;
 
 public class PedidoView {
     // --- Paleta de cores definida ---
@@ -45,7 +48,7 @@ public class PedidoView {
         // Add panelConteudo
         this.pedidos = new PedidoFillerData();
         panelConteudo.add(listar(pedidoController), "lista");
-        panelConteudo.add(cadastrar(pedidoController), "cadastro");
+        panelConteudo.add(cadastrar(pedidoController, new IngredienteController(), new CardapioController()), "cadastro");
 
         // Add panelBotoes
         panelBotoes.add(btnLista);
@@ -196,7 +199,7 @@ public class PedidoView {
         return panel;
     }
 
-    public JPanel cadastrar(PedidoController pedidoController) {
+    public JPanel cadastrar(PedidoController pedidoController, IngredienteController ingredienteController, CardapioController cardapioController) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
@@ -210,37 +213,52 @@ public class PedidoView {
         marmitaPanel.setLayout(new BoxLayout(marmitaPanel, BoxLayout.Y_AXIS));
 
         // Ingredientes - JCheckBox
+        // Ingredientes - JCheckBox
         List<JCheckBox> checkBoxes = new ArrayList<>();
-        String[] opcoes = {"Arroz", "Feijão", "Carne", "Frango", "Alface", "Tomate"};
-        for (String nome : opcoes) {
-            JCheckBox box = new JCheckBox(nome);
-            box.setFocusPainted(false);
-            box.setContentAreaFilled(true);
-            box.setOpaque(true);
-            box.setBackground(corFundoPrincipal);
-            box.setFont(new Font("Arial", Font.BOLD, 14));
-            box.setAlignmentX(Component.LEFT_ALIGNMENT);
-            box.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-            box.setHorizontalAlignment(SwingConstants.LEFT);
+        CardapiosEntity cardapioDoDia = pedidoController.getCardapioHoje();
 
-            box.addItemListener(e -> {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    box.setBackground(COR_ACENTO);
-                    box.setForeground(Color.WHITE);
-                } else {
-                    box.setBackground(corFundoPrincipal);
-                    box.setForeground(COR_TEXTO);
-                }
-            });
+        if (cardapioDoDia == null) {
+            JLabel aviso = new JLabel("Não há cardápio do dia.");
+            aviso.setFont(new Font("Arial", Font.BOLD, 14));
+            aviso.setForeground(Color.RED);
+            aviso.setAlignmentX(Component.LEFT_ALIGNMENT);
+            listaPanel.add(aviso);
+        } else {
+            List<IngredienteEntity> ingredientes = cardapioDoDia.getIngredientes();
+            for (IngredienteEntity ingrediente : ingredientes) {
+                JCheckBox box = new JCheckBox(ingrediente.getDescricao());
+                box.putClientProperty("ingrediente", ingrediente); // Associa o objeto completo
 
-            checkBoxes.add(box);
-            listaPanel.add(box);
+                // estilo e comportamento visual
+                box.setFocusPainted(false);
+                box.setContentAreaFilled(true);
+                box.setOpaque(true);
+                box.setBackground(corFundoPrincipal);
+                box.setFont(new Font("Arial", Font.BOLD, 14));
+                box.setAlignmentX(Component.LEFT_ALIGNMENT);
+                box.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+                box.setHorizontalAlignment(SwingConstants.LEFT);
+
+                box.addItemListener(e -> {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        box.setBackground(COR_ACENTO);
+                        box.setForeground(Color.WHITE);
+                    } else {
+                        box.setBackground(corFundoPrincipal);
+                        box.setForeground(COR_TEXTO);
+                    }
+                });
+
+                checkBoxes.add(box);
+                listaPanel.add(box);
+            }
         }
+
 
         // Marmita - JRadioButton
         ButtonGroup grupo = new ButtonGroup();
         List<JRadioButton> radioButtons = new ArrayList<>();
-        String[] opcoes2 = {"Pequena", "Média", "Grande", "Prato no Local"};
+        String[] opcoes2 = {"Pequena", "Média", "Grande", "Prato"};
 
         for (String nome : opcoes2) {
             JRadioButton radio = new JRadioButton(nome);
@@ -301,10 +319,11 @@ public class PedidoView {
             if (radioSelecionado && checkboxMarcado) {
 
                 // ingredientes selecionados
-                List<String> ingredientesSelecionados = checkBoxes.stream()
+                List<IngredienteEntity> ingredientesSelecionados = checkBoxes.stream()
                         .filter(JCheckBox::isSelected)
-                        .map(AbstractButton::getText)
+                        .map(cb -> (IngredienteEntity) cb.getClientProperty("ingrediente"))
                         .collect(Collectors.toList());
+                System.out.println(ingredientesSelecionados);
 
                 // marmita selecionada
                 String marmitaSelecionada = radioButtons.stream()
@@ -313,7 +332,20 @@ public class PedidoView {
                         .findFirst()
                         .orElse(null);
 
-                pedidos.addPedido(new PedidoEntity(Math.abs(new Random().nextLong()), marmitaSelecionada, "Iniciado", LocalTime.now(), null, new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
+                EntityManager em = CustomizerFactory.getEntityManager();
+                FuncionarioService funcionarioService = new FuncionarioService(em);
+                FuncionarioController funcionarioController = new FuncionarioController(funcionarioService);
+                ClienteController clienteController = new ClienteController();
+
+                PedidoEntity pedido = new PedidoEntity(
+                        marmitaSelecionada,
+                        cardapioDoDia,
+                        funcionarioController.buscarFuncionarioPorId(2L),
+                        clienteController.findByEmail("luan@gmail.com"),
+                        ingredientesSelecionados
+                );
+
+                pedidoController.insertPedido(pedido);
 
                 atualizarTabela(pedidoController);
 
