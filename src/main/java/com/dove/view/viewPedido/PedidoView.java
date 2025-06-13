@@ -1,5 +1,6 @@
 package com.dove.view.viewPedido;
 
+import ch.qos.logback.core.net.server.Client;
 import com.dove.controller.*;
 import com.dove.model.entities.*;
 
@@ -33,7 +34,7 @@ public class PedidoView {
     private PedidoFillerData pedidos;
     private DefaultTableModel modeloTabela;
 
-    public JPanel view(PedidoController pedidoController){
+    public JPanel view(PedidoController pedidoController, FuncionarioEntity funcionario, ClienteEntity cliente){
         JPanel panelGeral = new JPanel(new BorderLayout());
         JPanel panelBotoes = new JPanel();
         CardLayout cardLayout = new CardLayout();
@@ -47,8 +48,8 @@ public class PedidoView {
 
         // Add panelConteudo
         this.pedidos = new PedidoFillerData();
-        panelConteudo.add(listar(pedidoController), "lista");
-        panelConteudo.add(cadastrar(pedidoController, new IngredienteController(), new CardapioController()), "cadastro");
+        panelConteudo.add(listar(pedidoController, funcionario, cliente), "lista");
+        panelConteudo.add(cadastrar(pedidoController, new IngredienteController(), new CardapioController(), funcionario, cliente), "cadastro");
 
         // Add panelBotoes
         panelBotoes.add(btnLista);
@@ -62,11 +63,14 @@ public class PedidoView {
         return panelGeral;
     }
 
-    public JPanel listar(PedidoController pedidoController) {
+    public JPanel listar(PedidoController pedidoController, FuncionarioEntity funcionario, ClienteEntity cliente) {
         JPanel panel = new JPanel(new BorderLayout());
 
         // --- Tabela ---
-        String[] colunas = {"Id", "Marmita", "Status", "Hora Inicio", "Hora Fim", "Funcionario", "Cliente"};
+        String[] colunas = (cliente != null)
+                ? new String[] {"Id", "Marmita", "Status", "Hora Inicio", "Hora Fim"} // colunas para cliente
+                : new String[] {"Id", "Marmita", "Status", "Hora Inicio", "Hora Fim", "Funcionario", "Cliente"}; // colunas para funcionario
+
         modeloTabela = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -98,7 +102,7 @@ public class PedidoView {
         botoesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0)); // espaço entre botões
 
         JButton btnAtualizar = new JButton("ATUALIZAR");
-        JButton btnDeletar = new JButton("DELETAR");
+        JButton btnDeletar = new JButton("CANCELAR");
         btnAtualizar.setBackground(COR_TEXTO);
         btnAtualizar.setForeground(Color.WHITE);
         btnDeletar.setBackground(COR_TEXTO);
@@ -189,17 +193,17 @@ public class PedidoView {
             }
         });
 
-        botoesPanel.add(btnAtualizar);
+        if(funcionario != null) botoesPanel.add(btnAtualizar);
         botoesPanel.add(btnDeletar);
 
         panel.add(botoesPanel, BorderLayout.SOUTH);
 
-        atualizarTabela(pedidoController);
+        atualizarTabela(pedidoController, funcionario, cliente);
 
         return panel;
     }
 
-    public JPanel cadastrar(PedidoController pedidoController, IngredienteController ingredienteController, CardapioController cardapioController) {
+    public JPanel cadastrar(PedidoController pedidoController, IngredienteController ingredienteController, CardapioController cardapioController, FuncionarioEntity funcionario, ClienteEntity cliente) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
@@ -340,14 +344,14 @@ public class PedidoView {
                 PedidoEntity pedido = new PedidoEntity(
                         marmitaSelecionada,
                         cardapioDoDia,
-                        funcionarioController.buscarFuncionarioPorId(2L),
-                        clienteController.findByEmail("luan@gmail.com"),
+                        funcionario,
+                        cliente,
                         ingredientesSelecionados
                 );
 
                 pedidoController.insertPedido(pedido);
 
-                atualizarTabela(pedidoController);
+                atualizarTabela(pedidoController, funcionario, cliente);
 
                 JOptionPane.showMessageDialog(panel, "Pedido concluído!");
 
@@ -399,18 +403,22 @@ public class PedidoView {
     }
 
 
-    public void atualizarTabela(PedidoController pedidoController) {
+    public void atualizarTabela(PedidoController pedidoController, FuncionarioEntity funcionario, ClienteEntity cliente) {
         modeloTabela.setRowCount(0);
 
-        for (PedidoEntity pedido : pedidoController.findAll()) {
+        List<PedidoEntity> pedidos = funcionario != null
+                ? pedidoController.findAll()
+                : cliente.getPedidos();
+
+        for (PedidoEntity pedido : pedidos) {
             modeloTabela.addRow(new Object[]{
                     pedido.getId(),
                     pedido.getMarmita(),
                     pedido.getStatus(),
                     pedido.getHora_inicio(),
                     pedido.getHora_fim(),
-                    pedido.getFuncionario().getId(),
-                    pedido.getCliente().getEmail(),
+                    pedido.getFuncionario() != null ? pedido.getFuncionario().getNome() : null,
+                    pedido.getCliente() != null ? pedido.getCliente().getEmail() : null,
             });
         }
     }

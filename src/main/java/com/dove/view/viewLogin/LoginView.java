@@ -107,7 +107,7 @@ public class LoginView extends JFrame {
             boolean encontrado = false;
             for(ClienteEntity cliente: clientes){
                 if(cliente.getEmail().equals(txtEmail.getText()) && cliente.getSenha().equals(new String(txtSenha.getPassword()))){
-                    new ClienteView(cliente);
+                    new ClienteView(clienteController.findByEmail(cliente.getEmail()));
                     dispose();
                     encontrado = true;
                     break;

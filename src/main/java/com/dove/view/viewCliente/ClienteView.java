@@ -86,7 +86,7 @@ public class ClienteView extends JFrame {
         panelPrincipal.add(criarPainelExcluirConta(), "excluirConta");
         panelPrincipal.add(criarPainelPedido(), "fazerPedido");
         panelPrincipal.add(criarPainelExibirPedido(), "exibirPedidos");
-        panelPrincipal.add(new PedidoView().view(new PedidoController()), "pedidoCliente");
+        panelPrincipal.add(new PedidoView().view(new PedidoController(), null, cliente), "pedidoCliente");
 
         add(panelPrincipal, BorderLayout.CENTER);
 

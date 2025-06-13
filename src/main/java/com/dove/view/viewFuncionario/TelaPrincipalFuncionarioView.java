@@ -112,7 +112,7 @@ public class TelaPrincipalFuncionarioView extends JFrame {
 
         // painel central
         painelCentral.add(new JLabel(), "funcionario");
-        painelCentral.add(new PedidoView().view(new PedidoController()), "pedido");
+        painelCentral.add(new PedidoView().view(new PedidoController(), funcionario, null), "pedido");
         painelCentral.setBackground(corFundoPrincipal);
         painelFundo.add(painelCentral, BorderLayout.CENTER);
 
