@@ -183,6 +183,37 @@ public class LoginView extends JFrame {
         JButton btnCadastrar = new JButton("Cadastrar");
         estilizarBotaoPrimario(btnCadastrar);
 
+        btnCadastrar.addActionListener(e -> {
+            ClienteController clienteController = new ClienteController();
+
+            String nome = txtNome.getText();
+            String email = txtEmail.getText();
+            String senha = new String(txtSenha.getPassword());
+
+            boolean emailExistente = false;
+
+            // verifica se os campos estão vazios
+            if (nome.isBlank() || email.isBlank() || senha.isBlank()){
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // verifica se já existe o email
+            for(ClienteEntity cliente: clienteController.exibirClientes()){
+                if(cliente.getEmail().equals(email)) {
+                    emailExistente = true;
+                    break;
+                }
+            }
+            if(emailExistente) {
+                JOptionPane.showMessageDialog(this, "Email já está cadastrado", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            clienteController.salvarCliente(new ClienteEntity(nome, email, senha));
+            new ClienteView(clienteController.findByEmail(email));
+        });
+
         adicionarCamposCard(card, new JLabel[]{lblNome, lblEmail, lblSenha}, new JComponent[]{txtNome, txtEmail, txtSenha, btnCadastrar});
 
         return card;
