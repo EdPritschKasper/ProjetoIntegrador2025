@@ -351,7 +351,7 @@ public class PedidoView {
 
                 pedidoController.insertPedido(pedido);
 
-                atualizarTabela(pedidoController, funcionario, cliente);
+                atualizarTabela(pedidoController, funcionario, clienteController.findByEmail(cliente.getEmail()));
 
                 JOptionPane.showMessageDialog(panel, "Pedido concluído!");
 
@@ -409,6 +409,8 @@ public class PedidoView {
         List<PedidoEntity> pedidos = funcionario != null
                 ? pedidoController.findAll()
                 : cliente.getPedidos();
+
+        System.out.println(pedidos);
 
         for (PedidoEntity pedido : pedidos) {
             modeloTabela.addRow(new Object[]{
