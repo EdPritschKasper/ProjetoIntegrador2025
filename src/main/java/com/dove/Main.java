@@ -1,7 +1,11 @@
 package com.dove;
 
+import java.util.List;
 import java.util.Scanner;
 
+import com.dove.controller.ClienteController;
+import com.dove.controller.PedidoController;
+import com.dove.model.entities.PedidoEntity;
 import com.dove.view.IngredienteView;
 import com.dove.view.options.PedidoOptions;
 import com.dove.view.options.CardapioOptions;
@@ -24,17 +28,20 @@ public class Main {
 //        javax.swing.SwingUtilities.invokeLater(TelaPrincipalFuncionarioView::new);
 //        javax.swing.SwingUtilities.invokeLater(ClienteView::new);
 
+//        PedidoController controller = new PedidoController();
+//        List<PedidoEntity> pedidos = controller.findAll();
+//        System.out.println(pedidos);
+
         // Declaração de variáveis
         Scanner scanner = new Scanner(System.in);
         int controle = 0;
-
-
 
         // Inicialização de Opções
         CardapioOptions cardapioOptions = new CardapioOptions(scanner);
         FuncionarioOptions funcionarioOptions = new FuncionarioOptions(scanner);
         PedidoOptions pedidoOptions = new PedidoOptions(scanner);
         ClienteOptions clienteOptions = new ClienteOptions(scanner);
+        IngredienteOptions ingredienteOptions = new IngredienteOptions(scanner);
         IngredienteView ingredienteView = new IngredienteView(scanner);
 
         // Estrutura de repetição inicial para opções de entidade
@@ -55,7 +62,7 @@ public class Main {
                 case 1 -> funcionarioOptions.caseEntidade();
                 case 2 -> clienteOptions.caseEntidades();
                 case 3 -> cardapioOptions.caseEntidade();
-//                case 4 -> ingredienteOptions.casaEntidade();
+                case 4 -> ingredienteOptions.casaEntidade();
                 case 5 -> pedidoOptions.caseEntidade();
                 case 0 -> System.out.println("Encerrando Sistema...");
                 default -> System.out.println("Opção Inválida");
@@ -64,7 +71,5 @@ public class Main {
         } while(controle != 0);
 
         scanner.close();
-
-
     }
 }

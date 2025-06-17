@@ -1,11 +1,9 @@
+// imports
 package com.dove.view.viewFuncionario;
 
-// Imports necessários para as novas classes e funcionalidades
-import com.dove.controller.FuncionarioController;
+import com.dove.controller.PedidoController;
 import com.dove.model.entities.FuncionarioEntity;
-import com.dove.model.repository.CustomizerFactory;
-import com.dove.model.service.FuncionarioService;
-import com.dove.view.viewFuncionario.GerenciamentoFuncionario.FuncionarioPanel;
+import com.dove.view.viewFuncionario.GerenciamentoFuncionario.FuncionarioFrame;
 import com.dove.view.viewIngrediente.IngredienteFrame;
 import com.dove.view.viewLogin.LoginView;
 import com.dove.view.viewPedido.PedidoView;
@@ -26,9 +24,9 @@ public class TelaPrincipalFuncionarioView extends JFrame {
 
     private final Color corFundoPrincipal = new Color(0xFFF5E5);
     private final Color corLaranja = new Color(0xFFA500);
-    private final Color corLaranjaEscuro = corLaranja.darker();
+    private final Color corTextoCabecalho = new Color(0x333333);
 
-    public TelaPrincipalFuncionarioView() {
+    public TelaPrincipalFuncionarioView(FuncionarioEntity funcionario) {
         // setup inicial
         setTitle("Área do Funcionário - Restaurante Dove");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -41,7 +39,7 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelFundo.setBackground(corFundoPrincipal);
         add(painelFundo);
 
-        // cabeçalho (sem alterações)
+        // cabeçalho
         JPanel painelCabecalho = new JPanel(new BorderLayout(10, 10));
         painelCabecalho.setBackground(corLaranja);
         painelCabecalho.setBorder(new EmptyBorder(10, 20, 10, 20));
@@ -102,6 +100,8 @@ public class TelaPrincipalFuncionarioView extends JFrame {
             frameCardapio.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frameCardapio.setVisible(true);
         });
+
+        // botão Pedido
         JButton btnPedido = criarBotaoMenu("Pedido");
         btnPedido.addActionListener(e -> {
             cardLayout.show(painelCentral, "pedido");
@@ -119,11 +119,20 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelMenu.add(Box.createVerticalGlue());
 
         painelFundo.add(painelMenu, BorderLayout.WEST);
+
+        // painel central
+        painelCentral.add(new JLabel(), "funcionario");
+        painelCentral.add(new PedidoView().view(new PedidoController(), funcionario, null), "pedido");
+        painelCentral.setBackground(corFundoPrincipal);
         painelFundo.add(painelCentral, BorderLayout.CENTER);
 
-        // rodapé (sem alterações)
+        // rodapé
         JPanel painelRodape = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        // ... (código do rodapé) ...
+        painelRodape.setBackground(new Color(51, 51, 51));
+        JLabel lblRodape = new JLabel("© 2025 Restaurante Dove. Todos os direitos reservados.");
+        lblRodape.setForeground(Color.WHITE);
+        lblRodape.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        painelRodape.add(lblRodape);
         painelFundo.add(painelRodape, BorderLayout.SOUTH);
 
         // Inicia mostrando o dashboard
@@ -143,8 +152,10 @@ public class TelaPrincipalFuncionarioView extends JFrame {
 
     private JButton criarBotaoMenu(String texto) {
         JButton btn = new JButton(texto);
+
         final Color corOriginal = corLaranja;
         final Color corHover = corLaranja.brighter();
+
         btn.setBackground(corOriginal);
         btn.setForeground(Color.WHITE);
         btn.setFont(new Font("Arial", Font.BOLD, 14));
@@ -168,6 +179,7 @@ public class TelaPrincipalFuncionarioView extends JFrame {
                 }
             }
         });
+
         return btn;
     }
 
