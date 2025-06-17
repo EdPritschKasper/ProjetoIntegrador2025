@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import com.dove.model.repository.CustomizerFactory;
 import com.dove.model.service.FuncionarioService;
-import com.dove.view.viewPedido.PedidoFillerData;
 import jakarta.persistence.EntityManager;
 
 public class PedidoView {
@@ -31,7 +30,6 @@ public class PedidoView {
     private static final Color COR_SLA = new Color(0x9C999A);
     private static final Color corFundoPrincipal = new Color(0xFFF5E5);
 
-    private PedidoFillerData pedidos;
     private DefaultTableModel modeloTabela;
 
     public JPanel view(PedidoController pedidoController, FuncionarioEntity funcionario, ClienteEntity cliente){
@@ -39,6 +37,9 @@ public class PedidoView {
         JPanel panelBotoes = new JPanel();
         CardLayout cardLayout = new CardLayout();
         JPanel panelConteudo = new JPanel(cardLayout);
+        panelGeral.setBackground(corFundoPrincipal);
+        panelBotoes.setBackground(corFundoPrincipal);
+        panelConteudo.setBackground(corFundoPrincipal);
 
         // btn
         JButton btnLista = criarBotaoMenu("LISTA");
@@ -47,7 +48,6 @@ public class PedidoView {
         btnCadastra.addActionListener(e -> cardLayout.show(panelConteudo, "cadastro"));
 
         // Add panelConteudo
-        this.pedidos = new PedidoFillerData();
         panelConteudo.add(listar(pedidoController, funcionario, cliente), "lista");
         panelConteudo.add(cadastrar(pedidoController, new IngredienteController(), new CardapioController(), funcionario, cliente), "cadastro");
 
@@ -65,8 +65,9 @@ public class PedidoView {
 
     public JPanel listar(PedidoController pedidoController, FuncionarioEntity funcionario, ClienteEntity cliente) {
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(corFundoPrincipal);
 
-        // --- Tabela ---
+        // Colunas da Tabela
         String[] colunas = (cliente != null)
                 ? new String[] {"Id", "Marmita", "Status", "Hora Inicio", "Hora Fim"} // colunas para cliente
                 : new String[] {"Id", "Marmita", "Status", "Hora Inicio", "Hora Fim", "Funcionario", "Cliente"}; // colunas para funcionario
@@ -86,18 +87,22 @@ public class PedidoView {
         tabela.setSelectionBackground(COR_SLA);
         tabela.setSelectionForeground(Color.WHITE);
         tabela.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
+//        tabela.getTableHeader().setForeground(Color.WHITE);
         tabela.getTableHeader().setForeground(COR_ACENTO);
+//        tabela.getTableHeader().setBackground(COR_ACENTO);
         tabela.getTableHeader().setReorderingAllowed(false);
         tabela.setRowSorter(new TableRowSorter<>(modeloTabela));
         tabela.getColumnModel().getColumn(0).setPreferredWidth(10);
 
         JScrollPane scrollPane = new JScrollPane(tabela);
+        scrollPane.getViewport().setBackground(corFundoPrincipal);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
 
         panel.add(scrollPane, BorderLayout.CENTER);
 
         // --- Painel de Botões ---
         JPanel botoesPanel = new JPanel();
+        botoesPanel.setBackground(Color.decode("#FFF5E5"));
         botoesPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         botoesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0)); // espaço entre botões
 
@@ -205,6 +210,7 @@ public class PedidoView {
 
     public JPanel cadastrar(PedidoController pedidoController, IngredienteController ingredienteController, CardapioController cardapioController, FuncionarioEntity funcionario, ClienteEntity cliente) {
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(corFundoPrincipal);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(10, 10, 10, 10); // Espaçamento
@@ -212,11 +218,12 @@ public class PedidoView {
         // Panel de listas
         JPanel listaPanel = new JPanel();
         listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
+        listaPanel.setBackground(corFundoPrincipal);
 
         JPanel marmitaPanel = new JPanel();
         marmitaPanel.setLayout(new BoxLayout(marmitaPanel, BoxLayout.Y_AXIS));
+        marmitaPanel.setBackground(corFundoPrincipal);
 
-        // Ingredientes - JCheckBox
         // Ingredientes - JCheckBox
         List<JCheckBox> checkBoxes = new ArrayList<>();
         CardapiosEntity cardapioDoDia = pedidoController.getCardapioHoje();
@@ -294,9 +301,13 @@ public class PedidoView {
         // Labels estilizados
         JLabel labelIngredientes = new JLabel("Ingredientes");
         labelIngredientes.setFont(new Font("Arial", Font.BOLD, 18));
+        labelIngredientes.setOpaque(true);
+        labelIngredientes.setBackground(corFundoPrincipal);
 
         JLabel labelMarmita = new JLabel("Marmita");
         labelMarmita.setFont(new Font("Arial", Font.BOLD, 18));
+        labelMarmita.setOpaque(true);
+        labelMarmita.setBackground(corFundoPrincipal);
 
         // Scroll panes
         JScrollPane scrollIngredientes = new JScrollPane(listaPanel);

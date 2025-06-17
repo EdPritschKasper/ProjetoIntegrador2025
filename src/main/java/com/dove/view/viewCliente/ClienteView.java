@@ -37,7 +37,7 @@ public class ClienteView extends JFrame {
         headerPanel.setBackground(laranja);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JLabel lblTitulo = new JLabel("Restaurante Dove - Bem-vindo, Cliente!");
+        JLabel lblTitulo = new JLabel("Restaurante Dove - Bem-vindo, " + cliente.getNome() + " !");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
         lblTitulo.setForeground(Color.WHITE);
         headerPanel.add(lblTitulo, BorderLayout.WEST);

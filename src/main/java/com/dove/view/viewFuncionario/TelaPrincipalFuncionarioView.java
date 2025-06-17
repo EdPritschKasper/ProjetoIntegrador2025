@@ -38,7 +38,7 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelCabecalho.setBackground(corLaranja);
         painelCabecalho.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-        JLabel lblBemVindo = new JLabel("Restaurante Dove - Bem-vindo, Funcionário!");
+        JLabel lblBemVindo = new JLabel("Restaurante Dove - Bem-vindo, " + funcionario.getNome() + " !");
         lblBemVindo.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblBemVindo.setForeground(corFundoPrincipal);
 
