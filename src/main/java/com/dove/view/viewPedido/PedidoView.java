@@ -5,6 +5,7 @@ import com.dove.controller.*;
 import com.dove.model.entities.*;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
-
+import java.time.format.DateTimeFormatter;
 import com.dove.model.repository.CustomizerFactory;
 import com.dove.model.service.FuncionarioService;
 import jakarta.persistence.EntityManager;
@@ -93,6 +94,15 @@ public class PedidoView {
         tabela.getTableHeader().setReorderingAllowed(false);
         tabela.setRowSorter(new TableRowSorter<>(modeloTabela));
         tabela.getColumnModel().getColumn(0).setPreferredWidth(10);
+
+        // Centralizar o conteúdo das células
+        DefaultTableCellRenderer centralizado = new DefaultTableCellRenderer();
+        centralizado.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Aplica o renderer a todas as colunas
+        for (int i = 0; i < tabela.getColumnCount(); i++) {
+            tabela.getColumnModel().getColumn(i).setCellRenderer(centralizado);
+        }
 
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.getViewport().setBackground(corFundoPrincipal);
@@ -421,15 +431,16 @@ public class PedidoView {
                 ? pedidoController.findAll()
                 : cliente.getPedidos();
 
-        System.out.println(pedidos);
+        // Formatter para mostrar apenas HH:mm:ss
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         for (PedidoEntity pedido : pedidos) {
             modeloTabela.addRow(new Object[]{
                     pedido.getId(),
                     pedido.getMarmita(),
                     pedido.getStatus(),
-                    pedido.getHora_inicio(),
-                    pedido.getHora_fim(),
+                    pedido.getHora_inicio().format(formatter),
+                    pedido.getHora_fim() != null ? pedido.getHora_fim().format(formatter) : null,
                     pedido.getFuncionario() != null ? pedido.getFuncionario().getNome() : null,
                     pedido.getCliente() != null ? pedido.getCliente().getEmail() : null,
             });
