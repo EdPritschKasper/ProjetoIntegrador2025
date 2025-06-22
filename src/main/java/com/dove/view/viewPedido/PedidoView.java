@@ -1,5 +1,7 @@
 package com.dove.view.viewPedido;
 
+import ch.qos.logback.core.net.server.Client;
+import com.dove.controller.*;
 import com.dove.model.entities.*;
 
 import javax.swing.*;
@@ -16,7 +18,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.dove.model.repository.CustomizerFactory;
+import com.dove.model.service.FuncionarioService;
 import com.dove.view.viewPedido.PedidoFillerData;
+import jakarta.persistence.EntityManager;
 
 public class PedidoView {
     // --- Paleta de cores definida ---
@@ -29,7 +34,7 @@ public class PedidoView {
     private PedidoFillerData pedidos;
     private DefaultTableModel modeloTabela;
 
-    public JPanel view(){
+    public JPanel view(PedidoController pedidoController, FuncionarioEntity funcionario, ClienteEntity cliente){
         JPanel panelGeral = new JPanel(new BorderLayout());
         JPanel panelBotoes = new JPanel();
         CardLayout cardLayout = new CardLayout();
@@ -43,8 +48,8 @@ public class PedidoView {
 
         // Add panelConteudo
         this.pedidos = new PedidoFillerData();
-        panelConteudo.add(listar(), "lista");
-        panelConteudo.add(cadastrar(), "cadastro");
+        panelConteudo.add(listar(pedidoController, funcionario, cliente), "lista");
+        panelConteudo.add(cadastrar(pedidoController, new IngredienteController(), new CardapioController(), funcionario, cliente), "cadastro");
 
         // Add panelBotoes
         panelBotoes.add(btnLista);
@@ -58,11 +63,14 @@ public class PedidoView {
         return panelGeral;
     }
 
-    public JPanel listar() {
+    public JPanel listar(PedidoController pedidoController, FuncionarioEntity funcionario, ClienteEntity cliente) {
         JPanel panel = new JPanel(new BorderLayout());
 
         // --- Tabela ---
-        String[] colunas = {"Id", "Marmita", "Status", "Hora Inicio", "Hora Fim", "Funcionario", "Cliente"};
+        String[] colunas = (cliente != null)
+                ? new String[] {"Id", "Marmita", "Status", "Hora Inicio", "Hora Fim"} // colunas para cliente
+                : new String[] {"Id", "Marmita", "Status", "Hora Inicio", "Hora Fim", "Funcionario", "Cliente"}; // colunas para funcionario
+
         modeloTabela = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -94,7 +102,7 @@ public class PedidoView {
         botoesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0)); // espaço entre botões
 
         JButton btnAtualizar = new JButton("ATUALIZAR");
-        JButton btnDeletar = new JButton("DELETAR");
+        JButton btnDeletar = new JButton("CANCELAR");
         btnAtualizar.setBackground(COR_TEXTO);
         btnAtualizar.setForeground(Color.WHITE);
         btnDeletar.setBackground(COR_TEXTO);
@@ -120,7 +128,7 @@ public class PedidoView {
                 long id = Long.parseLong(idObj.toString());
 
                 // Procura o pedido correspondente
-                for (PedidoEntity pedido : pedidos.getPedidos()) {
+                for (PedidoEntity pedido : pedidoController.findAll()) {
                     if (pedido.getId() == id) {
                         // Verifica se o status já está "Pronto"
                         if ("Pronto".equalsIgnoreCase(pedido.getStatus().trim())) {
@@ -130,17 +138,21 @@ public class PedidoView {
                             pedido.setStatus("Pronto");
                             LocalTime horaFim = LocalTime.now();
                             pedido.setHora_fim(horaFim);
+                            boolean atualizado = pedidoController.updatePedido(pedido);
 
-                            // Atualiza a tabela visualmente
-                            modeloTabela.setValueAt("Pronto", linhaModelo, 2); // coluna "Status"
-                            modeloTabela.setValueAt(horaFim, linhaModelo, 4);  // coluna "Hora Fim"
+                            if(atualizado){
+                                // Atualiza a tabela visualmente
+                                modeloTabela.setValueAt("Pronto", linhaModelo, 2); // coluna "Status"
+                                modeloTabela.setValueAt(horaFim, linhaModelo, 4);  // coluna "Hora Fim"
 
-                            JOptionPane.showMessageDialog(panel, "Pedido atualizado para pronto.");
+                                JOptionPane.showMessageDialog(panel, "Pedido atualizado para pronto.");
+                            } else {
+                                JOptionPane.showMessageDialog(panel, "Pedido não atualizado");
+                            }
                         }
                         return;
                     }
                 }
-
                 JOptionPane.showMessageDialog(panel, "Pedido não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(panel, "Selecione exatamente uma linha para atualizar.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -155,8 +167,8 @@ public class PedidoView {
                 Object idObj = modeloTabela.getValueAt(linhaModelo, 0);
                 long id = Long.parseLong(idObj.toString());
 
-                // Remove da lista de pedidos (entidade)
-                boolean removido = pedidos.getPedidos().removeIf(pedido -> pedido.getId() == id);
+                // Remove da lista de pedidos
+                boolean removido = pedidoController.deletePedido(pedidoController.pesquisaPedido(id));
 
                 if (removido) {
                     // Remove da tabela visual
@@ -181,17 +193,17 @@ public class PedidoView {
             }
         });
 
-        botoesPanel.add(btnAtualizar);
+        if(funcionario != null) botoesPanel.add(btnAtualizar);
         botoesPanel.add(btnDeletar);
 
         panel.add(botoesPanel, BorderLayout.SOUTH);
 
-        atualizarTabela();
+        atualizarTabela(pedidoController, funcionario, cliente);
 
         return panel;
     }
 
-    public JPanel cadastrar() {
+    public JPanel cadastrar(PedidoController pedidoController, IngredienteController ingredienteController, CardapioController cardapioController, FuncionarioEntity funcionario, ClienteEntity cliente) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
@@ -205,37 +217,52 @@ public class PedidoView {
         marmitaPanel.setLayout(new BoxLayout(marmitaPanel, BoxLayout.Y_AXIS));
 
         // Ingredientes - JCheckBox
+        // Ingredientes - JCheckBox
         List<JCheckBox> checkBoxes = new ArrayList<>();
-        String[] opcoes = {"Arroz", "Feijão", "Carne", "Frango", "Alface", "Tomate"};
-        for (String nome : opcoes) {
-            JCheckBox box = new JCheckBox(nome);
-            box.setFocusPainted(false);
-            box.setContentAreaFilled(true);
-            box.setOpaque(true);
-            box.setBackground(corFundoPrincipal);
-            box.setFont(new Font("Arial", Font.BOLD, 14));
-            box.setAlignmentX(Component.LEFT_ALIGNMENT);
-            box.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-            box.setHorizontalAlignment(SwingConstants.LEFT);
+        CardapiosEntity cardapioDoDia = pedidoController.getCardapioHoje();
 
-            box.addItemListener(e -> {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    box.setBackground(COR_ACENTO);
-                    box.setForeground(Color.WHITE);
-                } else {
-                    box.setBackground(corFundoPrincipal);
-                    box.setForeground(COR_TEXTO);
-                }
-            });
+        if (cardapioDoDia == null) {
+            JLabel aviso = new JLabel("Não há cardápio do dia.");
+            aviso.setFont(new Font("Arial", Font.BOLD, 14));
+            aviso.setForeground(Color.RED);
+            aviso.setAlignmentX(Component.LEFT_ALIGNMENT);
+            listaPanel.add(aviso);
+        } else {
+            List<IngredienteEntity> ingredientes = cardapioDoDia.getIngredientes();
+            for (IngredienteEntity ingrediente : ingredientes) {
+                JCheckBox box = new JCheckBox(ingrediente.getDescricao());
+                box.putClientProperty("ingrediente", ingrediente); // Associa o objeto completo
 
-            checkBoxes.add(box);
-            listaPanel.add(box);
+                // estilo e comportamento visual
+                box.setFocusPainted(false);
+                box.setContentAreaFilled(true);
+                box.setOpaque(true);
+                box.setBackground(corFundoPrincipal);
+                box.setFont(new Font("Arial", Font.BOLD, 14));
+                box.setAlignmentX(Component.LEFT_ALIGNMENT);
+                box.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+                box.setHorizontalAlignment(SwingConstants.LEFT);
+
+                box.addItemListener(e -> {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        box.setBackground(COR_ACENTO);
+                        box.setForeground(Color.WHITE);
+                    } else {
+                        box.setBackground(corFundoPrincipal);
+                        box.setForeground(COR_TEXTO);
+                    }
+                });
+
+                checkBoxes.add(box);
+                listaPanel.add(box);
+            }
         }
+
 
         // Marmita - JRadioButton
         ButtonGroup grupo = new ButtonGroup();
         List<JRadioButton> radioButtons = new ArrayList<>();
-        String[] opcoes2 = {"Pequena", "Média", "Grande", "Prato no Local"};
+        String[] opcoes2 = {"Pequena", "Média", "Grande", "Prato"};
 
         for (String nome : opcoes2) {
             JRadioButton radio = new JRadioButton(nome);
@@ -296,10 +323,11 @@ public class PedidoView {
             if (radioSelecionado && checkboxMarcado) {
 
                 // ingredientes selecionados
-                List<String> ingredientesSelecionados = checkBoxes.stream()
+                List<IngredienteEntity> ingredientesSelecionados = checkBoxes.stream()
                         .filter(JCheckBox::isSelected)
-                        .map(AbstractButton::getText)
+                        .map(cb -> (IngredienteEntity) cb.getClientProperty("ingrediente"))
                         .collect(Collectors.toList());
+                System.out.println(ingredientesSelecionados);
 
                 // marmita selecionada
                 String marmitaSelecionada = radioButtons.stream()
@@ -308,9 +336,22 @@ public class PedidoView {
                         .findFirst()
                         .orElse(null);
 
-                pedidos.addPedido(new PedidoEntity(Math.abs(new Random().nextLong()), marmitaSelecionada, "Iniciado", LocalTime.now(), null, new CardapiosEntity(), new FuncionarioEntity(), new ClienteEntity()));
+                EntityManager em = CustomizerFactory.getEntityManager();
+                FuncionarioService funcionarioService = new FuncionarioService(em);
+                FuncionarioController funcionarioController = new FuncionarioController(funcionarioService);
+                ClienteController clienteController = new ClienteController();
 
-                atualizarTabela();
+                PedidoEntity pedido = new PedidoEntity(
+                        marmitaSelecionada,
+                        cardapioDoDia,
+                        funcionario,
+                        cliente,
+                        ingredientesSelecionados
+                );
+
+                pedidoController.insertPedido(pedido);
+
+                atualizarTabela(pedidoController, funcionario, clienteController.findByEmail(cliente.getEmail()));
 
                 JOptionPane.showMessageDialog(panel, "Pedido concluído!");
 
@@ -362,18 +403,24 @@ public class PedidoView {
     }
 
 
-    public void atualizarTabela() {
+    public void atualizarTabela(PedidoController pedidoController, FuncionarioEntity funcionario, ClienteEntity cliente) {
         modeloTabela.setRowCount(0);
 
-        for (PedidoEntity pedido : pedidos.getPedidos()) {
+        List<PedidoEntity> pedidos = funcionario != null
+                ? pedidoController.findAll()
+                : cliente.getPedidos();
+
+        System.out.println(pedidos);
+
+        for (PedidoEntity pedido : pedidos) {
             modeloTabela.addRow(new Object[]{
                     pedido.getId(),
                     pedido.getMarmita(),
                     pedido.getStatus(),
                     pedido.getHora_inicio(),
                     pedido.getHora_fim(),
-                    pedido.getFuncionario(),
-                    pedido.getCliente(),
+                    pedido.getFuncionario() != null ? pedido.getFuncionario().getNome() : null,
+                    pedido.getCliente() != null ? pedido.getCliente().getEmail() : null,
             });
         }
     }

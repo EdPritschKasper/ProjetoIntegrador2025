@@ -7,6 +7,7 @@ import com.dove.model.entities.PedidoEntity;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -19,13 +20,14 @@ public class FuncionarioPanel extends JPanel {
     private static final Color COR_FUNDO = Color.WHITE;
     private static final Color COR_ACENTO = new Color(0xFFA500); // Laranja
     private static final Color COR_TEXTO = new Color(0x333333);   // Cinza Escuro
-    private static final Color COR_SLA = new Color(0x9C999A);
+    private static final Color COR_SELECAO = new Color(0xFFDDAA); // Laranja mais claro para seleção
 
     private FuncionarioController funcionarioController;
     private JTable tabela;
     private DefaultTableModel modeloTabela;
 
-    public FuncionarioPanel(FuncionarioController controller) {
+    // Construtor ajustado para receber a lista pré-carregada
+    public FuncionarioPanel(FuncionarioController controller, List<FuncionarioEntity> funcionariosIniciais) {
         this.funcionarioController = controller;
         setBorder(new EmptyBorder(15, 15, 15, 15));
         setLayout(new BorderLayout(10, 15));
@@ -38,6 +40,7 @@ public class FuncionarioPanel extends JPanel {
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         add(lblTitulo, BorderLayout.NORTH);
 
+
         // --- Tabela ---
         String[] colunas = {"ID", "Nome", "CPF"};
         modeloTabela = new DefaultTableModel(colunas, 0) {
@@ -48,17 +51,23 @@ public class FuncionarioPanel extends JPanel {
         };
         tabela = new JTable(modeloTabela);
 
+        // Ocultando a coluna do ID
+        TableColumn idColumn = tabela.getColumnModel().getColumn(0);
+        idColumn.setMinWidth(0);
+        idColumn.setMaxWidth(0);
+        idColumn.setPreferredWidth(0);
+
+        // Estilização da tabela
         tabela.setFont(new Font("SansSerif", Font.PLAIN, 14));
         tabela.setForeground(COR_TEXTO);
         tabela.setRowHeight(28);
         tabela.setBackground(COR_FUNDO);
-        tabela.setSelectionBackground(COR_SLA);
-        tabela.setSelectionForeground(Color.WHITE);
+        tabela.setSelectionBackground(COR_SELECAO);
+        tabela.setSelectionForeground(COR_TEXTO);
         tabela.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
         tabela.getTableHeader().setForeground(COR_ACENTO);
         tabela.getTableHeader().setReorderingAllowed(false);
         tabela.setRowSorter(new TableRowSorter<>(modeloTabela));
-
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220)));
         add(scrollPane, BorderLayout.CENTER);
@@ -135,7 +144,8 @@ public class FuncionarioPanel extends JPanel {
             dialog.setVisible(true);
         });
 
-        atualizarTabela();
+
+        popularTabela(funcionariosIniciais);
     }
 
     private JButton createStyledButton(String text) {
@@ -165,9 +175,8 @@ public class FuncionarioPanel extends JPanel {
         return button;
     }
 
-    private void atualizarTabela() {
+    private void popularTabela(List<FuncionarioEntity> funcionarios) {
         modeloTabela.setRowCount(0);
-        List<FuncionarioEntity> funcionarios = funcionarioController.listarFuncionarios();
         for (FuncionarioEntity funcionario : funcionarios) {
             modeloTabela.addRow(new Object[]{
                     funcionario.getId(),
@@ -175,5 +184,10 @@ public class FuncionarioPanel extends JPanel {
                     funcionario.getCpf()
             });
         }
+    }
+
+    private void atualizarTabela() {
+        List<FuncionarioEntity> funcionarios = funcionarioController.listarFuncionarios();
+        popularTabela(funcionarios);
     }
 }

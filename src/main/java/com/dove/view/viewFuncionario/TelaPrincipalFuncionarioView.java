@@ -1,24 +1,35 @@
-// imports
 package com.dove.view.viewFuncionario;
 
-import com.dove.view.viewFuncionario.GerenciamentoFuncionario.FuncionarioFrame;
+// Imports necessários para as novas classes e funcionalidades
+import com.dove.controller.FuncionarioController;
+import com.dove.controller.PedidoController;
+import com.dove.model.entities.FuncionarioEntity;
+import com.dove.model.repository.CustomizerFactory;
+import com.dove.model.service.FuncionarioService;
+import com.dove.view.viewFuncionario.GerenciamentoFuncionario.FuncionarioPanel;
 import com.dove.view.viewIngrediente.IngredienteFrame;
 import com.dove.view.viewLogin.LoginView;
 import com.dove.view.viewPedido.PedidoView;
+import jakarta.persistence.EntityManager;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class TelaPrincipalFuncionarioView extends JFrame {
 
+    private final CardLayout cardLayout = new CardLayout();
+    private final JPanel painelCentral;
+    private JButton botaoMenuActive;
+
     private final Color corFundoPrincipal = new Color(0xFFF5E5);
     private final Color corLaranja = new Color(0xFFA500);
-    private final Color corTextoCabecalho = new Color(0x333333);
+    private final Color corLaranjaEscuro = corLaranja.darker();
 
-    public TelaPrincipalFuncionarioView() {
+    public TelaPrincipalFuncionarioView(FuncionarioEntity funcionario) {
         // setup inicial
         setTitle("Área do Funcionário - Restaurante Dove");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -38,7 +49,7 @@ public class TelaPrincipalFuncionarioView extends JFrame {
 
         JLabel lblBemVindo = new JLabel("Restaurante Dove - Bem-vindo, Funcionário!");
         lblBemVindo.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        lblBemVindo.setForeground(corFundoPrincipal);
+        lblBemVindo.setForeground(Color.WHITE); // Corrigido para branco para melhor contraste
 
         JButton btnLogout = new JButton("Logout");
         btnLogout.setBackground(Color.WHITE);
@@ -62,41 +73,50 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelMenu.setPreferredSize(new Dimension(280, 0));
 
         // painel central
-        CardLayout cardLayout = new CardLayout();
-        JPanel painelCentral = new JPanel(cardLayout);
+        painelCentral = new JPanel(cardLayout);
 
-        // botão Gerenciamento de Funcionário
+        EntityManager em = CustomizerFactory.getEntityManager();
+        FuncionarioService funcionarioService = new FuncionarioService(em);
+        FuncionarioController funcionarioController = new FuncionarioController(funcionarioService);
+        List<FuncionarioEntity> funcionariosIniciais = funcionarioController.listarFuncionarios();
+
+        // Placeholder Funcionario
+        FuncionarioPanel painelFuncionario = new FuncionarioPanel(funcionarioController, funcionariosIniciais);
+        painelCentral.add(painelFuncionario, "funcionario");
+
+        painelCentral.add(new PedidoView().view(new PedidoController(), funcionario, null), "pedido");
+        // Placeholder para ingredientes
+        painelCentral.add(new JLabel("Tela de Ingredientes em Construção"), "ingredientes");
+
+
+        //Acoes Botoes
         JButton btnGerenciamento = criarBotaoMenu("Gerenciamento de Funcionário");
         btnGerenciamento.addActionListener(e -> {
-            FuncionarioFrame frameGerenciamento = new FuncionarioFrame();
-            frameGerenciamento.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frameGerenciamento.setVisible(true);
             cardLayout.show(painelCentral, "funcionario");
+            setBotaoMenuActive(btnGerenciamento); // Destaca o botão ativo
         });
 
-        // botão Gerenciar Ingredientes
+        // Mantendo os outros botões com o comportamento antigo
         JButton btnIngredientes = criarBotaoMenu("Gerenciar Ingredientes");
         btnIngredientes.addActionListener(e -> {
+            // Ação antiga mantida como exemplo
             IngredienteFrame frameIngredientes = new IngredienteFrame();
             frameIngredientes.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frameIngredientes.setVisible(true);
-            cardLayout.show(painelCentral, "ingredientes");
         });
-
-        // botão Cardápio
         JButton btnCardapio = criarBotaoMenu("Cardápio");
         btnCardapio.addActionListener(e -> {
             com.dove.view.viewCardapio.CardapioFrame frameCardapio = new com.dove.view.viewCardapio.CardapioFrame();
             frameCardapio.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             frameCardapio.setVisible(true);
         });
-
-        // botão Pedido
         JButton btnPedido = criarBotaoMenu("Pedido");
-        btnPedido.addActionListener(e -> cardLayout.show(painelCentral, "pedido"));
+        btnPedido.addActionListener(e -> {
+            cardLayout.show(painelCentral, "pedido");
+            setBotaoMenuActive(btnPedido);
+        });
 
-        // adicionar botões ao menu
-        painelMenu.add(Box.createVerticalStrut(10));
+        // Adicionando botões ao menu
         painelMenu.add(btnGerenciamento);
         painelMenu.add(Box.createVerticalStrut(20));
         painelMenu.add(btnIngredientes);
@@ -107,11 +127,6 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelMenu.add(Box.createVerticalGlue());
 
         painelFundo.add(painelMenu, BorderLayout.WEST);
-
-        // painel central
-        painelCentral.add(new JLabel(), "funcionario");
-        painelCentral.add(new PedidoView().view(), "pedido");
-        painelCentral.setBackground(corFundoPrincipal);
         painelFundo.add(painelCentral, BorderLayout.CENTER);
 
         // rodapé
@@ -123,39 +138,47 @@ public class TelaPrincipalFuncionarioView extends JFrame {
         painelRodape.add(lblRodape);
         painelFundo.add(painelRodape, BorderLayout.SOUTH);
 
+        // Inicia mostrando o painel de funcionário por padrão
+        cardLayout.show(painelCentral, "funcionario");
+        setBotaoMenuActive(btnGerenciamento);
         setVisible(true);
+    }
+
+    private void setBotaoMenuActive(JButton botao) {
+        if (botaoMenuActive != null) {
+            botaoMenuActive.setBackground(corLaranja);
+        }
+        botao.setBackground(corLaranjaEscuro);
+        botaoMenuActive = botao;
     }
 
     private JButton criarBotaoMenu(String texto) {
         JButton btn = new JButton(texto);
-
         final Color corOriginal = corLaranja;
         final Color corHover = corLaranja.brighter();
-
         btn.setBackground(corOriginal);
         btn.setForeground(Color.WHITE);
         btn.setFont(new Font("Arial", Font.BOLD, 14));
-
         btn.setOpaque(true);
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
         btn.setAlignmentX(Component.LEFT_ALIGNMENT);
         btn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-
         btn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                btn.setBackground(corHover);
+                if (btn != botaoMenuActive) {
+                    btn.setBackground(corHover);
+                }
             }
-
             @Override
             public void mouseExited(MouseEvent e) {
-                btn.setBackground(corOriginal);
+                if (btn != botaoMenuActive) {
+                    btn.setBackground(corOriginal);
+                }
             }
         });
-
         return btn;
     }
 }

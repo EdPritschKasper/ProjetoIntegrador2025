@@ -1,5 +1,8 @@
 package com.dove.view.viewIngrediente;
 
+import com.dove.controller.IngredienteController;
+import com.dove.model.entities.IngredienteEntity;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -7,7 +10,6 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientePanel extends JPanel {
@@ -20,10 +22,11 @@ public class IngredientePanel extends JPanel {
     private JTable tabela;
     private DefaultTableModel modeloTabela;
 
-    // Simulando dados locais (sem banco)
-    private final List<Ingrediente> ingredientes = new ArrayList<>();
+    private IngredienteController controller;
 
     public IngredientePanel() {
+        controller = new IngredienteController();
+
         setBorder(new EmptyBorder(15, 15, 15, 15));
         setLayout(new BorderLayout(10, 15));
         setBackground(COR_FUNDO);
@@ -34,7 +37,7 @@ public class IngredientePanel extends JPanel {
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         add(lblTitulo, BorderLayout.NORTH);
 
-        String[] colunas = {"ID", "Nome"};
+        String[] colunas = {"ID", "Descrição"};
         modeloTabela = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -74,11 +77,14 @@ public class IngredientePanel extends JPanel {
 
         // Eventos dos botões
         btnAdicionar.addActionListener(e -> {
-            Ingrediente novo = exibirDialogo(null);
+            IngredienteEntity novo = exibirDialogo(null);
             if (novo != null) {
-                novo.setId(gerarNovoId());
-                ingredientes.add(novo);
-                atualizarTabela();
+                boolean sucesso = controller.insert(novo);
+                if (sucesso) {
+                    atualizarTabela();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao adicionar ingrediente no banco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -89,12 +95,17 @@ public class IngredientePanel extends JPanel {
                 return;
             }
             int indiceReal = tabela.convertRowIndexToModel(linhaSelecionada);
-            Ingrediente existente = ingredientes.get(indiceReal);
+            IngredienteEntity existente = getIngredientes().get(indiceReal);
 
-            Ingrediente atualizado = exibirDialogo(existente);
+            IngredienteEntity atualizado = exibirDialogo(existente);
             if (atualizado != null) {
-                ingredientes.set(indiceReal, atualizado);
-                atualizarTabela();
+                atualizado = new IngredienteEntity(existente.getId(), atualizado.getDescricao()); // manter o id
+                boolean sucesso = controller.update(atualizado);
+                if (sucesso) {
+                    atualizarTabela();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao atualizar ingrediente no banco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -107,14 +118,29 @@ public class IngredientePanel extends JPanel {
             int confirmacao = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja remover este ingrediente?", "Confirmação", JOptionPane.YES_NO_OPTION);
             if (confirmacao == JOptionPane.YES_OPTION) {
                 int indiceReal = tabela.convertRowIndexToModel(linhaSelecionada);
-                ingredientes.remove(indiceReal);
-                atualizarTabela();
+                IngredienteEntity aRemover = getIngredientes().get(indiceReal);
+                boolean sucesso = controller.delete(aRemover);
+                if (sucesso) {
+                    atualizarTabela();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao remover ingrediente no banco.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
         btnMaisSelecionado.addActionListener(e -> {
-            // Botão por enquanto só mostra uma mensagem.
-            JOptionPane.showMessageDialog(this, "Funcionalidade ainda não implementada.", "Ingrediente Mais Selecionado", JOptionPane.INFORMATION_MESSAGE);
+            IngredienteEntity maisSelecionado = controller.getMostSelectedIngrediente();
+            if (maisSelecionado != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Ingrediente mais selecionado: " + maisSelecionado.getDescricao(),
+                        "Ingrediente Mais Selecionado",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Nenhum ingrediente encontrado.",
+                        "Ingrediente Mais Selecionado",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
         });
 
         atualizarTabela();
@@ -147,67 +173,49 @@ public class IngredientePanel extends JPanel {
 
     private void atualizarTabela() {
         modeloTabela.setRowCount(0);
-        for (Ingrediente i : ingredientes) {
+        List<IngredienteEntity> ingredientes = getIngredientes();
+        for (IngredienteEntity i : ingredientes) {
             modeloTabela.addRow(new Object[]{
                     i.getId(),
-                    i.getNome()
+                    i.getDescricao()
             });
         }
     }
 
-    private Ingrediente exibirDialogo(Ingrediente original) {
-        JTextField campoNome = new JTextField();
+    private List<IngredienteEntity> getIngredientes() {
+        return controller.findAll();
+    }
+
+    private IngredienteEntity exibirDialogo(IngredienteEntity original) {
+        JTextField campoDescricao = new JTextField();
 
         if (original != null) {
-            campoNome.setText(original.getNome());
+            campoDescricao.setText(original.getDescricao());
         }
 
         JPanel painel = new JPanel(new GridLayout(0, 1));
-        painel.add(new JLabel("Nome:"));
-        painel.add(campoNome);
+        painel.add(new JLabel("Descrição:"));
+        painel.add(campoDescricao);
 
         int resultado = JOptionPane.showConfirmDialog(this, painel,
                 original == null ? "Novo Ingrediente" : "Editar Ingrediente",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (resultado == JOptionPane.OK_OPTION) {
-            String nome = campoNome.getText().trim();
+            String descricao = campoDescricao.getText().trim();
 
-            if (nome.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Preencha o campo nome!", "Erro", JOptionPane.ERROR_MESSAGE);
+            if (descricao.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Preencha o campo descrição!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return null;
             }
 
             if (original == null) {
-                return new Ingrediente(null, nome);
+                return new IngredienteEntity(descricao);
             } else {
-                original.setNome(nome);
+                original.setDescricao(descricao);
                 return original;
             }
         }
         return null;
-    }
-
-    private long gerarNovoId() {
-        return ingredientes.stream()
-                .mapToLong(i -> i.getId() == null ? 0 : i.getId())
-                .max()
-                .orElse(0) + 1;
-    }
-
-    // Classe interna para simular entidade sem banco
-    private static class Ingrediente {
-        private Long id;
-        private String nome;
-
-        public Ingrediente(Long id, String nome) {
-            this.id = id;
-            this.nome = nome;
-        }
-
-        public Long getId() { return id; }
-        public void setId(Long id) { this.id = id; }
-        public String getNome() { return nome; }
-        public void setNome(String nome) { this.nome = nome; }
     }
 }
