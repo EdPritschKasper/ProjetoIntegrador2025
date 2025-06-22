@@ -10,8 +10,6 @@ import com.dove.view.viewPedido.PedidoView;
 
 public class ClienteView extends JFrame {
 
-    private final ClienteEntity cliente;
-
     private final JButton btnAlterarSenha;
     private final JButton btnExibirPedidos;
     private final JButton btnExcluirConta;
@@ -25,13 +23,12 @@ public class ClienteView extends JFrame {
     private final Color rodape = Color.decode("#EEEEEE");
 
     public ClienteView(ClienteEntity cliente) {
-        this.cliente = cliente;
-
-        setTitle("Área do Cliente - Bem-vindo, " + cliente.getNome());
+        setTitle("Área do Cliente - Restaurante Dove");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1024, 768);
         setLocationRelativeTo(null);
         setMinimumSize(new Dimension(800, 600));
+        setLocationRelativeTo(null);
         setResizable(false);
         setLayout(new BorderLayout());
 
@@ -40,7 +37,7 @@ public class ClienteView extends JFrame {
         headerPanel.setBackground(laranja);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JLabel lblTitulo = new JLabel("Restaurante Dove - Bem-vindo, " + cliente.getNome() + "!");
+        JLabel lblTitulo = new JLabel("Restaurante Dove - Bem-vindo, Cliente!");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
         lblTitulo.setForeground(Color.WHITE);
         headerPanel.add(lblTitulo, BorderLayout.WEST);
@@ -48,11 +45,12 @@ public class ClienteView extends JFrame {
         JButton btnLogout = new JButton("Logout");
         btnLogout.setBackground(Color.WHITE);
         btnLogout.setForeground(laranja);
+        headerPanel.add(btnLogout, BorderLayout.EAST);
+
         btnLogout.addActionListener(e -> {
             dispose();
             new LoginView();
         });
-        headerPanel.add(btnLogout, BorderLayout.EAST);
 
         add(headerPanel, BorderLayout.NORTH);
 
@@ -68,10 +66,13 @@ public class ClienteView extends JFrame {
         btnExibirPedidos = criarBotao("Exibir Pedidos", laranja, Color.WHITE);
         btnPedidoCliente = criarBotao("Pedido", laranja, Color.WHITE);
 
+//        botoesPanel.add(btnPedido);
+//        botoesPanel.add(Box.createVerticalStrut(20));
         botoesPanel.add(btnAlterarSenha);
         botoesPanel.add(Box.createVerticalStrut(20));
         botoesPanel.add(btnExcluirConta);
         botoesPanel.add(Box.createVerticalStrut(20));
+//        botoesPanel.add(btnExibirPedidos);
         botoesPanel.add(btnPedidoCliente);
 
         add(botoesPanel, BorderLayout.WEST);
@@ -95,6 +96,7 @@ public class ClienteView extends JFrame {
         JLabel rodapeTexto = new JLabel("© 2025 Restaurante Dove. Todos os direitos reservados.");
         rodapeTexto.setForeground(texto);
         rodapePanel.add(rodapeTexto);
+
         add(rodapePanel, BorderLayout.SOUTH);
 
         // Ações dos botões
@@ -121,26 +123,35 @@ public class ClienteView extends JFrame {
     private JPanel criarPainelAlterarSenha() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.decode("#FFF5E5"));
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
         JLabel lblTitulo = new JLabel("Alterar Senha");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
-        JTextField txtSenhaAntiga = new JTextField(20);
-        JTextField txtSenhaNova = new JTextField(20);
-        JButton btnSalvar = new JButton("Salvar Nova Senha");
 
+        JLabel lblEmail = new JLabel("Email:");
+        JTextField txtEmail = new JTextField(20);
+
+        JLabel lblSenhaAntiga = new JLabel("Senha Antiga:");
+        JTextField txtSenhaAntiga = new JTextField(20);
+
+        JLabel lblSenhaNova = new JLabel("Senha Nova:");
+        JTextField txtSenhaNova = new JTextField(20);
+
+        JButton btnSalvar = new JButton("Salvar Nova Senha");
         btnSalvar.setBackground(laranja);
         btnSalvar.setForeground(Color.WHITE);
 
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        panel.add(lblTitulo, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; panel.add(lblTitulo, gbc);
         gbc.gridwidth = 1;
-        gbc.gridy = 1; panel.add(new JLabel("Senha Antiga:"), gbc);
+        gbc.gridy = 1; panel.add(lblEmail, gbc);
+        gbc.gridx = 1; panel.add(txtEmail, gbc);
+        gbc.gridx = 0; gbc.gridy = 2; panel.add(lblSenhaAntiga, gbc);
         gbc.gridx = 1; panel.add(txtSenhaAntiga, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; panel.add(new JLabel("Senha Nova:"), gbc);
+        gbc.gridx = 0; gbc.gridy = 3; panel.add(lblSenhaNova, gbc);
         gbc.gridx = 1; panel.add(txtSenhaNova, gbc);
-        gbc.gridx = 1; gbc.gridy = 3; panel.add(btnSalvar, gbc);
+        gbc.gridx = 1; gbc.gridy = 4; panel.add(btnSalvar, gbc);
 
         return panel;
     }
@@ -148,23 +159,30 @@ public class ClienteView extends JFrame {
     private JPanel criarPainelExcluirConta() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.decode("#FFF5E5"));
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
         JLabel lblTitulo = new JLabel("Excluir Conta");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
-        JTextField txtSenha = new JTextField(20);
-        JButton btnExcluir = new JButton("Excluir Conta");
 
+        JLabel lblEmail = new JLabel("Email:");
+        JTextField txtEmail = new JTextField(20);
+
+        JLabel lblSenha = new JLabel("Senha:");
+        JTextField txtSenha = new JTextField(20);
+
+        JButton btnExcluir = new JButton("Excluir Conta");
         btnExcluir.setBackground(laranja);
         btnExcluir.setForeground(Color.WHITE);
 
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        panel.add(lblTitulo, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; panel.add(lblTitulo, gbc);
         gbc.gridwidth = 1;
-        gbc.gridy = 1; panel.add(new JLabel("Senha:"), gbc);
+        gbc.gridy = 1; panel.add(lblEmail, gbc);
+        gbc.gridx = 1; panel.add(txtEmail, gbc);
+        gbc.gridx = 0; gbc.gridy = 2; panel.add(lblSenha, gbc);
         gbc.gridx = 1; panel.add(txtSenha, gbc);
-        gbc.gridx = 1; gbc.gridy = 2; panel.add(btnExcluir, gbc);
+        gbc.gridx = 1; gbc.gridy = 3; panel.add(btnExcluir, gbc);
 
         return panel;
     }
@@ -172,21 +190,23 @@ public class ClienteView extends JFrame {
     private JPanel criarPainelPedido() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.decode("#FFF5E5"));
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
         JLabel lblTitulo = new JLabel("Fazer Pedido");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
-        JTextField txtIngredientes = new JTextField(20);
-        JButton btnFazerPedido = new JButton("Fazer Pedido");
 
+        JLabel lblIngredientes = new JLabel("Ingredientes:");
+        JTextField txtIngredientes = new JTextField(20);
+
+        JButton btnFazerPedido = new JButton("Fazer Pedido");
         btnFazerPedido.setBackground(laranja);
         btnFazerPedido.setForeground(Color.WHITE);
 
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        panel.add(lblTitulo, gbc);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; panel.add(lblTitulo, gbc);
         gbc.gridwidth = 1;
-        gbc.gridy = 1; panel.add(new JLabel("Ingredientes:"), gbc);
+        gbc.gridy = 1; panel.add(lblIngredientes, gbc);
         gbc.gridx = 1; panel.add(txtIngredientes, gbc);
         gbc.gridx = 1; gbc.gridy = 2; panel.add(btnFazerPedido, gbc);
 
@@ -196,11 +216,13 @@ public class ClienteView extends JFrame {
     private JPanel criarPainelExibirPedido() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.decode("#FFF5E5"));
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
         JLabel lblTitulo = new JLabel("Seus Pedidos");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
+
         JTextArea txtPedidos = new JTextArea(10, 30);
         txtPedidos.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(txtPedidos);
@@ -210,4 +232,5 @@ public class ClienteView extends JFrame {
 
         return panel;
     }
+
 }
