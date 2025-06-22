@@ -8,7 +8,6 @@ import com.dove.model.repository.CustomizerFactory;
 import com.dove.model.service.FuncionarioService;
 import com.dove.view.viewCliente.ClienteView;
 import com.dove.view.viewFuncionario.TelaPrincipalFuncionarioView;
-
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.Timer;
-import javax.swing.text.MaskFormatter;
 
 public class LoginView extends JFrame {
 
@@ -102,28 +100,27 @@ public class LoginView extends JFrame {
         JButton btnLogin = new JButton("Entrar");
         estilizarBotaoPrimario(btnLogin);
         btnLogin.addActionListener(e -> {
-            String email = txtEmail.getText();
-            String senha = new String(txtSenha.getPassword());
 
-            if (email.isBlank() || senha.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Preencha todos os campos!",
-                        "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
+            ClienteController clienteController = new ClienteController();
+            List<ClienteEntity> clientes = clienteController.exibirClientes();
+
+            boolean encontrado = false;
+            for(ClienteEntity cliente: clientes){
+                if(cliente.getEmail().equals(txtEmail.getText()) && cliente.getSenha().equals(new String(txtSenha.getPassword()))){
+                    new ClienteView(clienteController.findByEmail(cliente.getEmail()));
+                    dispose();
+                    encontrado = true;
+                    break;
+                }
             }
 
-            ClienteController controller = new ClienteController();
-            ClienteEntity cliente = controller.autenticar(email, senha);
-
-            if (cliente != null) {
-                new ClienteView(cliente);
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Email ou senha inválidos.",
-                        "Erro", JOptionPane.ERROR_MESSAGE);
+            if(!encontrado){
+                JOptionPane.showMessageDialog(null, "Cliente não encontrado");
             }
         });
 
         adicionarCamposCard(card, new JLabel[]{lblEmail, lblSenha}, new JComponent[]{txtEmail, txtSenha, btnLogin});
+
         return card;
     }
 
@@ -131,41 +128,43 @@ public class LoginView extends JFrame {
         JPanel card = criarCardBase();
 
         JLabel lblCPF = new JLabel("CPF:");
-        JFormattedTextField txtCPF = criarCampoCpf();
+        JTextField txtCPF = new JTextField(20);
 
         JButton btnLogin = new JButton("Entrar");
         estilizarBotaoPrimario(btnLogin);
 
+        // --- ADICIONANDO A AÇÃO AO BOTÃO DE LOGIN ---
         btnLogin.addActionListener(e -> {
-            String cpf = txtCPF.getText().replaceAll("[^0-9]", "");
+            // Validação simples (pode ser melhorada com a lógica do seu controller)
+            if (!txtCPF.getText().isBlank()) {
 
-            if (cpf.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Por favor, insira o CPF.", "Aviso", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            EntityManager em = CustomizerFactory.getEntityManager();
-            FuncionarioService funcionarioService = new FuncionarioService(em);
-            FuncionarioController funcionarioController = new FuncionarioController(funcionarioService);
-
-            List<FuncionarioEntity> funcionarios = funcionarioController.listarFuncionarios();
-            boolean encontrado = false;
-
-            for (FuncionarioEntity funcionario : funcionarios) {
-                if (funcionario.getCpf().equals(cpf)) {
-                    new TelaPrincipalFuncionarioView(funcionario);
-                    dispose();
-                    encontrado = true;
-                    break;
+                EntityManager em = CustomizerFactory.getEntityManager();
+                FuncionarioService funcionarioService = new FuncionarioService(em);
+                FuncionarioController funcionarioController = new FuncionarioController(funcionarioService);
+                List<FuncionarioEntity> funcionarios = funcionarioController.listarFuncionarios();
+                boolean encontrado = false;
+                for(FuncionarioEntity funcionario: funcionarios){
+                    if(funcionario.getCpf().equals(txtCPF.getText())){
+                        encontrado = true;
+                        // Cria a nova tela de dashboard
+                        new TelaPrincipalFuncionarioView(funcionario);
+                        // Fecha a tela de login
+                        dispose();
+                        break;
+                    }
                 }
-            }
 
-            if (!encontrado) {
-                JOptionPane.showMessageDialog(this, "CPF não encontrado.");
+                if(!encontrado) {
+                    JOptionPane.showMessageDialog(null, "CPF não encontrado");
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, insira o CPF.", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         });
 
         adicionarCamposCard(card, new JLabel[]{lblCPF}, new JComponent[]{txtCPF, btnLogin});
+
         return card;
     }
 
@@ -185,44 +184,39 @@ public class LoginView extends JFrame {
         estilizarBotaoPrimario(btnCadastrar);
 
         btnCadastrar.addActionListener(e -> {
+            ClienteController clienteController = new ClienteController();
+
             String nome = txtNome.getText();
             String email = txtEmail.getText();
             String senha = new String(txtSenha.getPassword());
 
-            if (nome.isBlank() || email.isBlank() || senha.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Preencha todos os campos!",
-                        "Erro", JOptionPane.ERROR_MESSAGE);
+            boolean emailExistente = false;
+
+            // verifica se os campos estão vazios
+            if (nome.isBlank() || email.isBlank() || senha.isBlank()){
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos", "Aviso", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            ClienteController controller = new ClienteController();
-            List<ClienteEntity> clientes = controller.exibirClientes();
-
-            for (ClienteEntity cliente : clientes) {
-                if (cliente.getEmail().equalsIgnoreCase(email)) {
-                    JOptionPane.showMessageDialog(this, "Email já cadastrado!", "Erro", JOptionPane.WARNING_MESSAGE);
-                    return;
+            // verifica se já existe o email
+            for(ClienteEntity cliente: clienteController.exibirClientes()){
+                if(cliente.getEmail().equals(email)) {
+                    emailExistente = true;
+                    break;
                 }
             }
+            if(emailExistente) {
+                JOptionPane.showMessageDialog(this, "Email já está cadastrado", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-            controller.salvarCliente(nome, email, senha);
-            JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
-            new ClienteView(controller.findByEmail(email));
-            dispose();
+            clienteController.salvarCliente(new ClienteEntity(nome, email, senha));
+            new ClienteView(clienteController.findByEmail(email));
         });
 
         adicionarCamposCard(card, new JLabel[]{lblNome, lblEmail, lblSenha}, new JComponent[]{txtNome, txtEmail, txtSenha, btnCadastrar});
-        return card;
-    }
 
-    private JFormattedTextField criarCampoCpf() {
-        try {
-            MaskFormatter mf = new MaskFormatter("###.###.###-##");
-            mf.setPlaceholderCharacter('_');
-            return new JFormattedTextField(mf);
-        } catch (Exception e) {
-            return new JFormattedTextField();
-        }
+        return card;
     }
 
     private JPanel criarCardBase() {
@@ -274,22 +268,22 @@ public class LoginView extends JFrame {
 
     private void animarTransicao(JPanel target, int finalX) {
         Timer timer = new Timer(5, null);
-        timer.addActionListener(e -> {
-            int step = 20;
-            boolean done = true;
-
-            for (JPanel panel : new JPanel[]{painelCadastro, painelCliente, painelFuncionario}) {
-                int x = panel.getX();
+        timer.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int x = target.getX();
                 if (x != finalX) {
-                    int delta = (x < finalX) ? step : -step;
-                    panel.setLocation(x + delta, 0);
-                    done = false;
+                    int step = (x > finalX) ? -20 : 20;
+                    painelCliente.setLocation(painelCliente.getX() + step, 0);
+                    painelFuncionario.setLocation(painelFuncionario.getX() + step, 0);
+                    painelCadastro.setLocation(painelCadastro.getX() + step, 0);
+                    panelPrincipal.repaint();
+                } else {
+                    timer.stop();
                 }
             }
-
-            if (done) ((Timer) e.getSource()).stop();
-            panelPrincipal.repaint();
         });
         timer.start();
     }
+
+
 }
