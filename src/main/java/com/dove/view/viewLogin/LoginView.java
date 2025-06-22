@@ -2,12 +2,15 @@ package com.dove.view.viewLogin;
 
 import com.dove.view.viewCliente.ClienteView;
 import com.dove.view.viewFuncionario.TelaPrincipalFuncionarioView;
+import com.dove.controller.*;
+import com.dove.model.entities.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.Timer;
+import javax.swing.text.MaskFormatter;
 
 public class LoginView extends JFrame {
 
@@ -92,8 +95,25 @@ public class LoginView extends JFrame {
         JButton btnLogin = new JButton("Entrar");
         estilizarBotaoPrimario(btnLogin);
         btnLogin.addActionListener(e -> {
-            new ClienteView();
-            dispose();
+            String email = txtEmail.getText();
+            String senha = new String(txtSenha.getPassword());
+
+            if (email.isBlank() || senha.isBlank()) {
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos!",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            ClienteController controller = new ClienteController();
+            ClienteEntity cliente = controller.autenticar(email, senha);
+
+            if (cliente != null) {
+                new ClienteView(cliente); // abre tela principal do cliente
+                dispose(); // fecha a tela de login
+            } else {
+                JOptionPane.showMessageDialog(this, "Email ou senha inválidos.",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         adicionarCamposCard(card, new JLabel[]{lblEmail, lblSenha}, new JComponent[]{txtEmail, txtSenha, btnLogin});
@@ -105,15 +125,16 @@ public class LoginView extends JFrame {
         JPanel card = criarCardBase();
 
         JLabel lblCPF = new JLabel("CPF:");
-        JTextField txtCPF = new JTextField(20);
+        JFormattedTextField txtCPF = criarCampoCpf();
 
         JButton btnLogin = new JButton("Entrar");
         estilizarBotaoPrimario(btnLogin);
 
         // --- ADICIONANDO A AÇÃO AO BOTÃO DE LOGIN ---
         btnLogin.addActionListener(e -> {
+            String cpf = txtCPF.getText().replaceAll("[^0-9]","");
             // Validação simples (pode ser melhorada com a lógica do seu controller)
-            if (!txtCPF.getText().isBlank()) {
+            if (!cpf.isBlank()) {
                 // Cria a nova tela de dashboard
                 new TelaPrincipalFuncionarioView();
                 // Fecha a tela de login
@@ -126,6 +147,17 @@ public class LoginView extends JFrame {
         adicionarCamposCard(card, new JLabel[]{lblCPF}, new JComponent[]{txtCPF, btnLogin});
 
         return card;
+    }
+
+    private JFormattedTextField criarCampoCpf() {
+        try {
+            MaskFormatter mf = new MaskFormatter("###.###.###-##");
+            mf.setPlaceholderCharacter('_');
+            return new JFormattedTextField(mf);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JFormattedTextField(); // fallback
+        }
     }
 
     private JPanel criarPainelCadastro() {
@@ -142,6 +174,30 @@ public class LoginView extends JFrame {
 
         JButton btnCadastrar = new JButton("Cadastrar");
         estilizarBotaoPrimario(btnCadastrar);
+
+        btnCadastrar.addActionListener(e -> {
+            String nome  = txtNome.getText();
+            String email = txtEmail.getText();
+            String senha = new String(txtSenha.getPassword());
+
+            if (nome.isBlank() || email.isBlank() || senha.isBlank()) {
+                JOptionPane.showMessageDialog(this, "Preencha todos os campos!",
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                ClienteController controller = new ClienteController();
+                controller.salvarCliente(nome, email, senha);
+                JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
+                txtNome.setText("");
+                txtEmail.setText("");
+                txtSenha.setText("");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao cadastrar cliente:\n" + ex.getMessage(),
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         adicionarCamposCard(card, new JLabel[]{lblNome, lblEmail, lblSenha}, new JComponent[]{txtNome, txtEmail, txtSenha, btnCadastrar});
 

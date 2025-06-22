@@ -3,6 +3,7 @@ package com.dove.view.viewCliente;
 import javax.swing.*;
 import java.awt.*;
 
+import com.dove.model.entities.ClienteEntity;
 import com.dove.view.viewLogin.LoginView;
 import com.dove.view.viewPedido.PedidoView;
 
@@ -20,7 +21,9 @@ public class ClienteView extends JFrame {
     private final Color texto = Color.decode("#333333");
     private final Color rodape = Color.decode("#EEEEEE");
 
-    public ClienteView() {
+    public ClienteView(ClienteEntity cliente)
+
+    {
         setTitle("Área do Cliente - Restaurante Dove");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1024, 768);
@@ -35,7 +38,7 @@ public class ClienteView extends JFrame {
         headerPanel.setBackground(laranja);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JLabel lblTitulo = new JLabel("Restaurante Dove - Bem-vindo, Cliente!");
+        JLabel lblTitulo = new JLabel("Restaurante Dove - Bem-vindo, " + cliente.getNome() + "!");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
         lblTitulo.setForeground(Color.WHITE);
         headerPanel.add(lblTitulo, BorderLayout.WEST);

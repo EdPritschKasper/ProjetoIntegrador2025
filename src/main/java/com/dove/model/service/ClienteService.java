@@ -1,38 +1,44 @@
 package com.dove.model.service;
 
+import com.dove.config.JPAUtil;
 import com.dove.model.entities.ClienteEntity;
 import com.dove.model.repository.ClienteRepository;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
 public class ClienteService {
-    private final ClienteRepository clienteRepository;
 
-    public ClienteService() {
-        this.clienteRepository = new ClienteRepository();
+    public void cadastrarCliente(ClienteEntity cliente) {
+        EntityManager em = JPAUtil.getEntityManager();
+        ClienteRepository repo = new ClienteRepository(em);
+
+        try {
+            repo.salvarCliente(cliente);
+        } finally {
+            if (em.isOpen()) em.close();
+        }
+    }
+
+    public ClienteEntity buscarPorEmailESenha(String email, String senha) {
+        EntityManager em = JPAUtil.getEntityManager();
+        ClienteRepository repo = new ClienteRepository(em);
+
+        try {
+            return repo.buscarPorEmailESenha(email, senha);
+        } finally {
+            if (em.isOpen()) em.close();
+        }
     }
 
     public ClienteEntity buscarClientePorEmail(String email) {
-        return clienteRepository.findByEmail(email);
-    }
+        EntityManager em = JPAUtil.getEntityManager();
+        ClienteRepository repo = new ClienteRepository(em);
 
-    public void cadastrarCliente(ClienteEntity cliente) {
-        clienteRepository.salvarCliente(cliente);
-    }
-
-    public boolean alterarSenha(String email, String senha) {
-        return clienteRepository.alterarSenha(email, senha);
-    }
-
-    public boolean excluirCliente(String email) {
-        return clienteRepository.excluirCliente(email);
-    }
-
-    public List<ClienteEntity> exibirClientes() {
-        return clienteRepository.exibirClientes();
-    }
-
-    public List<ClienteEntity> exibirClientesComMaisPedidos() {
-        return clienteRepository.getClientesComMaisPedidos();
+        try {
+            return repo.buscarPorEmail(email);
+        } finally {
+            if (em.isOpen()) em.close();
+        }
     }
 }

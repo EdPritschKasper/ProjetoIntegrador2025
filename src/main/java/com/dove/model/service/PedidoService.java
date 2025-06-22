@@ -17,7 +17,7 @@ public class PedidoService {
 
     public PedidoService() {
         this.em = CustomizerFactory.getEntityManager();
-        this.clienteRepository = new ClienteRepository();
+        this.clienteRepository = new ClienteRepository(em);
         this.funcionarioRepository = new FuncionarioRepository(em);
         this.cardapiosRepository = new CardapiosRepository(em);
         this.pedidoRepository = new PedidoRepository(em);
