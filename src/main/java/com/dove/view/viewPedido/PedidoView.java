@@ -351,7 +351,12 @@ public class PedidoView {
 
                 pedidoController.insertPedido(pedido);
 
-                atualizarTabela(pedidoController, funcionario, clienteController.findByEmail(cliente.getEmail()));
+                if(cliente == null){
+                    atualizarTabela(pedidoController, funcionario, null);
+                } else {
+                    atualizarTabela(pedidoController, funcionario, clienteController.findByEmail(cliente.getEmail()));
+                }
+
 
                 JOptionPane.showMessageDialog(panel, "Pedido concluído!");
 
