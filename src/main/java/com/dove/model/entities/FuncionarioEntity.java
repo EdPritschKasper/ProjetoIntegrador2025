@@ -21,6 +21,8 @@ public class FuncionarioEntity {
     @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL)
     private List<PedidoEntity> pedidos = new ArrayList<>();
 
+    public FuncionarioEntity(){}
+
     // Getters e Setters
 
     public Long getId() {

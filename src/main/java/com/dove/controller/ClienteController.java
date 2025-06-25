@@ -8,11 +8,11 @@ import java.util.Scanner;
 
 public class ClienteController {
     private final ClienteService clienteService;
-    private final Scanner scanner;
+//    private final Scanner scanner;
 
-    public ClienteController(Scanner scanner) {
+    public ClienteController() {
         this.clienteService = new ClienteService();
-        this.scanner = scanner;
+//        this.scanner = scanner;
     }
 
     public ClienteEntity findByEmail(String email) {
@@ -27,8 +27,8 @@ public class ClienteController {
         return clienteService.alterarSenha(email, senha);
     }
 
-    public boolean excluirCliente(String email) {
-        return clienteService.excluirCliente(email);
+    public boolean excluirCliente(String email, String senha) {
+        return clienteService.excluirCliente(email, senha);
     }
 
     public List<ClienteEntity> exibirClientes() {

@@ -25,7 +25,7 @@ public class PedidoEntity {
     @JoinColumn(name = "cardapio_id", nullable = false)
     private CardapiosEntity cardapio;
     @ManyToOne
-    @JoinColumn(name = "funcionario_id", nullable = false)
+    @JoinColumn(name = "funcionario_id")
     private FuncionarioEntity funcionario;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
@@ -38,16 +38,30 @@ public class PedidoEntity {
     )
     private List<IngredienteEntity> ingredientes = new ArrayList<>();
 
+    // Construtor para insert pedido
+    public PedidoEntity(String marmita, CardapiosEntity cardapio, FuncionarioEntity funcionario, ClienteEntity cliente, List<IngredienteEntity> ingredientes) {
+        this.marmita = marmita;
+        this.status = "Iniciado";
+        this.hora_inicio =  LocalTime.now();
+        this.hora_fim = null;
+        this.cardapio = cardapio;
+        this.funcionario = funcionario;
+        this.cliente = cliente;
+        this.ingredientes = ingredientes;
+    }
+
+    public PedidoEntity(){}
+
     @Override
     public String toString() {
         return "id = " + id + "\n" +
                 "marmita = " + marmita + "\n" +
                 "status = " + status + "\n" +
                 "hora_inicio = " + hora_inicio + "\n" +
-                "hora_fim = " + hora_fim + "\n" +
-                "cardapio = " + cardapio + "\n" +
-                "funcionario = " + funcionario + "\n" +
-                "cliente = " + cliente + "\n";
+                "hora_fim = " + hora_fim + "\n";
+//                + "cardapio = " + cardapio + "\n" +
+//                "funcionario = " + funcionario + "\n" +
+//                "cliente = " + cliente + "\n";
     }
 
     public Long getId() {
