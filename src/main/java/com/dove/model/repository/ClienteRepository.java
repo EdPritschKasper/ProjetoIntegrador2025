@@ -71,12 +71,19 @@ public class ClienteRepository {
             tx.commit();
             return true;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            if (tx != null && tx.isActive()) {
+                try {
+                    tx.rollback(); // ← só é executado se estiver seguro
+                } catch (Exception rollbackEx) {
+                    System.err.println("Erro no rollback: " + rollbackEx.getMessage());
+                }
+            }
             throw new RuntimeException("Erro ao alterar senha: " + e.getMessage(), e);
         }
     }
 
-    public boolean excluirCliente(String email) {
+
+    public boolean excluirCliente(String email, String senha) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
@@ -86,7 +93,7 @@ public class ClienteRepository {
             query.setParameter("email", email);
             ClienteEntity cliente = query.uniqueResult();
 
-            if (cliente == null) {
+            if (cliente == null || !cliente.getSenha().equals(senha)) {
                 return false;
             }
 
@@ -94,10 +101,17 @@ public class ClienteRepository {
             tx.commit();
             return true;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            throw new RuntimeException("Erro ao excluir cliente: " + e.getMessage(), e);
+            if (tx != null && tx.isActive()) {
+                try {
+                    tx.rollback();
+                } catch (Exception rollbackEx) {
+                    System.err.println("Erro no rollback: " + rollbackEx.getMessage());
+                }
+            }
+            throw new RuntimeException("Erro ao excluir conta: " + e.getMessage(), e);
         }
     }
+
 
     public List <ClienteEntity> exibirClientes(){
         try (Session session = sessionFactory.openSession()){

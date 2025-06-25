@@ -27,8 +27,8 @@ public class ClienteController {
         return clienteService.alterarSenha(email, senha);
     }
 
-    public boolean excluirCliente(String email) {
-        return clienteService.excluirCliente(email);
+    public boolean excluirCliente(String email, String senha) {
+        return clienteService.excluirCliente(email, senha);
     }
 
     public List<ClienteEntity> exibirClientes() {
