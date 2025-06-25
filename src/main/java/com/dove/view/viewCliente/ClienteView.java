@@ -3,6 +3,7 @@ package com.dove.view.viewCliente;
 import javax.swing.*;
 import java.awt.*;
 
+import com.dove.controller.ClienteController;
 import com.dove.controller.PedidoController;
 import com.dove.model.entities.ClienteEntity;
 import com.dove.view.viewLogin.LoginView;
@@ -82,8 +83,8 @@ public class ClienteView extends JFrame {
         panelPrincipal = new JPanel(cardLayout);
         panelPrincipal.setBackground(Color.decode("#FFF5E5"));
 
-        panelPrincipal.add(criarPainelAlterarSenha(), "alterarSenha");
-        panelPrincipal.add(criarPainelExcluirConta(), "excluirConta");
+        panelPrincipal.add(criarPainelAlterarSenha(cliente, new ClienteController()), "alterarSenha");
+        panelPrincipal.add(criarPainelExcluirConta(new ClienteController()), "excluirConta");
         panelPrincipal.add(criarPainelPedido(), "fazerPedido");
         panelPrincipal.add(criarPainelExibirPedido(), "exibirPedidos");
         panelPrincipal.add(new PedidoView().view(new PedidoController(), null, cliente), "pedidoCliente");
@@ -120,7 +121,8 @@ public class ClienteView extends JFrame {
         return btn;
     }
 
-    private JPanel criarPainelAlterarSenha() {
+    private JPanel criarPainelAlterarSenha(ClienteEntity clienteEntity, ClienteController clienteController) {
+        ClienteEntity cliente = clienteController.findByEmail(clienteEntity.getEmail());
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.decode("#FFF5E5"));
 
@@ -131,32 +133,62 @@ public class ClienteView extends JFrame {
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
 
         JLabel lblEmail = new JLabel("Email:");
-        JTextField txtEmail = new JTextField(20);
+        JTextField txtEmail = new JTextField(cliente.getEmail(), 20);
+        txtEmail.setEditable(false); // impede alteração
 
         JLabel lblSenhaAntiga = new JLabel("Senha Antiga:");
-        JTextField txtSenhaAntiga = new JTextField(20);
+        JPasswordField txtSenhaAntiga = new JPasswordField(20);
 
         JLabel lblSenhaNova = new JLabel("Senha Nova:");
-        JTextField txtSenhaNova = new JTextField(20);
+        JPasswordField txtSenhaNova = new JPasswordField(20);
 
         JButton btnSalvar = new JButton("Salvar Nova Senha");
         btnSalvar.setBackground(laranja);
         btnSalvar.setForeground(Color.WHITE);
 
+        btnSalvar.addActionListener(e -> {
+            String email = txtEmail.getText();
+            String senhaAntiga = new String(txtSenhaAntiga.getPassword());
+            String senhaNova = new String(txtSenhaNova.getPassword());
+
+            if (!email.equals(cliente.getEmail()) || !senhaAntiga.equals(cliente.getSenha())) {
+                JOptionPane.showMessageDialog(panel, "Email ou Senha incorretos", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (senhaAntiga.equals(senhaNova)) {
+                JOptionPane.showMessageDialog(panel, "A nova senha não pode ser igual à antiga", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (senhaNova.length() < 4) {
+                JOptionPane.showMessageDialog(panel, "A nova senha deve ter ao menos 4 caracteres", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                clienteController.alterarSenha(email, senhaNova);
+                JOptionPane.showMessageDialog(panel, "Senha alterada com sucesso.");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Erro ao alterar senha: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; panel.add(lblTitulo, gbc);
         gbc.gridwidth = 1;
-        gbc.gridy = 1; panel.add(lblEmail, gbc);
+        gbc.gridy = 1; gbc.gridx = 0; panel.add(lblEmail, gbc);
         gbc.gridx = 1; panel.add(txtEmail, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; panel.add(lblSenhaAntiga, gbc);
+        gbc.gridy = 2; gbc.gridx = 0; panel.add(lblSenhaAntiga, gbc);
         gbc.gridx = 1; panel.add(txtSenhaAntiga, gbc);
-        gbc.gridx = 0; gbc.gridy = 3; panel.add(lblSenhaNova, gbc);
+        gbc.gridy = 3; gbc.gridx = 0; panel.add(lblSenhaNova, gbc);
         gbc.gridx = 1; panel.add(txtSenhaNova, gbc);
-        gbc.gridx = 1; gbc.gridy = 4; panel.add(btnSalvar, gbc);
+        gbc.gridy = 4; gbc.gridx = 1; panel.add(btnSalvar, gbc);
 
         return panel;
     }
 
-    private JPanel criarPainelExcluirConta() {
+
+    private JPanel criarPainelExcluirConta(ClienteController clienteController) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.decode("#FFF5E5"));
 
@@ -170,22 +202,39 @@ public class ClienteView extends JFrame {
         JTextField txtEmail = new JTextField(20);
 
         JLabel lblSenha = new JLabel("Senha:");
-        JTextField txtSenha = new JTextField(20);
+        JPasswordField txtSenha = new JPasswordField(20);
 
         JButton btnExcluir = new JButton("Excluir Conta");
         btnExcluir.setBackground(laranja);
         btnExcluir.setForeground(Color.WHITE);
 
+        btnExcluir.addActionListener(e -> {
+            String email = txtEmail.getText();
+            String senha = new String(txtSenha.getPassword());
+
+            try {
+                boolean sucesso = clienteController.excluirCliente(email, senha);
+                if (sucesso) {
+                    JOptionPane.showMessageDialog(panel, "Conta excluída com sucesso.");
+                } else {
+                    JOptionPane.showMessageDialog(panel, "Email ou senha incorretos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Erro ao excluir conta: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; panel.add(lblTitulo, gbc);
         gbc.gridwidth = 1;
-        gbc.gridy = 1; panel.add(lblEmail, gbc);
+        gbc.gridy = 1; gbc.gridx = 0; panel.add(lblEmail, gbc);
         gbc.gridx = 1; panel.add(txtEmail, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; panel.add(lblSenha, gbc);
+        gbc.gridy = 2; gbc.gridx = 0; panel.add(lblSenha, gbc);
         gbc.gridx = 1; panel.add(txtSenha, gbc);
-        gbc.gridx = 1; gbc.gridy = 3; panel.add(btnExcluir, gbc);
+        gbc.gridy = 3; gbc.gridx = 1; panel.add(btnExcluir, gbc);
 
         return panel;
     }
+
 
     private JPanel criarPainelPedido() {
         JPanel panel = new JPanel(new GridBagLayout());
